@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Utilisateur.belongsToMany(models.Role, { through: 'UtilisateurRoles' });
+      Utilisateur.hasMany(models.Notification);
     }
   }
   Utilisateur.init({
