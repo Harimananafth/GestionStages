@@ -37,6 +37,13 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+Object.values(db).forEach(model => {
+  if (model.associate) {
+    model.associate(db);
+  }
+});
+
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
