@@ -27,7 +27,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         defaultValue: 'simple',
-        enum: ['simple', 'actualité']
+        enum: ['simple', 'actualité', 'admin']
       },
       date_reception: {
         allowNull: false,

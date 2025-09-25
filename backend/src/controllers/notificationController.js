@@ -5,7 +5,6 @@ const { ValidationError, where } = require('sequelize');
 class NotificationController {
 
     // Méthode pour créer une nouvelle notification
-
     static async createNotification(req, res) {
         Notification.create(req.body)
             .then(notification => {
@@ -19,21 +18,6 @@ class NotificationController {
                 }
                 // Gestion des autres erreurs
                 const message = `La notification n'a pas pu être créée. Réessayez dans quelques instants.`;
-                res.status(500).json({ message, data: error });
-            })
-    }
-
-    // Méthode pour récupérer toutes les notifications
-
-    static async getAllNotifications(req, res) {
-        Notification.findAll()
-            .then(notifications => {
-                const message = `La liste des notifications a été récupérée avec succès.`;
-                res.json({ message, data: notifications });
-            })
-            .catch(error => {
-                // Gestion des erreurs
-                const message = `La liste des notifications n'a pas pu être récupérée. Réessayez dans quelques instants.`;
                 res.status(500).json({ message, data: error });
             })
     }
@@ -56,6 +40,62 @@ class NotificationController {
                 const message = `La notification avec l'identifiant ${id} n'a pas pu être supprimée. Réessayez dans quelques instants.`;
                 res.status(500).json({ message, data: error });
             })
+    }
+
+    // Méthode pour récupérer toutes les notifications de type 'actualité'
+    static async getRecentActualiteNotifications(req, res) {
+        Notification.findAll({
+            where: { type: 'actualité' },
+            limit: 10,
+            order: [['date_reception', 'DESC']]
+        })
+            .then(notifications => {
+                const message = `La liste des actualités a été récupérée avec succès.`;
+                res.json({ message, data: notifications });
+            })
+            .catch(error => {
+                // Gestion des erreurs
+                const message = `La liste des notifications n'a pas pu être récupérée. Réessayez dans quelques instants.`;
+                res.status(500).json({ message, data: error });
+            })
+    }
+
+    // Méthode pour récupérer toutes les notifications d'un utilisateur
+    static async getUserNotifications(req, res) {
+        const id_utilisateur = req.params.id_utilisateur;
+        Notification.findAll({
+            where: { id_utilisateur: id_utilisateur },
+            order: [['date_reception', 'DESC']]
+        })
+            .then(notifications => {
+                const message = `La liste des notifications a été récupérée avec succès.`;
+                res.json({ message, data: notifications });
+            })
+            .catch(error => {
+                // Gestion des erreurs
+                const message = `La liste des notifications n'a pas pu être récupérée. Réessayez dans quelques instants.`;
+                res.status(500).json({ message, data: error });
+            })
+    }
+
+    //Méthode pour récupérer une notification pour l'admin 
+    static async getAdminNotification(req, res) {
+        Notification.findOne({
+            where: { type: 'admin' }
+        })
+            .then(notification => {
+                if (notification) {
+                    const message = `La notification admin a été récupérée avec succès.`;
+                    res.json({ message, data: notification });
+                } else {
+                    const message = `Aucune notification admin trouvée avec l'identifiant ${id}.`;
+                    res.status(404).json({ message });
+                }
+            })
+            .catch(error => {
+                const message = `La notification admin n'a pas pu être récupérée. Réessayez dans quelques instants.`;
+                res.status(500).json({ message, data: error });
+            });
     }
 }
 

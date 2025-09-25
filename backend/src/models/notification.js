@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isIn: {
-          args: [['simple', 'actualité']],
+          args: [['simple', 'actualité', 'admin']],
           msg: "Le type doit être 'simple' ou 'actualité'"
         },
         notNull: { msg: 'Le type est requis' },
