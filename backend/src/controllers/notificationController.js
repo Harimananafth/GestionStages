@@ -77,26 +77,6 @@ class NotificationController {
                 res.status(500).json({ message, data: error });
             })
     }
-
-    //Méthode pour récupérer une notification pour l'admin 
-    static async getAdminNotification(req, res) {
-        Notification.findOne({
-            where: { type: 'admin' }
-        })
-            .then(notification => {
-                if (notification) {
-                    const message = `La notification admin a été récupérée avec succès.`;
-                    res.json({ message, data: notification });
-                } else {
-                    const message = `Aucune notification admin trouvée avec l'identifiant ${id}.`;
-                    res.status(404).json({ message });
-                }
-            })
-            .catch(error => {
-                const message = `La notification admin n'a pas pu être récupérée. Réessayez dans quelques instants.`;
-                res.status(500).json({ message, data: error });
-            });
-    }
 }
 
 module.exports = NotificationController;

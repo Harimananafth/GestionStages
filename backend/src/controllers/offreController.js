@@ -92,3 +92,5 @@ class OffreController{
             })
     }
 }
+
+module.exports = OffreController
