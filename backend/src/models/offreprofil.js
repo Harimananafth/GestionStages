@@ -29,7 +29,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'OffreProfil',
+    modelName: 'offreProfil',
+    timestamps: true
   });
   return OffreProfil;
 };

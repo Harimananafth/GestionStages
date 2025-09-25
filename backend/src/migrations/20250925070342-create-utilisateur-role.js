@@ -2,27 +2,28 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('notifications', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
+    await queryInterface.createTable('utilisateurRoles', {
+      id_role : {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'roles',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+        primaryKey: true
       },
-      id_utilisateur: {
+      id_utilisateur : {
         type: Sequelize.INTEGER,
         references: {
           model: 'utilisateurs',
           key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        primaryKey: true
       },
-      message: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      date_reception: {
+      createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
@@ -33,6 +34,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('notifications');
+    await queryInterface.dropTable('utilisateurRoles');
   }
 };

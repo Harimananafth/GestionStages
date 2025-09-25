@@ -10,10 +10,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       nomProfil: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       descriptionProfil: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,

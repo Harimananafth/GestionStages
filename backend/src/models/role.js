@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Role.belongsToMany(models.Utilisateur, { through: 'UtilisateurRoles'});
+      Role.belongsToMany(models.Utilisateur, { through: models.UtilisateurRole } );
     }
   }
   Role.init({
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     } 
   }, {
     sequelize,
-    modelName: 'Role',
+    modelName: 'role',
     timestamps: true
   });
   return Role;

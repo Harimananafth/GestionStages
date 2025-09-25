@@ -9,16 +9,39 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      id_etudiant: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'etudiants',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      id_offre: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'offres',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      },
       cv_path: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       lm_path: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       statut: {
-        type: Sequelize.DATE
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: 'En attente',
+        values : ['En attente', 'Acceptée', 'Refusée']
       },
-      createdAt: {
+      date_candidature: {
         allowNull: false,
         type: Sequelize.DATE
       },

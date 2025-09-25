@@ -46,8 +46,8 @@ module.exports = (sequelize, DataTypes) => {
         notNull: { msg: 'Le téléphone est requis' },
         notEmpty: { msg: 'Le téléphone ne peut pas être vide' },
         is: {
-          args: /^[0-9]{10}$/,
-          msg: 'Le téléphone doit contenir exactement 10 chiffres'
+          args: /^03[0-9]{8}$/,
+          msg: 'Le téléphone doit commencer par 03 et contenir exactement 10 chiffres'
         }
       }
     },
@@ -69,9 +69,9 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: { msg: 'Le nom de l\'ecole est requise' },
         notEmpty: { msg: 'Le nom de l\'ecole ne peut pas être vide' },
-        len: {
-          args: [3, 50],
-          msg: 'Le nom de l\'ecole doit contenir entre 3 et 50 caractères'
+        min: {
+          args: [2],
+          msg: 'Le nom de l\'ecole doit contenir au moins 2 caractères'
         }
       }
     },
@@ -82,8 +82,8 @@ module.exports = (sequelize, DataTypes) => {
         notNull: { msg: 'Le niveau est requis' },
         notEmpty: { msg: 'Le niveau ne peut pas être vide' },
         len: {
-          args: [1, 20],
-          msg: 'Le niveau doit contenir entre 1 et 20 caractères'
+          args: [2, 20],
+          msg: 'Le niveau doit contenir entre 2 et 20 caractères'
         }
       }
     },

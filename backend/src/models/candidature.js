@@ -31,7 +31,17 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: { msg: 'Le chemin de la lettre de motivation ne peut pas être vide' }
       }
     },
-    statut: DataTypes.STRING
+    statut: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'En attente',
+      validate: {
+        isIn: {
+          args: [['En attente', 'Acceptée', 'Refusée']],
+          msg: 'Le statut doit être "En attente", "Acceptée" ou "Refusée"'
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'candidature',

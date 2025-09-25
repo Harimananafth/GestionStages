@@ -9,10 +9,20 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      titre: {
-        type: Sequelize.STRING
+      id_periode: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'periodes',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
       },
-      createdAt: {
+      titre: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      date_publication: {
         allowNull: false,
         type: Sequelize.DATE
       },

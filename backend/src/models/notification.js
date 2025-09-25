@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'Notification',
+    modelName: 'notification',
     timestamps: true,
     createdAt: 'date_envoi'
   });
