@@ -10,6 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       id_utilisateur: {
+        allowNull: true,
         type: Sequelize.INTEGER,
         references: {
           model: 'utilisateurs',
@@ -21,6 +22,12 @@ module.exports = {
       message: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      type: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'simple',
+        enum: ['simple', 'actualité']
       },
       date_reception: {
         allowNull: false,

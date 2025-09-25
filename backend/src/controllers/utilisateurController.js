@@ -1,14 +1,18 @@
 const { where, ValidationError, UniqueConstraintError } = require('sequelize');
 const { Utilisateur } = require('../Models');
+const bcrypt = require('bcrypt');
 
 class UtilisateurController {
 
     // Méthode pour créer un nouvel utilisateur
 
     static async createUtilisateur(req, res) {
-        Utilisateur.create(req.body)
+        // Hash du mot de passe avant de le stocker en base de données
+        const {password}= req.body;
+        passwordHash = bcrypt.hashSync(password, 10);
+        Utilisateur.create({...req.body, password: passwordHash})
             .then(utilisateur => {
-                const message = `L'utilisateur ${utilisateur.prenom} ${utilisateur.nom} a été créé avec succès.`;
+                const message = `L'utilisateur a été créé avec succès.`;
                 res.json({ message, data: utilisateur });
             })
             .catch(error => {
@@ -23,6 +27,7 @@ class UtilisateurController {
                 const message = `L'utilisateur n'a pas pu être créé. Réessayez dans quelques instants.`;
                 res.status(500).json({ message, data: error });
             })
+
     }
 
     //Méthode pour modifier un utilisateur

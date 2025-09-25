@@ -22,6 +22,18 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: { msg: 'Le message ne peut pas être vide' }
       }
     },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: {
+          args: [['simple', 'actualité']],
+          msg: "Le type doit être 'simple' ou 'actualité'"
+        },
+        notNull: { msg: 'Le type est requis' },
+        notEmpty: { msg: 'Le type ne peut pas être vide' }
+      }
+    }
   }, {
     sequelize,
     modelName: 'notification',

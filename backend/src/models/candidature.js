@@ -39,7 +39,9 @@ module.exports = (sequelize, DataTypes) => {
         isIn: {
           args: [['En attente', 'Acceptée', 'Refusée']],
           msg: 'Le statut doit être "En attente", "Acceptée" ou "Refusée"'
-        }
+        },
+        notNull: { msg: 'Le statut est requis' },
+        notEmpty: { msg: 'Le statut ne peut pas être vide' }
       }
     }
   }, {

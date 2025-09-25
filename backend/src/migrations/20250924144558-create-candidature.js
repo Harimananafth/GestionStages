@@ -39,7 +39,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
         defaultValue: 'En attente',
-        values : ['En attente', 'Acceptée', 'Refusée']
+        enum : ['En attente', 'Acceptée', 'Refusée']
       },
       date_candidature: {
         allowNull: false,
