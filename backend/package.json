@@ -2,10 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "GestionStages API REST ",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
   },
   "author": "harimananafth",
   "license": "ISC",

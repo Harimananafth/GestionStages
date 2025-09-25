@@ -42,3 +42,4 @@ class UtilisateurRoleController {
             });
     }
 }
+module.exports = UtilisateurRoleController;
