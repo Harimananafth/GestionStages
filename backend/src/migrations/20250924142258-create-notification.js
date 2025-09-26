@@ -29,6 +29,11 @@ module.exports = {
         defaultValue: 'simple',
         enum: ['simple', 'actualité']
       },
+      lu: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
       date_reception: {
         allowNull: false,
         type: Sequelize.DATE

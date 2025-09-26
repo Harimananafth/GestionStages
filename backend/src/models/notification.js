@@ -33,6 +33,11 @@ module.exports = (sequelize, DataTypes) => {
         notNull: { msg: 'Le type est requis' },
         notEmpty: { msg: 'Le type ne peut pas être vide' }
       }
+    },
+    lu: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     }
   }, {
     sequelize,

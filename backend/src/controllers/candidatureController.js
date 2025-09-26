@@ -89,13 +89,21 @@ class CandidatureController {
             candidature.statut = statut;
             await candidature.save();
 
+            const offre = await Offre.findOne({
+                where: { id_offre: candidature.id_offre }
+            });
+
+            if (!offre) {
+                return res.status(404).json({ message: "Offre introuvable." });
+            }
+
             // Récupération de l'utilisateur lié
             const utilisateur = await Utilisateur.findByPk(candidature.id_utilisateur);
 
             if (utilisateur) {
                 await notificationController.createNotification({
                     id_utilisateur: utilisateur.id,
-                    message: `Le statut de votre candidature a été mis à jour : ${statut}`,
+                    message: `Le statut de votre candidature pour l'offre ${offre.titre} a été mis à jour : ${statut}`,
                     type: 'info',
                     date_reception: new Date()
                 });

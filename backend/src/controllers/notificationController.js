@@ -67,6 +67,67 @@ class NotificationController {
             res.status(500).json({ message, data: error });
         }
     }
+
+    // Méthode pour vérifier si un utilisateur a au moins une notification non lue
+    static async avoirNotificationNonLu(req, res) {
+        const id_utilisateur = req.params.id_utilisateur;
+        try {
+            const exists = await Notification.findOne({
+                where: { id_utilisateur: id_utilisateur, lu: false }
+            });
+            res.json({ hasUnread: !!exists });
+        } catch (error) {
+            const message = `Impossible de vérifier les notifications non lues. Réessayez dans quelques instants.`;
+            res.status(500).json({ message, data: error });
+        }
+    }
+
+    // Méthode pour mettre toutes les notifications d'un utilisateur en lu
+    static async toutMarquerLu(req, res) {
+        const id_utilisateur = req.params.id_utilisateur;
+        try {
+            const [updated] = await Notification.update(
+                { lu: true },
+                { where: { id_utilisateur: id_utilisateur } }
+            );
+            const message = `Toutes les notifications de l'utilisateur ${id_utilisateur} ont été marquées comme lues.`;
+            res.json({ message, updated });
+        } catch (error) {
+            const message = `Impossible de mettre toutes les notifications en lu. Réessayez dans quelques instants.`;
+            res.status(500).json({ message, data: error });
+        }
+    }
+
+    // Méthode pour mettre toutes les notifications d'admin en lu
+    static async toutMarquerLuAdmin(req, res) {
+        try {
+            const [updated] = await Notification.update(
+                { lu: true },
+                { where: { id_utilisateur: null, type: 'simple' } }
+            );
+            const message = `Toutes les notifications simples ont été marquées comme lues.`;
+            res.json({ message, updated });
+        } catch (error) {
+            const message = `Impossible de mettre toutes les notifications simples en lu. Réessayez dans quelques instants.`;
+            res.status(500).json({ message, data: error });
+        }
+    }
+
+    // Méthode pour récupérer toutes les notifications d'admin
+    static async getAdminNotifications(req, res) {
+        try {
+            const notifications = await Notification.findAll({
+                where: { id_utilisateur: null, type: 'simple' },
+                order: [['date_reception', 'DESC']]
+            });
+            const message = `La liste des notifications d'admin a été récupérée avec succès.`;
+            res.json({ message, data: notifications });
+        } catch (error) {
+            const message = `La liste des notifications d'admin n'a pas pu être récupérée. Réessayez dans quelques instants.`;
+            res.status(500).json({ message, data: error });
+        }
+    }
+
 }
 
 module.exports = NotificationController;
