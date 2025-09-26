@@ -13,6 +13,6 @@ router.delete("/:id", CandidatureController.deleteCandidature)
 
 
 module.exports = {
-  prefix: "/candidature", // Préfixe spécifique
+  prefix: "/candidature",
   router
 };
