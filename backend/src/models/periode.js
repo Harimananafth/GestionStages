@@ -3,17 +3,17 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class periode extends Model {
+  class Periode extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      periode.hasMany(models.Offre);
+      Periode.hasMany(models.Offre);
     }
   }
-  periode.init({
+  Periode.init({
     date_debut: {
       type : DataTypes.DATE,
       allowNull: false,      
@@ -32,8 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'periode',
+    modelName: 'Periode',
     timestamps: true
   });
-  return periode;
+  return Periode;
 };

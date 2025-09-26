@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Notification.belongsTo(models.Utilisateur);
+      Notification.belongsTo(models.Utilisateur); 
     }
   }
   Notification.init({
@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'notification',
+    modelName: 'Notification',
     timestamps: true,
     createdAt: 'date_envoi'
   });

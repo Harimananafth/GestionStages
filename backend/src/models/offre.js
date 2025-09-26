@@ -3,19 +3,19 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class offre extends Model {
+  class Offre extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      offre.hasMany(models.Candidature);
-      offre.belongsTo(models.Periode);
-      offre.belongsToMany(models.Profil, { through: models.OffreProfil } );
+      Offre.hasMany(models.Candidature);
+      Offre.belongsTo(models.Periode);
+      Offre.belongsToMany(models.Profil, { through: models.OffreProfil } );
     }
   }
-  offre.init({
+  Offre.init({
     titre: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -26,9 +26,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'offre',
+    modelName: 'Offre',
     timestamps : true,
     createdAt : 'date_publication'
   });
-  return offre;
+  return Offre;
 };

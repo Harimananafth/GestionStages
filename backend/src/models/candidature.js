@@ -3,18 +3,18 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class candidature extends Model {
+  class Candidature extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      candidature.belongsTo(models.Etudiant);
-      candidature.belongsTo(models.Offre);
+      Candidature.belongsTo(models.Etudiant);
+      Candidature.belongsTo(models.Offre);
     }
   }
-  candidature.init({
+  Candidature.init({
     cv_path: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -46,9 +46,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'candidature',
+    modelName: 'Candidature',
     timestamps: true,
     createdAt: 'date_candidature'
   });
-  return candidature;
+  return Candidature;
 };

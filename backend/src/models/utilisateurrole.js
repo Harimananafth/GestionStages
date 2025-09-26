@@ -13,9 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  UtilisateurRole.init({
+  UtilisateurRole.init(
+    {
+      //pas d'attribut
+    },
+    {
     sequelize,
-    modelName: 'utilisateurRole',
+    modelName: 'UtilisateurRole',
     timestamps: true
   });
   return UtilisateurRole;
