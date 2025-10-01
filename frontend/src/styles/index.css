@@ -1,0 +1,90 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default, dark;
+}
+.bg-HS{
+    background-color: #E9F3FF;
+}
+
+.lg-light{
+    color : #113133 
+}
+.textC{
+    color : #4F5D75
+}
+
+
+/*animation home/nav*/
+
+.nav-link {
+    position: relative;
+    transition: color 0.5s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0%;
+    bottom: -5px;
+    width: 0%;
+    height: 2px;
+    background-color: #D84444;
+    transition: width 0.5s ;
+}
+
+.nav-link:hover {
+    color: #D84444; /* text-red-500 */
+}
+
+.nav-link:hover::after {
+    width: 70%;
+}
+
+/*Animation d'entrée*/
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.scale{
+    opacity: 0;
+    scale: 0.5;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+}
+.scale.in-view{
+    opacity: 1;
+    scale: 1;
+}
+.upEntry{
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+}
+.upEntry.in-view{
+    opacity: 1;
+        transform: translateY(-10px);
+
+}
+.leftEntry{
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+
+}
+.leftEntry.in-view{
+    opacity: 1;
+    transform: translateX(0);
+}
+.rightEntry{
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+}
+.rightEntry.in-view{
+    opacity: 1;
+    transform: translateX(0);
+}
