@@ -31,21 +31,27 @@ class UtilisateurController {
 
     // Méthode pour modifier un utilisateur
     static async updateUtilisateur(req, res) {
-        const id = parseInt(req.params.id, 10);
+        const id = parseInt(req.params.id)
+        const utilisateur = await Utilisateur.findByPk(id);
+
+        if (!utilisateur) {
+            const message = `L'utilisateur demandé n'existe pas.`;
+            return res.status(404).json({ message });
+        }
+
+        const { password, ...reste } = req.body;
+
+        // Vérifier si le mot de passe est modifié
+        let updatedFields = { ...reste };
+        if (password && !bcrypt.compareSync(password, utilisateur.password)) {
+            updatedFields.password = bcrypt.hashSync(password, 10);
+        }
 
         try {
-            const [affectedRows] = await Utilisateur.update(req.body, { where: { id } });
+            await utilisateur.update(updatedFields);
 
-            if (!affectedRows) {
-                const message = `L'utilisateur demandé n'existe pas.`;
-                return res.status(404).json({ message });
-            }
-
-            const utilisateur = await Utilisateur.findByPk(id);
-
-            const message = `L'utilisateur ${utilisateur.prenom} ${utilisateur.nom} a bien été modifié.`;
+            const message = `L'utilisateur ${utilisateur.email} a bien été modifié.`;
             res.json({ message, data: utilisateur });
-
         } catch (error) {
             if (error instanceof ValidationError) {
                 return res.status(400).json({ message: error.message, data: error });
@@ -60,7 +66,7 @@ class UtilisateurController {
 
     // Méthode pour supprimer un utilisateur
     static async deleteUtilisateur(req, res) {
-        const id = parseInt(req.params.id, 10);
+        const id = parseInt(req.params.id)
 
         try {
             const utilisateur = await Utilisateur.findByPk(id);
@@ -72,7 +78,7 @@ class UtilisateurController {
 
             await Utilisateur.destroy({ where: { id } });
 
-            const message = `L'utilisateur ${utilisateur.prenom} ${utilisateur.nom} a bien été supprimé.`;
+            const message = `L'utilisateur ${utilisateur.email} a bien été supprimé.`;
             res.json({ message, data: utilisateur });
 
         } catch (error) {
