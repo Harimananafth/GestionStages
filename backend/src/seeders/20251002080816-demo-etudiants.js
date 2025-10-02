@@ -4,7 +4,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert('etudiants', [
       {
-        id_utilisateur: 2, // correspond à user@example.com
+        UtilisateurId: 2, // correspond à user@example.com
         nom: 'Rabeharison',
         prenom: 'Fitahiana',
         telephone: '0341234567',
@@ -17,7 +17,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id_utilisateur: 3, // correspond à moderator@example.com
+        UtilisateurId: 3, // correspond à moderator@example.com
         nom: 'Rakoto',
         prenom: 'Miora',
         telephone: '0339876543',

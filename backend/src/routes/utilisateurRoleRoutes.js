@@ -8,7 +8,7 @@ router.post("/", UtilisateurRoleController.assignRoleToUser);
 
 // Retirer un rôle d'un utilisateur
 // On utilise :utilisateurId et :roleId dans les params
-router.delete("/:utilisateurId/:roleId", UtilisateurRoleController.removeRoleFromUser);
+router.delete("/:id_utilisateur/:id_role", UtilisateurRoleController.removeRoleFromUser);
 
 module.exports = {
   prefix: "/utilisateurRole", // Préfixe spécifique

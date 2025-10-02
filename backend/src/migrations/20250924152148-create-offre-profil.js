@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id_offre: {
+      OffreId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -19,7 +19,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      id_profil: {
+      ProfilId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
