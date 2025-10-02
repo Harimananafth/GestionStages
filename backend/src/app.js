@@ -2,10 +2,12 @@ const express = require('express')
 const fs = require("fs")
 const path = require("path")
 const db = require('./Models')
+const cors = require('cors')
 
 const app = express();
 const PORT = 5000;
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
