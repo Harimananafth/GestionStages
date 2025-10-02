@@ -1,4 +1,5 @@
-require('dotenv').config(); // charge les variables d'environnement depuis .env
+const dotenv = require("dotenv");
+dotenv.config();
 
 module.exports = {
   development: {
@@ -15,4 +16,4 @@ module.exports = {
     host: process.env.DB_HOST_PROD,
     dialect: process.env.DB_DIALECT_PROD || 'postgres'
   }
-}
+};

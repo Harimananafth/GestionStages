@@ -2,7 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const Utilisateur = require('./Utilisateur');
 module.exports = (sequelize, DataTypes) => {
   class Role extends Model {
     /**
@@ -26,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Role',
+    tableName: 'roles',
     timestamps: true
   });
   return Role;

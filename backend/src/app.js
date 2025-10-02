@@ -9,7 +9,7 @@ const PORT = 5000;
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.json({ message: "Hello from backend!" });
+  res.json({ message: "Hello from Gestion Stage API REST !" });
 });
 
 // Charger automatiquement toutes les routes

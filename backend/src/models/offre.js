@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
+    tableName: 'offres',
     modelName: 'Offre',
     timestamps : true,
     createdAt : 'date_publication'

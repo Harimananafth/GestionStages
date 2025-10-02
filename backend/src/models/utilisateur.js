@@ -31,16 +31,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: { msg: 'Le mot de passe est requis' },
-        notEmpty: { msg: 'Le mot de passe ne peut pas être vide' },
-        len: {
-          args: [8, 25],
-          msg: 'Le mot de passe doit contenir au moins 8 caractères'
-        }
+        notEmpty: { msg: 'Le mot de passe ne peut pas être vide' }
       }
     }
   }, {
     sequelize,
     modelName: 'Utilisateur',
+    tableName: 'utilisateurs',
     timestamps: true
   });
   return Utilisateur;
