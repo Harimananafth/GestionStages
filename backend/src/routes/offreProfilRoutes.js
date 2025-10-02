@@ -3,7 +3,9 @@ const router = express.Router();
 const OffreProfilController = require('../controllers/offreProfilController')
 
 router.post("/", OffreProfilController.assignProfilToOffre)
-router.delete("/:offreId/:profilId", OffreProfilController.removeProfilFromOffre)
+router.delete("/:OffreId/:ProfilId", OffreProfilController.removeProfilFromOffre)
+router.get("/:OffreId", OffreProfilController.getProfilsOfOffre)
+
 
 
 module.exports = {

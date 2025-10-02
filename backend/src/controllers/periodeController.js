@@ -1,24 +1,29 @@
 const { Periode } = require('../Models');
-const { notificationController } = require('./notificationController');
+const NotificationController = require('./notificationController');
 const { ValidationError } = require('sequelize');
 
 class PeriodeController {
-    // Méthode pour créer une nouvelle période de stage 
+    // Méthode pour créer une nouvelle période de stage
     static async createPeriode(req, res) {
         try {
-            const periode = await Periode.create(req.body);
+            const periode = await Periode.sequelize.transaction(async (t) => {
+                const newPeriode = await Periode.create(req.body, { transaction: t });
 
-            // Création d'une notification associée
-            await notificationController.createNotification({
-                id_utilisateur: null,
-                message: `La période de stage ${periode.date_debut.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })} - ${periode.date_fin.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })} est ouverte. Vous pouvez dès à présent postuler aux offres disponibles.`,
-                type: 'actualité',
-                date_reception: new Date()
+                // Création d'une notification associée
+                await NotificationController.addNotification({
+                    UtilisateurId: null,
+                    message: `La période de stage ${newPeriode.date_debut.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })} - ${newPeriode.date_fin.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })} est ouverte. Vous pouvez dès à présent postuler aux offres disponibles.`,
+                    type: 'actualité'
+                });
+
+                return newPeriode;
             });
 
             const message = `La période a été créée avec succès.`;
             return res.status(201).json({ message, data: periode });
+
         } catch (error) {
+            console.error(error);
             if (error instanceof ValidationError) {
                 return res.status(400).json({ message: error.message, data: error });
             }
@@ -41,59 +46,60 @@ class PeriodeController {
 
     // Méthode pour supprimer une période de stage
     static async deletePeriode(req, res) {
+        const id = parseInt(req.params.id);
         try {
-            const id = parseInt(req.params.id);
-            const periode = await Periode.findByPk(id);
+            await Periode.sequelize.transaction(async (t) => {
+                const periode = await Periode.findByPk(id, { transaction: t });
+                if (!periode) throw new Error('not_found');
 
-            if (!periode) {
-                const message = `La période demandée n'existe pas.`;
-                return res.status(404).json({ message });
-            }
-
-            await Periode.destroy({ where: { id } });
+                await Periode.destroy({ where: { id }, transaction: t });
+            });
 
             const message = `La période avec l'identifiant ${id} a été supprimée avec succès.`;
             return res.json({ message });
+
         } catch (error) {
-            const message = `La période avec l'identifiant ${req.params.id} n'a pas pu être supprimée. Réessayez dans quelques instants.`;
+            if (error.message === 'not_found') {
+                return res.status(404).json({ message: `La période demandée n'existe pas.` });
+            }
+            const message = `La période avec l'identifiant ${id} n'a pas pu être supprimée. Réessayez dans quelques instants.`;
             return res.status(500).json({ message, data: error });
         }
     }
 
     // Méthode pour mettre à jour une période de stage
     static async updatePeriode(req, res) {
+        const id = parseInt(req.params.id);
         try {
-            const id = parseInt(req.params.id);
+            const updatedPeriode = await Periode.sequelize.transaction(async (t) => {
+                const oldPeriode = await Periode.findByPk(id, { transaction: t });
+                if (!oldPeriode) throw new Error('not_found');
 
-            // On récupère l'ancienne période avant la mise à jour
-            const oldPeriode = await Periode.findByPk(id);
-            if (!oldPeriode) {
-                const message = `La période avec l'identifiant ${id} n'existe pas.`;
-                return res.status(404).json({ message });
-            }
+                await Periode.update(req.body, { where: { id }, transaction: t });
+                const newPeriode = await Periode.findByPk(id, { transaction: t });
 
-            // Mise à jour
-            await Periode.update(req.body, { where: { id } });
+                // Création d'une notification associée
+                await NotificationController.addNotification({
+                    UtilisateurId: null,
+                    message: `La période de stage a été modifiée : ${oldPeriode.date_debut.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })} - ${oldPeriode.date_fin.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })} devient ${newPeriode.date_debut.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })} - ${newPeriode.date_fin.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}.`,
+                    type: 'actualité',
+                    date_reception: new Date()
+                });
 
-            // Récupération de la nouvelle valeur
-            const updatedPeriode = await Periode.findByPk(id);
-
-            // Création d'une notification associée
-            await notificationController.createNotification({
-                id_utilisateur: null,
-                message: `La période de stage a été modifiée : ${oldPeriode.date_debut.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })} - ${oldPeriode.date_fin.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })} devient ${updatedPeriode.date_debut.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })} - ${updatedPeriode.date_fin.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}.`,
-                type: 'actualité',
-                date_reception: new Date()
+                return newPeriode;
             });
 
             const message = `La période avec l'identifiant ${id} a été mise à jour avec succès.`;
             return res.json({ message, data: updatedPeriode });
 
         } catch (error) {
+            if (error.message === 'not_found') {
+                return res.status(404).json({ message: `La période avec l'identifiant ${id} n'existe pas.` });
+            }
             if (error instanceof ValidationError) {
                 return res.status(400).json({ message: error.message, data: error });
             }
-            const message = `La période avec l'identifiant ${req.params.id} n'a pas pu être mise à jour. Réessayez dans quelques instants.`;
+            const message = `La période avec l'identifiant ${id} n'a pas pu être mise à jour. Réessayez dans quelques instants.`;
             return res.status(500).json({ message, data: error });
         }
     }

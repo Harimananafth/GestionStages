@@ -1,20 +1,24 @@
-const { Offre } = require('../Models')
-const { notificationController } = require('./notificationController')
-const { ValidationError } = require('sequelize')
+const { Offre } = require('../Models');
+const NotificationController = require('./notificationController');
+const { ValidationError } = require('sequelize');
 
-class OffreController{
+class OffreController {
 
-     // Méthode pour créer une nouvelle offre de stage
+    // Méthode pour créer une nouvelle offre de stage
     static async createOffre(req, res) {
         try {
-            const offre = await Offre.create(req.body);
+            const offre = await Offre.sequelize.transaction(async (t) => {
+                const newOffre = await Offre.create(req.body, { transaction: t });
 
-            // Création d'une notification associée à l'offre
-            await notificationController.createNotification({
-                id_utilisateur: null,
-                message: `Une nouvelle offre de stage a été publiée : ${offre.titre}. N'hésitez pas à postuler si elle convient à votre profil !`,
-                type: 'actualité',
-                date_reception: new Date()
+                // Création d'une notification associée à l'offre
+                await NotificationController.addNotification({
+                    UtilisateurId: null,
+                    message: `Une nouvelle offre de stage a été publiée : ${newOffre.titre}. N'hésitez pas à postuler si elle convient à votre profil !`,
+                    type: 'actualité',
+                    date_reception: new Date()
+                });
+
+                return newOffre;
             });
 
             const message = `L'offre a été créée avec succès.`;
@@ -29,28 +33,30 @@ class OffreController{
         }
     }
 
-
-    //Méthode pour supprimer une offre de stage
+    // Méthode pour supprimer une offre de stage
     static async deleteOffre(req, res) {
+        const id = req.params.id;
         try {
-            const id = req.params.id;
-            const deleted = await Offre.destroy({ where: { id } });
+            const deletedOffre = await Offre.sequelize.transaction(async (t) => {
+                const offre = await Offre.findByPk(id, { transaction: t });
+                if (!offre) throw new Error('not_found');
+                await Offre.destroy({ where: { id }, transaction: t });
+                return offre;
+            });
 
-            if (deleted) {
-                const message = `L'offre avec l'identifiant ${id} a été supprimée avec succès.`;
-                return res.json({ message });
-            } else {
-                const message = `L'offre avec l'identifiant ${id} n'existe pas.`;
-                return res.status(404).json({ message });
-            }
+            const message = `L'offre avec l'identifiant ${id} a été supprimée avec succès.`;
+            return res.json({ message, data: deletedOffre });
+
         } catch (error) {
+            if (error.message === 'not_found') {
+                return res.status(404).json({ message: `L'offre avec l'identifiant ${id} n'existe pas.` });
+            }
             const message = `L'offre avec l'identifiant ${id} n'a pas pu être supprimée. Réessayez dans quelques instants.`;
             return res.status(500).json({ message, data: error });
         }
     }
 
-
-    //Méthode pour récupérer toutes les offres de stage
+    // Méthode pour récupérer toutes les offres de stage
     static async getAllOffres(req, res) {
         try {
             const offres = await Offre.findAll();
@@ -62,22 +68,23 @@ class OffreController{
         }
     }
 
-
-    //Méthode pour mettre à jour une offre de stage
+    // Méthode pour mettre à jour une offre de stage
     static async updateOffre(req, res) {
+        const id = req.params.id;
         try {
-            const id = req.params.id;
-            const [updated] = await Offre.update(req.body, { where: { id } });
+            const updatedOffre = await Offre.sequelize.transaction(async (t) => {
+                const [updated] = await Offre.update(req.body, { where: { id }, transaction: t });
+                if (!updated) throw new Error('not_found');
+                return await Offre.findByPk(id, { transaction: t });
+            });
 
-            if (updated) {
-                const updatedOffre = await Offre.findByPk(id);
-                const message = `L'offre avec l'identifiant ${id} a été mise à jour avec succès.`;
-                return res.json({ message, data: updatedOffre });
-            } else {
-                const message = `L'offre avec l'identifiant ${id} n'existe pas.`;
-                return res.status(404).json({ message });
-            }
+            const message = `L'offre avec l'identifiant ${id} a été mise à jour avec succès.`;
+            return res.json({ message, data: updatedOffre });
+
         } catch (error) {
+            if (error.message === 'not_found') {
+                return res.status(404).json({ message: `L'offre avec l'identifiant ${id} n'existe pas.` });
+            }
             if (error instanceof ValidationError) {
                 return res.status(400).json({ message: error.message, data: error });
             }
@@ -85,7 +92,6 @@ class OffreController{
             return res.status(500).json({ message, data: error });
         }
     }
-
 }
 
-module.exports = OffreController
+module.exports = OffreController;

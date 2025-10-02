@@ -5,7 +5,10 @@ class EtudiantController {
     // Méthode pour créer un nouvel étudiant
     static async createEtudiant(req, res) {
         try {
-            const etudiant = await Etudiant.create(req.body);
+            const etudiant = await Etudiant.sequelize.transaction(async (t) => {
+                return await Etudiant.create(req.body, { transaction: t });
+            });
+
             const message = `L'étudiant a été créé avec succès.`;
             return res.status(201).json({ message, data: etudiant });
         } catch (error) {
@@ -30,14 +33,14 @@ class EtudiantController {
                 const result = await Etudiant.findAndCountAll({
                     where: {
                         [Op.or]: [
-                            { nom: { [Op.like]: `%${search}%` } },
-                            { prenom: { [Op.like]: `%${search}%` } }
+                            { nom: { [Op.iLike]: `%${search}%` } },
+                            { prenom: { [Op.iLike]: `%${search}%` } }
                         ]
                     }
                 });
 
-                const message = `La recherche des étudiants a été effectuée avec succès.`;
-                return res.json({ message, count: result.count, data: result.rows });
+                const message = `La recherche a retourné ${result.count} correspondance(s).`;
+                return res.json({ message, data: result.rows });
             }
 
             const etudiants = await Etudiant.findAll();
@@ -51,42 +54,46 @@ class EtudiantController {
 
     // Méthode pour supprimer un étudiant
     static async deleteEtudiant(req, res) {
+        const id = req.params.id;
         try {
-            const id = req.params.id;
-            const deleted = await Etudiant.destroy({ where: { id } });
+            const deletedEtudiant = await Etudiant.sequelize.transaction(async (t) => {
+                const etudiant = await Etudiant.findByPk(id, { transaction: t });
+                if (!etudiant) throw new Error('not_found');
+                await Etudiant.destroy({ where: { id }, transaction: t });
+                return etudiant;
+            });
 
-            if (deleted) {
-                const message = `L'étudiant avec l'identifiant ${id} a été supprimé avec succès.`;
-                return res.json({ message });
-            } else {
-                const message = `L'étudiant avec l'identifiant ${id} n'existe pas.`;
-                return res.status(404).json({ message });
-            }
+            const message = `L'étudiant avec l'identifiant ${id} a été supprimé avec succès.`;
+            return res.json({ message, data: deletedEtudiant });
         } catch (error) {
-            const message = `L'étudiant avec l'identifiant ${req.params.id} n'a pas pu être supprimé. Réessayez dans quelques instants.`;
+            if (error.message === 'not_found') {
+                return res.status(404).json({ message: `L'étudiant avec l'identifiant ${id} n'existe pas.` });
+            }
+            const message = `L'étudiant avec l'identifiant ${id} n'a pas pu être supprimé. Réessayez dans quelques instants.`;
             return res.status(500).json({ message, data: error });
         }
     }
 
     // Méthode pour mettre à jour un étudiant
     static async updateEtudiant(req, res) {
+        const id = req.params.id;
         try {
-            const id = req.params.id;
-            const [affectedRows] = await Etudiant.update(req.body, { where: { id } });
+            const etudiant = await Etudiant.sequelize.transaction(async (t) => {
+                const [affectedRows] = await Etudiant.update(req.body, { where: { id }, transaction: t });
+                if (!affectedRows) throw new Error('not_found');
+                return await Etudiant.findByPk(id, { transaction: t });
+            });
 
-            if (affectedRows) {
-                const etudiant = await Etudiant.findByPk(id);
-                const message = `L'étudiant avec l'identifiant ${id} a été mis à jour avec succès.`;
-                return res.json({ message, data: etudiant });
-            } else {
-                const message = `L'étudiant avec l'identifiant ${id} n'existe pas.`;
-                return res.status(404).json({ message });
-            }
+            const message = `L'étudiant avec l'identifiant ${id} a été mis à jour avec succès.`;
+            return res.json({ message, data: etudiant });
         } catch (error) {
+            if (error.message === 'not_found') {
+                return res.status(404).json({ message: `L'étudiant avec l'identifiant ${id} n'existe pas.` });
+            }
             if (error instanceof ValidationError) {
                 return res.status(400).json({ message: error.message, data: error });
             }
-            const message = `L'étudiant avec l'identifiant ${req.params.id} n'a pas pu être mis à jour. Réessayez dans quelques instants.`;
+            const message = `L'étudiant avec l'identifiant ${id} n'a pas pu être mis à jour. Réessayez dans quelques instants.`;
             return res.status(500).json({ message, data: error });
         }
     }

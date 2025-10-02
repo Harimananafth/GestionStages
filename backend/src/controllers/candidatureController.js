@@ -1,4 +1,4 @@
-const { Candidature, Offre, Utilisateur } = require('../Models');
+const { Candidature, Offre, Utilisateur, Etudiant, sequelize } = require('../Models');
 const { ValidationError } = require('sequelize');
 const notificationController = require('./notificationController');
 
@@ -19,35 +19,36 @@ class CandidatureController {
     // Méthode pour ajouter une candidature
     static async createCandidature(req, res) {
         try {
-            const candidature = await Candidature.create(req.body);
+            const candidature = await sequelize.transaction(async (t) => {
+                const newCandidature = await Candidature.create(req.body, { transaction: t });
 
-            // Récupération de l'offre liée
-            const offre = await Offre.findOne({
-                where: { id_offre: candidature.id_offre }
-            });
+                // Récupération de l'offre liée
+                const offre = await Offre.findByPk(newCandidature.OffreId, { transaction: t });
+                if (!offre) throw new Error('offre_not_found');
 
-            if (!offre) {
-                return res.status(404).json({ message: "Offre introuvable." });
-            }
+                // Création d'une notification associée
+                await notificationController.addNotification({
+                    UtilisateurId: null,
+                    message: `Une candidature a été postée pour l'offre ${offre.titre}`,
+                    type: 'simple',
+                    date_reception: new Date()
+                });
 
-            // Création d'une notification associée
-            await notificationController.createNotification({
-                id_utilisateur: null,
-                message: `Une candidature a été postée pour l'offre ${offre.titre}`,
-                type: 'simple',
-                date_reception: new Date()
+                return newCandidature;
             });
 
             const message = `La candidature a été postée avec succès.`;
-            res.status(201).json({ message, data: candidature });
+            return res.status(201).json({ message, data: candidature });
 
         } catch (error) {
+            if (error.message === 'offre_not_found') {
+                return res.status(404).json({ message: "Offre introuvable." });
+            }
             if (error instanceof ValidationError) {
                 return res.status(400).json({ message: error.message, data: error });
             }
-
             const message = `La candidature n'a pas pu être créée. Réessayez dans quelques instants.`;
-            res.status(500).json({ message, data: error });
+            return res.status(500).json({ message, data: error });
         }
     }
 
@@ -55,22 +56,24 @@ class CandidatureController {
     static async updateCandidature(req, res) {
         const id = parseInt(req.params.id);
         try {
-            const [affectedRows] = await Candidature.update(req.body, { where: { id } });
+            const updatedCandidature = await sequelize.transaction(async (t) => {
+                const [affectedRows] = await Candidature.update(req.body, { where: { id }, transaction: t });
+                if (!affectedRows) throw new Error('not_found');
+                return await Candidature.findByPk(id, { transaction: t });
+            });
 
-            if (affectedRows === 0) {
-                return res.status(404).json({ message: "Candidature introuvable." });
-            }
-
-            const candidature = await Candidature.findByPk(id);
             const message = `La candidature a été mise à jour avec succès.`;
-            res.json({ message, data: candidature });
+            return res.json({ message, data: updatedCandidature });
 
         } catch (error) {
+            if (error.message === 'not_found') {
+                return res.status(404).json({ message: "Candidature introuvable." });
+            }
             if (error instanceof ValidationError) {
                 return res.status(400).json({ message: error.message, data: error });
             }
             const message = `La candidature n'a pas pu être mise à jour. Réessayez dans quelques instants.`;
-            res.status(500).json({ message, data: error });
+            return res.status(500).json({ message, data: error });
         }
     }
 
@@ -80,40 +83,43 @@ class CandidatureController {
         const { statut } = req.body;
 
         try {
-            const candidature = await Candidature.findByPk(id);
+            const updatedCandidature = await sequelize.transaction(async (t) => {
+                const candidature = await Candidature.findByPk(id, { transaction: t });
+                if (!candidature) throw new Error('candidature_not_found');
 
-            if (!candidature) {
-                return res.status(404).json({ message: "Candidature introuvable." });
-            }
+                candidature.statut = statut;
+                await candidature.save({ transaction: t });
 
-            candidature.statut = statut;
-            await candidature.save();
+                const offre = await Offre.findByPk(candidature.OffreId, { transaction: t });
+                if (!offre) throw new Error('offre_not_found');
 
-            const offre = await Offre.findOne({
-                where: { id_offre: candidature.id_offre }
+                const etudiant = await Etudiant.findByPk(candidature.EtudiantId, { transaction: t });
+                const utilisateur = etudiant ? await Utilisateur.findByPk(etudiant.UtilisateurId, { transaction: t }) : null;
+
+                if (utilisateur) {
+                    await notificationController.addNotification({
+                        UtilisateurId: utilisateur.id,
+                        message: `Le statut de votre candidature pour l'offre ${offre.titre} a été mis à jour : ${statut}`,
+                        type: 'simple',
+                        date_reception: new Date()
+                    });
+                }
+
+                return candidature;
             });
 
-            if (!offre) {
-                return res.status(404).json({ message: "Offre introuvable." });
-            }
-
-            // Récupération de l'utilisateur lié
-            const utilisateur = await Utilisateur.findByPk(candidature.id_utilisateur);
-
-            if (utilisateur) {
-                await notificationController.createNotification({
-                    id_utilisateur: utilisateur.id,
-                    message: `Le statut de votre candidature pour l'offre ${offre.titre} a été mis à jour : ${statut}`,
-                    type: 'info',
-                    date_reception: new Date()
-                });
-            }
             const message = `Le statut de la candidature a été mis à jour avec succès.`;
-            res.json({ message, data: candidature });
+            return res.json({ message, data: updatedCandidature });
 
         } catch (error) {
+            if (error.message === 'candidature_not_found') {
+                return res.status(404).json({ message: "Candidature introuvable." });
+            }
+            if (error.message === 'offre_not_found') {
+                return res.status(404).json({ message: "Offre introuvable." });
+            }
             const message = `Le statut de la candidature n'a pas pu être mis à jour. Réessayez dans quelques instants.`;
-            res.status(500).json({ message, data: error });
+            return res.status(500).json({ message, data: error });
         }
     }
 
@@ -122,20 +128,23 @@ class CandidatureController {
         const id = parseInt(req.params.id);
 
         try {
-            const candidature = await Candidature.findByPk(id);
+            const deletedCandidature = await sequelize.transaction(async (t) => {
+                const candidature = await Candidature.findByPk(id, { transaction: t });
+                if (!candidature) throw new Error('not_found');
 
-            if (!candidature) {
-                return res.status(404).json({ message: "Candidature introuvable." });
-            }
-
-            await Candidature.destroy({ where: { id } });
+                await Candidature.destroy({ where: { id }, transaction: t });
+                return candidature;
+            });
 
             const message = `La candidature a été supprimée avec succès.`;
-            res.json({ message, data: candidature });
+            return res.json({ message, data: deletedCandidature });
 
         } catch (error) {
+            if (error.message === 'not_found') {
+                return res.status(404).json({ message: "Candidature introuvable." });
+            }
             const message = `La candidature n'a pas pu être supprimée. Réessayez dans quelques instants.`;
-            res.status(500).json({ message, data: error });
+            return res.status(500).json({ message, data: error });
         }
     }
 }

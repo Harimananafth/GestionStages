@@ -6,7 +6,10 @@ class NotificationController {
     // Méthode pour créer une nouvelle notification
     static async createNotification(req, res) {
         try {
-            const notification = await Notification.create(req.body);
+            const notification = await Notification.sequelize.transaction(async (t) => {
+                return await Notification.create(req.body, { transaction: t });
+            });
+
             const message = `La notification a été créée avec succès.`;
             res.json({ message, data: notification });
         } catch (error) {
@@ -22,15 +25,20 @@ class NotificationController {
     static async deleteNotification(req, res) {
         const id = req.params.id;
         try {
-            const deleted = await Notification.destroy({ where: { id: id } });
-            if (deleted) {
-                const message = `La notification avec l'identifiant ${id} a été supprimée avec succès.`;
-                res.json({ message });
-            } else {
-                const message = `La notification avec l'identifiant ${id} n'existe pas.`;
-                res.status(404).json({ message });
-            }
+            const deletedNotification = await Notification.sequelize.transaction(async (t) => {
+                const notif = await Notification.findByPk(id, { transaction: t });
+                if (!notif) throw new Error('not_found');
+                await Notification.destroy({ where: { id }, transaction: t });
+                return notif;
+            });
+
+            const message = `La notification avec l'identifiant ${id} a été supprimée avec succès.`;
+            res.json({ message, data: deletedNotification });
+
         } catch (error) {
+            if (error.message === 'not_found') {
+                return res.status(404).json({ message: `La notification avec l'identifiant ${id} n'existe pas.` });
+            }
             const message = `La notification avec l'identifiant ${id} n'a pas pu être supprimée. Réessayez dans quelques instants.`;
             res.status(500).json({ message, data: error });
         }
@@ -54,10 +62,10 @@ class NotificationController {
 
     // Méthode pour récupérer toutes les notifications d'un utilisateur
     static async getUserNotifications(req, res) {
-        const id_utilisateur = req.params.id_utilisateur;
+        const UtilisateurId = req.params.UtilisateurId;
         try {
             const notifications = await Notification.findAll({
-                where: { id_utilisateur: id_utilisateur },
+                where: { UtilisateurId },
                 order: [['date_reception', 'DESC']]
             });
             const message = `La liste des notifications a été récupérée avec succès.`;
@@ -70,10 +78,10 @@ class NotificationController {
 
     // Méthode pour vérifier si un utilisateur a au moins une notification non lue
     static async avoirNotificationNonLu(req, res) {
-        const id_utilisateur = req.params.id_utilisateur;
+        const UtilisateurId = req.params.UtilisateurId;
         try {
             const exists = await Notification.findOne({
-                where: { id_utilisateur: id_utilisateur, lu: false }
+                where: { UtilisateurId, lu: false }
             });
             res.json({ hasUnread: !!exists });
         } catch (error) {
@@ -84,13 +92,16 @@ class NotificationController {
 
     // Méthode pour mettre toutes les notifications d'un utilisateur en lu
     static async toutMarquerLu(req, res) {
-        const id_utilisateur = req.params.id_utilisateur;
+        const UtilisateurId = req.params.UtilisateurId;
         try {
-            const [updated] = await Notification.update(
-                { lu: true },
-                { where: { id_utilisateur: id_utilisateur } }
-            );
-            const message = `Toutes les notifications de l'utilisateur ${id_utilisateur} ont été marquées comme lues.`;
+            const [updated] = await Notification.sequelize.transaction(async (t) => {
+                return await Notification.update(
+                    { lu: true },
+                    { where: { UtilisateurId }, transaction: t }
+                );
+            });
+
+            const message = `Toutes les notifications de l'utilisateur ${UtilisateurId} ont été marquées comme lues.`;
             res.json({ message, updated });
         } catch (error) {
             const message = `Impossible de mettre toutes les notifications en lu. Réessayez dans quelques instants.`;
@@ -101,14 +112,17 @@ class NotificationController {
     // Méthode pour mettre toutes les notifications d'admin en lu
     static async toutMarquerLuAdmin(req, res) {
         try {
-            const [updated] = await Notification.update(
-                { lu: true },
-                { where: { id_utilisateur: null, type: 'simple' } }
-            );
+            const [updated] = await Notification.sequelize.transaction(async (t) => {
+                return await Notification.update(
+                    { lu: true },
+                    { where: { UtilisateurId: null, type: 'simple' }, transaction: t }
+                );
+            });
+
             const message = `Toutes les notifications simples ont été marquées comme lues.`;
             res.json({ message, updated });
         } catch (error) {
-            const message = `Impossible de mettre toutes les notifications simples en lu. Réessayez dans quelques instants.`;
+            const message = `Impossible de mettre toutes les notifications d'admin en lu. Réessayez dans quelques instants.`;
             res.status(500).json({ message, data: error });
         }
     }
@@ -117,7 +131,7 @@ class NotificationController {
     static async getAdminNotifications(req, res) {
         try {
             const notifications = await Notification.findAll({
-                where: { id_utilisateur: null, type: 'simple' },
+                where: { UtilisateurId: null, type: 'simple' },
                 order: [['date_reception', 'DESC']]
             });
             const message = `La liste des notifications d'admin a été récupérée avec succès.`;
@@ -126,6 +140,13 @@ class NotificationController {
             const message = `La liste des notifications d'admin n'a pas pu être récupérée. Réessayez dans quelques instants.`;
             res.status(500).json({ message, data: error });
         }
+    }
+
+    // Service addNotification avec transaction
+    static async addNotification(data) {
+        return await Notification.sequelize.transaction(async (t) => {
+            return await Notification.create(data, { transaction: t });
+        });
     }
 
 }

@@ -1,45 +1,49 @@
-const { UtilisateurRole } = require('../Models');
+const { UtilisateurRole, sequelize } = require('../Models');
 
 class UtilisateurRoleController {
 
     // Méthode pour attribuer un rôle à un utilisateur
     static async assignRoleToUser(req, res) {
-        try {
-            const { id_utilisateur, id_role } = req.body;
+        const { id_utilisateur, id_role } = req.body;
 
-            if (!id_utilisateur || !id_role) {
+        if (!id_utilisateur || !id_role) {
             return res.status(400).json({ message: "L'id_utilisateur et l'id_role sont obligatoires." });
-            }
+        }
 
-            const utilisateurRole = await UtilisateurRole.create({
-            id_role,
-            id_utilisateur,
-            createdAt : new Date(),
-            updatedAt : new Date()
+        try {
+            const utilisateurRole = await sequelize.transaction(async (t) => {
+                return await UtilisateurRole.create({
+                    id_role,
+                    id_utilisateur,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }, { transaction: t });
             });
 
             res.json({
-            message: `Le rôle a été attribué à l'utilisateur avec succès.`,
-            data: utilisateurRole
+                message: `Le rôle a été attribué à l'utilisateur avec succès.`,
+                data: utilisateurRole
             });
 
         } catch (error) {
             console.error(error);
             res.status(500).json({
-            message: `Le rôle n'a pas pu être attribué à l'utilisateur. Réessayez dans quelques instants.`,
-            data: error
+                message: `Le rôle n'a pas pu être attribué à l'utilisateur. Réessayez dans quelques instants.`,
+                data: error
             });
         }
     }
-
 
     // Méthode pour retirer un rôle d'un utilisateur
     static async removeRoleFromUser(req, res) {
         const { id_utilisateur, id_role } = req.params;
 
         try {
-            const deletedCount = await UtilisateurRole.destroy({
-                where: { id_utilisateur, id_role }
+            const deletedCount = await sequelize.transaction(async (t) => {
+                return await UtilisateurRole.destroy({
+                    where: { id_utilisateur, id_role },
+                    transaction: t
+                });
             });
 
             if (deletedCount === 0) {

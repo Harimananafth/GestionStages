@@ -1,11 +1,13 @@
-const { OffreProfil } = require('../Models');
+const { OffreProfil, sequelize } = require('../Models');
 
 class OffreProfilController {
 
     // Méthode pour attribuer un profil à une offre
     static async assignProfilToOffre(req, res) {
         try {
-            const offreProfil = await OffreProfil.create(req.body);
+            const offreProfil = await sequelize.transaction(async (t) => {
+                return await OffreProfil.create(req.body, { transaction: t });
+            });
 
             const message = `Le profil a été attribué à l'offre avec succès.`;
             res.json({ message, data: offreProfil });
@@ -18,11 +20,14 @@ class OffreProfilController {
 
     // Méthode pour retirer un profil d'une offre
     static async removeProfilFromOffre(req, res) {
-        const { offreId, profilId } = req.params;
+        const { OffreId, ProfilId } = req.params;
 
         try {
-            const deletedCount = await OffreProfil.destroy({
-                where: { offreId, profilId }
+            const deletedCount = await sequelize.transaction(async (t) => {
+                return await OffreProfil.destroy({
+                    where: { OffreId, ProfilId },
+                    transaction: t
+                });
             });
 
             if (deletedCount === 0) {
@@ -41,11 +46,11 @@ class OffreProfilController {
 
     // Méthode pour lister tous les profils d'une offre
     static async getProfilsOfOffre(req, res) {
-        const { offreId } = req.params;
+        const { OffreId } = req.params;
 
         try {
             const profils = await OffreProfil.findAll({
-                where: { offreId }
+                where: { OffreId }
             });
 
             const message = `Liste des profils de l'offre récupérée avec succès.`;
