@@ -13,15 +13,15 @@ export default function Carrousel(){
     const extendedTechnologies = [...technologies, ...technologies];
 
     return(
-        <section id="outil" className="bg-stone-50 relative min-h-[60vh] w-full flex flex-col items-center justify-center font-sans p-4 pb-8 pt-28">
+        <section id="outil" className="bg-stone-50 relative min-h-[75vh] w-full flex flex-col items-center justify-center font-sans p-4 py-8 md:py-30 xl:py-8">
                             <svg className="absolute w-1/1 h-[100px] top-[-1px] left-0"  xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 100"><g fill="#F2F4F7"><path d="M1000 100C500 100 500 64 0 64V0h1000v100Z" opacity=".5"></path><path d="M1000 100C500 100 500 34 0 34V0h1000v100Z" opacity=".5"></path><path d="M1000 100C500 100 500 4 0 4V0h1000v100Z"></path></g></svg>
             <div className="w-full max-w-5xl mx-auto ">
-                <h2 className=" text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-14">
+                <h2 className=" text-xl lg:text-3xl font-bold text-center text-gray-800 mb-14">
                 Quelques outils que nous utilisons :
                 </h2>
 
                 <div
-                className="relative w-full overflow-hidden group"
+                className="relative w-full overflow-hidden group "
                 style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}
                 >
 
@@ -37,7 +37,8 @@ export default function Carrousel(){
                 </div>
                 </div>
             </div>
-            <svg className="absolute w-1/1 h-[20px] bottom-[0] rotate-180 left-0"  xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 100"><g fill="#E9F3FF"><path d="M1000 100C500 100 500 64 0 64V0h1000v100Z" opacity=".5"></path><path d="M1000 100C500 100 500 34 0 34V0h1000v100Z" opacity=".5"></path><path d="M1000 100C500 100 500 4 0 4V0h1000v100Z"></path></g></svg>
+            <svg className="absolute w-1/1 h-[100px] bottom-[0] rotate-180 left-0"  xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 100"><g fill="#E9F3FF"><path d="M1000 100C500 100 500 64 0 64V0h1000v100Z" opacity=".5"></path><path d="M1000 100C500 100 500 34 0 34V0h1000v100Z" opacity=".5"></path><path d="M1000 100C500 100 500 4 0 4V0h1000v100Z"></path></g></svg>
+            
 
         </section>
     )

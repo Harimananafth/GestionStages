@@ -1,3 +1,3 @@
 export default function Login(){
-    return <h1>Logni</h1>
+    return <h1>Login</h1>
 }
