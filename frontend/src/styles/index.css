@@ -4,12 +4,13 @@
   themes: light --default, dark;
 }
 
+#root{
+    background-color: #F2F4F7;
+}
 
 .montserrat-hero {
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 600;
-  font-style: normal;
 }
 
 body{

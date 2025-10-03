@@ -5,8 +5,8 @@ export default function Hero(){
     return (
         <section id='hero' className=" mx-auto min-h-screen  lg:h-screen pt-3 flex flex-col bg-HS lg:px-16 px-10 sm:px-5 animate-[fadeIn_0.5s_ease-in]">
 
-                <header className="flex justify-between items-center pt-1 ">
-                    <div className="flex gap-2 items-center border-1 border-gray-200 p-2 hover:cursor-default rounded-xl md:grayscale-100 hover:grayscale-0 hover:-translate-y-1 duration-300">
+                <header className="flex justify-between items-center pt-3 ">
+                    <div className="flex gap-2 items-center hover:cursor-default border-1 border-gray-200 p-2 rounded-xl md:grayscale-100 hover:grayscale-0 hover:-translate-y-1 duration-300">
                         <img src="/images/logo.png" alt="" className="h-6"/>
                         <p className="font-semibold text-lg lg-light">Neovate App</p>
                     </div>
