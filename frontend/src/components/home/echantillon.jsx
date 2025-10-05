@@ -6,8 +6,8 @@ const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 
 export default  function Echantillon(){
-    
-    const { data, error, isLoading } = useSWR(`http://localhost:5000/api/offre/?limit=3`, fetcher)
+    const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+    const { data, error, isLoading } = useSWR(`${ApiUrl}/offre/?limit=3`, fetcher)
 
     return(
         

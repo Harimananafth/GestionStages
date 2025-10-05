@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Utilisateur.init({
+    googleId : {
+      type : DataTypes.STRING,
+      unique : true,
+      allowNull : true
+    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -30,14 +35,18 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: { msg: 'L\'email ne peut pas être vide' }
       }
     },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: { msg: 'Le mot de passe est requis' },
-        notEmpty: { msg: 'Le mot de passe ne peut pas être vide' }
-      }
-    }
+      allowNull: true
+    },
+    photo: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
   }, {
     sequelize,
     modelName: 'Utilisateur',
