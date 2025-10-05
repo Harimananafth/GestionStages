@@ -9,6 +9,10 @@ router.get("/google/callback", passport.authenticate("google", { session: false,
 router.post("/google/register", Auth.registerGoogle);
 router.post("/login", Auth.login)
 router.post("/register", Auth.register)
+router.post("/verify-code", Auth.verifyCode)
+router.post("/resend-code", Auth.resendCode)
+
+
 
 
 

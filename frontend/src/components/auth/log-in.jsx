@@ -17,20 +17,14 @@ export default function Login(){
         setLoading(true);
         setError(null);
 
-        // Récupération des données
-
         const formData = new FormData(e.currentTarget)
         const email = formData.get("email")
         const password = formData.get("password")
 
-        //Authentification
-
-        try{
+        try {
             const response = await fetch(`${ApiUrl}/auth/login`, {
                 method: "POST",
-                headers: {
-                "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 credentials: "include",
                 body: JSON.stringify({ email, password })
             });
@@ -40,20 +34,31 @@ export default function Login(){
             if (response.ok) {
                 setSuccess(data.message);
                 setError(null);
-                const id_utilisateur = data.id
-                const email = data.email
-                localStorage.setItem("utilisateur", JSON.stringify({ id_utilisateur, email}))
-                navigate("/")
+
+                // Récupération des infos utilisateur
+                const { id, email: userEmail, roles } = data.user;
+                localStorage.setItem("utilisateur", JSON.stringify({ id, email: userEmail, roles }));
+
+                // Redirection selon rôle
+                if (roles.includes("admin")) {
+                    navigate("/admin/");
+                } else if (roles.includes("etudiant")) {
+                    navigate("/etudiant/");
+                } else {
+                    navigate("/"); // fallback
+                }
+
             } else {
-                setError( data.message || "Erreur lors de la connexion.");
+                setError(data.message || "Erreur lors de la connexion.");
             }
-        }catch (err) {
+        } catch (err) {
             setError("Erreur réseau. Veuillez réessayer.");
             console.error(err)
         } finally {
             setLoading(false);
         }    
     }
+
 
     return (
         <div className="container mx-auto h-screen flex justify-center items-center py-14 px-5">

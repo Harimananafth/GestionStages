@@ -14,11 +14,13 @@ function App() {
         <Route path="" element={<Home />} />
         <Route path="auth"> 
           <Route index element={<Login />}/> 
-          <Route path="sign-up" element={<SignUp />}/>
+          <Route path="sign-up"> 
+              <Route index element={<SignUp />}/>
+              <Route path="set-password" element={<SetPassword />} /> 
+              <Route path="verification" element={<Verification />} /> 
+              <Route path="more-info" element={<MoreInfo />} /> 
+          </Route>
           <Route path="login-success" element={<Success />} />
-          <Route path="set-password" element={<SetPassword />} /> 
-          <Route path="verification" element={<Verification />} /> 
-          <Route path="more-info" element={<MoreInfo />} /> 
         </Route>
       </Routes>
     </Router>
