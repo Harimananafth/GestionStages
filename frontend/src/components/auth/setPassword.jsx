@@ -14,12 +14,12 @@ const SetPassword = () => {
     setLoading(true);
     setError(null);
 
-    // Récupération des données du form
+
     const formData = new FormData(e.target);
     const password = formData.get("password");
     const confirmPassword = formData.get("confirmPassword");
 
-    // Vérification simple côté client
+
     if (!password || !confirmPassword) {
       setError("Veuillez remplir tous les champs.");
       setLoading(false);
@@ -43,13 +43,18 @@ const SetPassword = () => {
 
       const data = await response.json();
 
+
       if (response.ok) {
         setSuccess(true);
         setError(null);
-        const id_utilisateur = data.id
-        const email = data.email
-        localStorage.setItem("utilisateur", JSON.stringify({ id_utilisateur, email}))
-        navigate("/")
+
+        // Récupération des infos utilisateur
+        const { id, email: userEmail, roles } = data.user;
+        const user = data.user
+        localStorage.setItem("utilisateur", JSON.stringify({ id, email: userEmail, roles }));
+
+        setTimeout(() => navigate('/auth/sign-up/more-info', { state: { user } }), 1000);
+
       } else {
         setError(data.error || "Erreur lors de l'inscription.");
       }
@@ -62,42 +67,45 @@ const SetPassword = () => {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "2rem auto", textAlign: "center" }}>
-      <h2>Choisissez votre mot de passe</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>Inscription réussie !</p>}
+    <div className="container mx-auto h-screen flex justify-center items-center py-14 px-5">
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "1rem" }}>
-          <input
-            type="password"
-            name="password"
-            placeholder="Mot de passe"
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirmer le mot de passe"
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            padding: "0.5rem 1rem",
-            backgroundColor: "#4f46e5",
-            color: "white",
-            border: "none",
-            cursor: "pointer"
-          }}
-        >
-          {loading ? "Chargement..." : "Valider"}
-        </button>
-      </form>
+      <div className=" w-[300px] animate-[text-appear-bottom_0.5s_ease-in] box-content  bg-white p-8 rounded-2xl shadow-lg">
+        <form onSubmit={handleSubmit} className="flex flex-col w-full gap-2">
+
+          <h1 className="montserrat-hero font-bold text-xl text-center">Tapez votre mot de passe</h1>
+
+          {error && <p className='label text-xs text-error'>{error}</p>}
+          {success && <p className='label text-xs text-success'>{success}</p>}
+
+          <fieldset className="fieldset my-0 w-full">
+            <legend className="fieldset-legend font-medium text-[0.85rem] text-[#4F5D75]">Mot de passe :</legend>
+            <input
+              type="password"
+              name="password"
+              className="input min-w-full text-[0.85rem] text-[#4F5D75] border-1 border-gray-200 focus:border-sky-400 focus:border-1 rounded-lg focus:outline-none duration-300"
+              placeholder="Neovate123!"
+              required
+            />
+          </fieldset>
+          <fieldset className="fieldset my-0 w-full">
+            <legend className="fieldset-legend font-medium text-[0.85rem] text-[#4F5D75]">Confirmez le mot de passe :</legend>
+            <input
+              type="password"
+              name="confirmPassword"
+              className="input min-w-full text-[0.85rem] text-[#4F5D75] border-1 border-gray-200 focus:border-sky-400 focus:border-1 rounded-lg focus:outline-none duration-300"
+              placeholder="Neovate123!"
+              required
+            />
+          </fieldset>
+          <button
+            type="submit"
+            disabled={loading}
+            className="block w-full mt-2 hover:bg-sky-700 bg-sky-600 text-white h-10 rounded-lg text-sm font-medium shadow-md duration-300 hover:shadow-lg hover:cursor-pointer"
+          >
+            {loading ? <span className="loading loading-spinner loading-md text-white"></span> : "Valider"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

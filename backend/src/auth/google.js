@@ -15,18 +15,21 @@ passport.use(
         let user = await Utilisateur.findOne({ where: { email: profile.emails[0].value } });
 
         if (!user) {
+          // nouvel utilisateur
           return done(null, { googleProfile: profile, isNew: true });
         }
 
+        // utilisateur existant
+        // ⚠️ inclure googleProfile pour mettre à jour infos
+        return done(null, { user, isNew: false, googleProfile: profile });
 
-        return done(null, { user, isNew: false });
-        
       } catch (err) {
         return done(err, null);
       }
     }
   )
 );
+
 
 
 passport.serializeUser((user, done) => done(null, user));

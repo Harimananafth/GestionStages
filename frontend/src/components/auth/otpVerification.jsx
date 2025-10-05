@@ -67,6 +67,11 @@ export default function Verification() {
 
       if (response.ok) {
         setMessage({ text: 'Vérification réussie ! Redirection en cours...', type: 'success' });
+
+        // Récupération des infos utilisateur
+        const { id, email: userEmail, roles } = data.user;
+        localStorage.setItem("utilisateur", JSON.stringify({ id, email: userEmail, roles }));
+
         setTimeout(() => navigate('/auth/sign-up/more-info', { state: { user } }), 1000);
       } else {
         setMessage({ text: data.message || 'Code incorrect. Veuillez réessayer.', type: 'error' });

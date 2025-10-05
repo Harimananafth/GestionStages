@@ -41,9 +41,9 @@ export default function Login(){
 
                 // Redirection selon rôle
                 if (roles.includes("admin")) {
-                    navigate("/admin/");
+                    navigate("/a/");
                 } else if (roles.includes("etudiant")) {
-                    navigate("/etudiant/");
+                    navigate("/t/");
                 } else {
                     navigate("/"); // fallback
                 }

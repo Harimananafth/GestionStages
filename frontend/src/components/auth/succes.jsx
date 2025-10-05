@@ -1,28 +1,28 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-export default function Success(){
+export default function Success() {
     const location = useLocation();
-
-    const queryParams = new URLSearchParams(location.search);
-    const name = queryParams.get("name");
-    const email = queryParams.get("email");
+    const navigate = useNavigate(); // ✅ parenthèses manquantes
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
-        const name = queryParams.get("name");
+        const id = queryParams.get("id");
         const email = queryParams.get("email");
+        const roles = queryParams.get("roles");
 
-        if (name && email) {
-        localStorage.setItem("user", JSON.stringify({ name, email }));
+        if (id && email && roles) {
+            localStorage.setItem("user", JSON.stringify({ id, email, roles: JSON.parse(roles) }));
         }
-    }, [location.search]);
+        
+        const timer = setTimeout(() => {
+            navigate("/t/");
+        }, 1000);
 
+        return () => clearTimeout(timer);
+    }, [location.search, navigate]);
 
     return (
-        <div>
-        <h1>Bienvenue, {name} !</h1>
-        <p>Email : {email}</p>
-        </div>
+        <h1 className="h-screen flex items-center justify-center text-success font-semibold">Connexion réussie ! Redirection en cours...</h1>
     );
 }

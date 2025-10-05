@@ -34,12 +34,6 @@ module.exports = {
       isVerified: {
         type: Sequelize.BOOLEAN, defaultValue: false
       },
-      verificationCode: {
-        type: Sequelize.STRING, allowNull: true
-      },
-      verificationExpires: {
-        type: Sequelize.DATE, allowNull: true
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

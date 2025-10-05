@@ -10,7 +10,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        libelle:'étudiant',
+        libelle:'user',
         createdAt: new Date(),
         updatedAt: new Date()
       }
