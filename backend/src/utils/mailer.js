@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 // Fonction générique pour envoyer un mail
 async function sendMail({ to, subject, text, html }) {
   await transporter.sendMail({
-    from: `"GestionStages" <${process.env.GMAIL_USER}>`,
+    from: `"NeovateApp" <${process.env.GMAIL_USER}>`,
     to,
     subject,
     text,

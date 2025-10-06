@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { IMaskInput } from "react-imask";
 
 export default function MoreInfo() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+  const [num, setNum] = useState("")
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,7 +35,7 @@ export default function MoreInfo() {
         diplome: formData.get("diplome"),
         niveau: formData.get("niveau") || "",
         specialite: formData.get("spec"),
-        telephone: formData.get("num"),
+        telephone: num,
         adresse: formData.get("adresse"),
         UtilisateurId: user?.id,
       };
@@ -77,7 +79,7 @@ export default function MoreInfo() {
     <div className="container mx-auto min-h-screen flex justify-center items-center py-14 px-5">
       <div className="flex flex-col gap-4 animate-[text-appear-bottom_0.5s_ease-in] bg-white shadow-lg rounded-2xl p-8 w-[400px] md:w-[800px] box-content">
         <h1 className="montserrat-hero font-bold text-xl">
-          Dîtes-nous un peu plus sur vous
+          Dites-nous un peu plus sur vous
         </h1>
         {message && (
           <p className={`label text-xs text-center ${getMessageClass(message.type)}`}>
@@ -158,14 +160,18 @@ export default function MoreInfo() {
             </fieldset>
             <fieldset className="fieldset gap-0 w-full">
               <legend className="fieldset-legend font-medium text-[0.85rem] text-[#4F5D75]">Numéro de téléphone :</legend>
-              <input
-                type="tel"
-                name="num"
-                maxLength={10}
-                className="input min-w-full text-[0.85rem] text-[#4F5D75] border-1 border-gray-200 focus:border-sky-400 focus:border-1 rounded-lg focus:outline-none duration-300"
-                placeholder="03x xx xxx xx"
-                required
-              />
+                <IMaskInput
+                  mask="03# ## ### ##"
+                  definitions={{
+                    "#": /[0-9]/,
+                  }}
+                  className="input min-w-full text-[0.85rem] text-[#4F5D75] border border-gray-200 focus:border-sky-400 rounded-lg focus:outline-none duration-300"
+                  placeholder="03x xx xxx xx"
+                  name="num"
+                  value={num}
+                  onAccept={(value) => setNum(value)} 
+                  inputMode="numeric"
+                />
             </fieldset>
             <fieldset className="fieldset gap-0 w-full">
               <legend className="fieldset-legend font-medium text-[0.85rem] text-[#4F5D75]">Adresse postale :</legend>

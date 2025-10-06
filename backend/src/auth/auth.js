@@ -52,6 +52,7 @@ class Auth {
         if (googleProfile) {
             updates.name = googleProfile.displayName;
             updates.photo = googleProfile.photos[0].value;
+            updates.isVerified = true
         }
         if (!user.googleId) {
             updates.googleId = uuidv4();
@@ -80,7 +81,7 @@ class Auth {
             if (!password) return res.status(400).json({ error: "Mot de passe requis." });
 
             const passwordHash = bcrypt.hashSync(password, 10);
-            const newUser = await Utilisateur.create({ ...tempUser, password: passwordHash });
+            const newUser = await Utilisateur.create({ ...tempUser, password: passwordHash, isVerified:true });
 
             // Assignation d'un rôle par défaut
             const defaultRole = await Role.findOne({ where: { libelle: 'user' } });

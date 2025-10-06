@@ -45,10 +45,6 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: { msg: 'Le téléphone est requis' },
         notEmpty: { msg: 'Le téléphone ne peut pas être vide' },
-        is: {
-          args: /^03[0-9]{8}$/,
-          msg: 'Le téléphone doit commencer par 03 et contenir exactement 10 chiffres'
-        }
       }
     },
     adresse: {

@@ -42,7 +42,7 @@ export default function Login(){
                 // Redirection selon rôle
                 if (roles.includes("admin")) {
                     navigate("/a/");
-                } else if (roles.includes("etudiant")) {
+                } else if (roles.includes("user")) {
                     navigate("/t/");
                 } else {
                     navigate("/"); // fallback

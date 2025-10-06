@@ -12,6 +12,7 @@ class EtudiantController {
             const message = `L'étudiant a été créé avec succès.`;
             return res.status(201).json({ message, data: etudiant });
         } catch (error) {
+            console.log(error)
             if (error instanceof ValidationError) {
                 return res.status(400).json({ message: error.message, data: error });
             }

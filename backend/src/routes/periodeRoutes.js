@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const PeriodeController = require('../controllers/periodeController')
+const authMiddleware = require("../middlewares/authMiddleware");
 
-router.post("/", PeriodeController.createPeriode)
-router.get("/", PeriodeController.getAllPeriodes)
-router.delete("/:id", PeriodeController.deletePeriode)
-router.put("/:id", PeriodeController.updatePeriode)
+router.post("/", authMiddleware, PeriodeController.createPeriode)
+router.get("/", authMiddleware, PeriodeController.getAllPeriodes)
+router.delete("/:id", authMiddleware, PeriodeController.deletePeriode)
+router.put("/:id", authMiddleware, PeriodeController.updatePeriode)
 
 module.exports = {
   prefix: "/periode",
