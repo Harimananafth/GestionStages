@@ -52,7 +52,7 @@ export default function MoreInfo() {
 
       if (response.ok) {
         setMessage({ type: "success", text: "Votre profil étudiant a été créé avec succès !" });
-        setTimeout(() => navigate("/t/"), 1500);
+        setTimeout(() => navigate("/t"), 1500);
       } else {
         setMessage({ type: "error", text: data.message || "Une erreur est survenue." });
       }

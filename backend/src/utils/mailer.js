@@ -31,7 +31,7 @@ async function sendVerificationMail(email, code) {
       <p style="font-size: 24px; font-weight: bold; color: #E94E77;">${code}</p>
       <p>Ce code est valide pendant <strong>5 minutes</strong>.</p>
       <hr style="margin: 20px 0; border: none; border-top: 1px solid #ccc;" />
-      <p style="font-size: 12px; color: #888;">Si vous n’avez pas demandé ce code, ignorez cet email.</p>
+      <p style="font-size: 12px; color: #888;">Si vous n’avez pas demandé ce code, ignorez cet email. <br/> Neovate Incorp. </p>
     </div>
   `;
 

@@ -1,0 +1,34 @@
+import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+
+export default function ProtectedRoute({ children, allowedRoles }) {
+  const [loading, setLoading] = useState(true);
+  const [authorized, setAuthorized] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/check`, {
+          credentials: "include",
+        });
+        if (!res.ok) throw new Error("Unauthorized");
+
+        const data = await res.json();
+        if (allowedRoles && !allowedRoles.some(r => data.user.roles.includes(r))) {
+          setAuthorized(false);
+        } else {
+          setAuthorized(true);
+        }
+      } catch {
+        setAuthorized(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, [allowedRoles]);
+
+  if (loading) return <div className="text-center p-10">Chargement...</div>;
+  return authorized ? children : <Navigate to="/auth" replace />;
+}

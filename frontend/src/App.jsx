@@ -6,6 +6,11 @@ import Success from "./components/auth/succes";
 import SetPassword from "./components/auth/setPassword";
 import Verification from "./components/auth/otpVerification";
 import MoreInfo from "./components/auth/moreInfo";
+import ProtectedRoute from "./components/auth/protectedRoute";
+import UserDashboard from "./components/client/userDashboard";
+import UserLayout from "./components/client/userLayout";
+import AdminDashboard from "./components/admin/adminDashboard";
+import AdminLayout from "./components/admin/adminLayout";
 
 function App() {
   return (
@@ -21,6 +26,28 @@ function App() {
               <Route path="more-info" element={<MoreInfo />} /> 
           </Route>
           <Route path="login-success" element={<Success />} />
+        </Route>
+        {/* Route user simple */}
+        <Route
+          path="t"
+          element={
+            <ProtectedRoute allowedRoles={["user", "admin"]}>
+              <UserLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="" element={<UserDashboard />} />
+        </Route>
+        {/* Route admin */}
+        <Route
+          path="a"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="" element={<AdminDashboard />} />
         </Route>
       </Routes>
     </Router>

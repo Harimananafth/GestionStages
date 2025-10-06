@@ -11,12 +11,20 @@ export default function Success() {
         const email = queryParams.get("email");
         const roles = queryParams.get("roles");
 
+
+        const parsedRoles = JSON.parse(roles);
         if (id && email && roles) {
-            localStorage.setItem("user", JSON.stringify({ id, email, roles: JSON.parse(roles) }));
+            localStorage.setItem("user", JSON.stringify({ id, email, roles: parsedRoles }));
         }
         
         const timer = setTimeout(() => {
-            navigate("/t/");
+            if (parsedRoles.includes("admin")) {
+                navigate("/a/");
+            } else if (parsedRoles.includes("user")) {
+                navigate("/t/");
+            } else {
+                navigate("/"); // fallback
+            }
         }, 1000);
 
         return () => clearTimeout(timer);
