@@ -40,8 +40,8 @@ export default function Login(){
                 setError(null);
 
                 // Récupération des infos utilisateur
-                const { id, email: userEmail, roles } = data.user;
-                localStorage.setItem("utilisateur", JSON.stringify({ id, email: userEmail, roles }));
+                const { id, email: userEmail, roles, photo } = data.user;
+                localStorage.setItem("utilisateur", JSON.stringify({ id, email: userEmail, roles, photo }));
 
                 // Redirection selon rôle
                 if (roles.includes("admin")) {

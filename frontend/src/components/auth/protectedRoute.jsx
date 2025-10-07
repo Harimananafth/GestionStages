@@ -29,6 +29,6 @@ export default function ProtectedRoute({ children, allowedRoles }) {
     checkAuth();
   }, [allowedRoles]);
 
-  if (loading) return <div className="text-center p-10">Chargement...</div>;
+  if (loading) return <div className="h-screen w-screen flex justify-center items-center font-semibold">Chargement...</div>;
   return authorized ? children : <Navigate to="/auth" replace />;
 }

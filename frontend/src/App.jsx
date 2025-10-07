@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, Outlet } from "react-router-dom";
 import Home from "./pages/home";
 import Login from "./components/auth/log-in";
 import SignUp from "./components/auth/sign-up";
@@ -7,17 +7,25 @@ import SetPassword from "./components/auth/setPassword";
 import Verification from "./components/auth/otpVerification";
 import MoreInfo from "./components/auth/moreInfo";
 import ProtectedRoute from "./components/auth/protectedRoute";
-import UserDashboard from "./components/client/userDashboard";
+import UserDashboard from "./components/client/dashboard/userDashboard";
 import UserLayout from "./components/client/userLayout";
-import AdminDashboard from "./components/admin/adminDashboard";
+import AdminDashboard from "./components/admin/dashboard/adminDashboard";
 import AdminLayout from "./components/admin/adminLayout";
+import PublicRoute from "./components/auth/publicRoute";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="" element={<Home />} />
-        <Route path="auth"> 
+        <Route
+          path="auth"
+          element={
+            <PublicRoute>
+              <Outlet />
+            </PublicRoute>
+          }
+        >
           <Route index element={<Login />}/> 
           <Route path="sign-up"> 
               <Route index element={<SignUp />}/>

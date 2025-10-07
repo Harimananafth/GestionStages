@@ -12,11 +12,12 @@ export default function Success() {
         const id = queryParams.get("id");
         const email = queryParams.get("email");
         const roles = queryParams.get("roles");
+        const photo = queryParams.get("photo");
 
 
         const parsedRoles = JSON.parse(roles);
         if (id && email && roles) {
-            localStorage.setItem("utilisateur", JSON.stringify({ id, email, roles: parsedRoles }));
+            localStorage.setItem("utilisateur", JSON.stringify({ id, email, roles: parsedRoles, photo }));
         }
         
         const timer = setTimeout(() => {

@@ -19,8 +19,10 @@ export default  function Echantillon(){
                     <h1 className='text-3xl font-bold text-gray-800 text-center upEntry'>Nos offres </h1>
                     {isLoading ? (
                             <span className="loading loading-dots loading-xl grow"></span>
-                        ) : (
+                        ) : data && data.data ? (
                             <OffresList data = {data} error={error} />
+                        ) : (
+                            <p className='text-sm font-semibold'>Aucune données</p>
                         )
                     }
                     <button className='scale hover:bg-sky-700 bg-sky-600 text-white w-45 h-9 rounded-lg text-sm font-medium shadow-md  duration-300 hover:shadow-lg hover:cursor-pointer'>

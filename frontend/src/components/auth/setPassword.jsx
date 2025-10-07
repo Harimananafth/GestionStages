@@ -53,9 +53,9 @@ const SetPassword = () => {
         setError(null);
 
         // Récupération des infos utilisateur
-        const { id, email: userEmail, roles } = data.user;
+        const { id, email: userEmail, roles, photo } = data.user;
         const user = data.user
-        localStorage.setItem("utilisateur", JSON.stringify({ id, email: userEmail, roles }));
+        localStorage.setItem("utilisateur", JSON.stringify({ id, email: userEmail, roles, photo }));
 
         setTimeout(() => navigate('/auth/sign-up/more-info', { state: { user } }), 1000);
 

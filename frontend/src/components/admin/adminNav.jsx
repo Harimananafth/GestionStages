@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 
 // Données pour les éléments de menu
 const menuItems = [
-  { to: 'home', icon: Home, name: 'Dashboard' },
-  { to: 'profile', icon: MessageSquareDot, name: 'Messages' },
-  { to: 'analytics', icon: BriefcaseBusiness, name: 'Offres de stage' },
-  { to: 'messages', icon: GraduationCap, name: 'Etudiants' },
-  { to: 'notifications', icon: FileUser, name: 'Candidatures' },
-  { to: 'settings', icon: FolderCog, name: 'Profils' },
+  { id:1, to: 'home', icon: Home, name: 'Dashboard' },
+  { id:2, to: 'profile', icon: MessageSquareDot, name: 'Messages' },
+  { id:3, to: 'analytics', icon: BriefcaseBusiness, name: 'Offres de stage' },
+  { id:4, to: 'messages', icon: GraduationCap, name: 'Etudiants' },
+  { id:5, to: 'notifications', icon: FileUser, name: 'Candidatures' },
+  { id:6, to: 'settings', icon: FolderCog, name: 'Profils' },
 ];
 
 // Le composant principal de l'application
