@@ -16,9 +16,11 @@ const menuItems = [
 // Le composant principal de l'application
 export default function AdNavbar(){
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <>
+    <div className="min-h-screen flex items-center justify-center lg:block hidden">
             
       <nav 
         className="relative bg-white shadow-lg flex  h-screen items-center justify-center"
@@ -67,6 +69,48 @@ export default function AdNavbar(){
       </nav>
 
     </div>
+ 
+    {/* Barre de navigation inférieure */}
+      <nav className="w-full bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] order-2 lg:order-1 block lg:hidden">
+        {/*
+          - h-16 sm:h-20 -> Hauteur réduite sur les petits écrans
+          - px-2 sm:px-4 -> Padding horizontal réduit sur les petits écrans
+        */}
+        <ul className="flex justify-around items-center h-14 sm:h-20 max-w-2xl mx-auto px-2 sm:px-4">
+          {menuItems.map((item, index) => (
+            <li key={item.id} className="relative">
+              <Link 
+                to={item.to}
+                // w-14 h-14 sm:w-16 sm:h-16 -> Zone cliquable plus petite sur petits écrans
+                className="flex flex-col items-center justify-center w-14 h-12 sm:w-16 sm:h-16"
+                onClick={(e) => {
+                  e.preventDefault(); // Empêche le saut de page
+                  setActiveIndex(index);
+                }}
+              >
+                {/* L'indicateur (le trait) qui apparaît au-dessus de l'icône active */}
+                <span
+                  className={`
+                    absolute -top-1 left-1/2 -translate-x-1/2
+                    w-6 sm:w-8 h-1 bg-sky-600 rounded-full
+                    transition-all duration-300 ease-in-out
+                    ${activeIndex === index ? 'scale-x-100' : 'scale-x-0'}
+                  `}
+                />
+
+                {/* L'icône */}
+                <item.icon 
+                  className={`
+                    w-6 h-6 sm:w-7 sm:h-7 transition-colors duration-300
+                    ${activeIndex === index ? 'text-sky-600' : 'text-[#4F5D75]'}
+                  `}
+                />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </>
   );
 };
 

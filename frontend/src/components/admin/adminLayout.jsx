@@ -4,11 +4,11 @@ import Header from "./header";
 
 export default function AdminLayout(){
     return(
-        <div className="flex">
+        <div className="flex lg:flex-row flex-col min-w-screen h-screen">
             <AdNavbar />
-            <div className="grow min-h-screen bg-[#F2F4F7] flex flex-col ">
+            <div className="grow  bg-[#F2F4F7] flex flex-col order-1">
                 <Header />
-                <div className="grow p-5">
+                <div className="grow p-10">
                     <Outlet />
                 </div>
             </div>

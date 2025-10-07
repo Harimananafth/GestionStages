@@ -62,15 +62,15 @@ export default function UserHeader(){
         }
     }
     return (
-        <div className="navbar bg-white shadow-sm flex justify-between items-center">
-            <div className="flex gap-2 items-center hover:cursor-defaul pl-3 rounded-xl md:grayscale-100 hover:grayscale-0 hover:-translate-y-1 duration-300">
+        <div className="navbar bg-white shadow-sm flex flex-col justify-between items-center gap-4 md:flex-row">
+            <div className="flex gap-2 items-center hover:cursor-default rounded-xl md:grayscale-100 hover:grayscale-0 hover:-translate-y-1 duration-300">
                 <img src="/images/logo.png" alt="" className="h-6"/>
                 <p className="font-semibold text-lg lg-light">Neovate App</p>
             </div>
 
             {/* Notification */}
 
-            <div className="flex gap-8 items-center">
+            <div className="flex flex-row-reverse items-center justify-between w-full md:w-auto md:flex-row gap-2">
                 <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                         <div className="indicator">
@@ -80,7 +80,7 @@ export default function UserHeader(){
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-100 shadow">
+                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-70 shadow">
                         {isLoading ? (
                             <span className="loading loading-dots loading-xl grow"></span>
                         ) : data && data.data ? (
@@ -97,7 +97,7 @@ export default function UserHeader(){
                 {/* Badge Utilisateur */}
 
 
-                <div className="dropdown dropdown-end mr-3">
+                <div className="dropdown dropdown-start mr-3">
                     <div tabIndex={0} role="button" className=' flex items-center justify-center gap-2 hover:cursor-pointer'>
                         <div  className=" btn-circle avatar">
                             <div className="w-8 rounded-full">
