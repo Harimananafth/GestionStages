@@ -229,6 +229,11 @@
             }
         }
 
+        // LOGOUT
+        static async logout(req, res) {
+            res.clearCookie("token");
+            res.json({ message: "Déconnecté avec succès." });
+        }
     }
 
     module.exports = Auth;

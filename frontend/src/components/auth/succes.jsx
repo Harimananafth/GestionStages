@@ -6,6 +6,8 @@ export default function Success() {
     const navigate = useNavigate(); // ✅ parenthèses manquantes
 
     useEffect(() => {
+        document.title = "Connexion réussie"
+
         const queryParams = new URLSearchParams(location.search);
         const id = queryParams.get("id");
         const email = queryParams.get("email");
@@ -14,7 +16,7 @@ export default function Success() {
 
         const parsedRoles = JSON.parse(roles);
         if (id && email && roles) {
-            localStorage.setItem("user", JSON.stringify({ id, email, roles: parsedRoles }));
+            localStorage.setItem("utilisateur", JSON.stringify({ id, email, roles: parsedRoles }));
         }
         
         const timer = setTimeout(() => {

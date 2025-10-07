@@ -1,6 +1,36 @@
 import { Bell, LogOut, User } from 'lucide-react'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 
 export default function UserHeader(){
+    const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+    const navigate = useNavigate()
+    const [message, setMessage] =  useState(null)
+    const [success, setSuccess] = useState(null)
+
+    const user = localStorage.getItem("utilisateur")
+    const email = user.email
+
+
+    const Logout = async () =>{
+        setMessage(null)
+        setSuccess(null)
+
+        try{
+            const response =  await fetch (`${ApiUrl}/auth/logout`, {
+                method: "GET",
+                credentials: "include",
+            })
+            if(response.ok){
+                localStorage.removeItem("utilisateur")
+                setSuccess("Déconnecté avec succès.")
+                navigate("/auth")
+            }
+        }catch(err){
+            setMessage("Erreur réseau. Veuillez réessayer.")
+            console.error(err)
+        }
+    }
     return (
         <div className="navbar bg-white shadow-sm flex justify-between items-center">
             <div className="flex gap-2 items-center hover:cursor-defaul pl-3 rounded-xl md:grayscale-100 hover:grayscale-0 hover:-translate-y-1 duration-300">
@@ -37,7 +67,7 @@ export default function UserHeader(){
                                     src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
                             </div>
                         </div>
-                        <h1 className='font-semibold lg-light'>Nom de l'utilisateur</h1>
+                        <h1 className='font-semibold lg-light'>{ email }</h1>
                     </div>
                     <ul
                         tabIndex={0}
@@ -49,10 +79,12 @@ export default function UserHeader(){
                             </a>
                         </li>
                         <li>
-                            <a className='text-error font-semibold text-sm'>
+                            <a className='text-error font-semibold text-sm' onClick={Logout}>
                                 <LogOut color="#ff637d" strokeWidth={2.25} size={18}/>
                                 Se déconnecter
                             </a>
+                            {message && <p className=' label text-xs text-error mt-1'>{message}</p>}
+                            {success && <p className=' label text-xs text-success mt-1'>{success}</p>}
                         </li>
                     </ul>
                 </div>

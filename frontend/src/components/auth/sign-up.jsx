@@ -13,6 +13,8 @@ export default function SignUp() {
 
   // Si on vient de la page verification avec un email
   useEffect(() => {
+
+    document.title = "S'inscrire"
     if (location.state?.email) {
       setEmailValue(location.state.email);
       // Supprimer le cookie temporaire si on veut recommencer

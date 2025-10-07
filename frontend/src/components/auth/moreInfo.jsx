@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IMaskInput } from "react-imask";
 
@@ -19,6 +19,10 @@ export default function MoreInfo() {
     prenomGoogle = parts.slice(0, -1).join(" ") || parts[0];
     nomGoogle = parts.slice(-1).join(" ");
   }
+
+  useEffect(()=>{
+        document.title = "Plus d'infos"
+    }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();

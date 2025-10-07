@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom";
 
 
@@ -11,6 +11,10 @@ export default function Login(){
     const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
 
     const navigate = useNavigate()
+
+    useEffect(()=>{
+        document.title = "Se connecter"
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault()

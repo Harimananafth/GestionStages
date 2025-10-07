@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { AtSign } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -11,6 +11,10 @@ export default function Verification() {
   const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.email || '';
+
+  useEffect(()=>{
+        document.title = "Code de vérification"
+    }, [])
 
   const handleChange = useCallback((e, index) => {
     const value = e.target.value;
