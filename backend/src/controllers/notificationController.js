@@ -62,7 +62,7 @@ class NotificationController {
 
     // Méthode pour récupérer toutes les notifications d'un utilisateur
     static async getUserNotifications(req, res) {
-        const UtilisateurId = req.params.id;
+        const UtilisateurId = req.user.id;
         try {
             const notifications = await Notification.findAll({
                 where: { UtilisateurId },
@@ -92,7 +92,7 @@ class NotificationController {
 
     // Méthode pour mettre toutes les notifications d'un utilisateur en lu
     static async toutMarquerLu(req, res) {
-        const UtilisateurId = req.params.id;
+        const UtilisateurId = req.user.id;
         try {
             const [updated] = await Notification.sequelize.transaction(async (t) => {
                 return await Notification.update(

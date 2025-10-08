@@ -15,6 +15,8 @@ export default function UserHeader(){
     const user = JSON.parse(localStorage.getItem("utilisateur"));
 
     const { data, error, isLoading, mutate } = useSWR(`${ApiUrl}/notification/admin`, fetcher)
+
+    const photoUrl = `${ApiUrl}/user/photo`
     
     const navigate = useNavigate()
     const [message, setMessage] =  useState(null)
@@ -80,7 +82,7 @@ export default function UserHeader(){
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-70 shadow">
+                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 min-w-70 shadow">
                         {isLoading ? (
                             <span className="loading loading-dots loading-xl grow"></span>
                         ) : data && data.data ? (
@@ -103,7 +105,8 @@ export default function UserHeader(){
                             <div className="w-8 rounded-full">
                                 <img
                                     alt="Votre photo de profil"
-                                    src={ user.photo || "/images/default-img-profil"} />
+                                    src={photoUrl}
+                                    onError={(e) => { e.currentTarget.src = "/images/default-img-profil.png"; }} />
                             </div>
                         </div>
                         <h1 className='font-semibold lg-light'>{ user.email }</h1>

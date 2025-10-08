@@ -9,8 +9,8 @@ router.post("/", authMiddleware, NotificationController.createNotification)
 router.get("/admin", authMiddleware, NotificationController.getAdminNotifications)
 router.put("/admin", authMiddleware, NotificationController.toutMarquerLuAdmin)
 router.get("/nonLu/:UtilisateurId", authMiddleware, NotificationController.avoirNotificationNonLu)
-router.put("/:id", authMiddleware, NotificationController.toutMarquerLu)
-router.get("/:id", authMiddleware, NotificationController.getUserNotifications)
+router.put("/", authMiddleware, NotificationController.toutMarquerLu)
+router.get("/user", authMiddleware, NotificationController.getUserNotifications)
 router.delete("/:id", authMiddleware, NotificationController.deleteNotification)
 
 

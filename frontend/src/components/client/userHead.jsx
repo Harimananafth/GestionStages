@@ -7,13 +7,16 @@ import Notification from '../common/notificationList';
 const fetcher = (url) => fetch(url, { credentials: 'include' }).then((res) => res.json());
 
 export default function UserHeader() {
+
   const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+
   const [newNotification, setNewNotification] = useState(false);
   const user = JSON.parse(localStorage.getItem("utilisateur"));
-  const { data, error, isLoading, mutate } = useSWR(`${ApiUrl}/notification/${user.id}`, fetcher);
+  const { data, error, isLoading, mutate } = useSWR(`${ApiUrl}/notification/user`, fetcher);
   const navigate = useNavigate();
   const [message, setMessage] = useState(null);
   const [success, setSuccess] = useState(null);
+  const photoUrl = `${ApiUrl}/user/photo`
 
   useEffect(() => {
     const hasUnread = data?.data?.some(n => !n.lu) || false;
@@ -22,7 +25,7 @@ export default function UserHeader() {
 
   const handleAllRead = async () => {
     try {
-      await fetch(`${ApiUrl}/notification/${user.id}`, {
+      await fetch(`${ApiUrl}/notification/user`, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" }
@@ -64,7 +67,7 @@ export default function UserHeader() {
       {/* Notifications + User */}
       <div className="flex flex-row-reverse items-center justify-between w-full md:w-auto md:flex-row gap-2">
         
-        {/* 🔔 Notifications */}
+        {/*Notifications */}
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
             <div className="indicator">
@@ -93,7 +96,7 @@ export default function UserHeader() {
           </ul>
         </div>
 
-        {/* 👤 Utilisateur */}
+        {/*Utilisateur */}
         <div className=" dropdown dropdown-start mr-3">
           <div
             tabIndex={0}
@@ -104,7 +107,8 @@ export default function UserHeader() {
               <div className="w-8 rounded-full">
                 <img
                   alt="Votre photo de profil"
-                  src={user.photo || "/images/default-img-profil"}
+                    src={photoUrl}
+                    onError={(e) => { e.currentTarget.src = "/images/default-img-profil.png"; }}
                 />
               </div>
             </div>
