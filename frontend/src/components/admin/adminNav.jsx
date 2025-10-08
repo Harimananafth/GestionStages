@@ -71,7 +71,7 @@ export default function AdNavbar(){
     </div>
  
     {/* Barre de navigation inférieure */}
-      <nav className="w-full bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] order-2 lg:order-1 block lg:hidden">
+      <nav className="w-full bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] order-2 lg:order-1 block lg:hidden fixed bottom-0 left-0">
         {/*
           - h-16 sm:h-20 -> Hauteur réduite sur les petits écrans
           - px-2 sm:px-4 -> Padding horizontal réduit sur les petits écrans
