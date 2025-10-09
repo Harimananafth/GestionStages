@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // Données pour les éléments de menu
 const menuItems = [
-  { id:1, to: '/a', icon: Home, name: 'Dashboard' },
+  { id:1, to: '/a', icon: Home, name: 'Tableau de bord' },
   { id:2, to: 'profile', icon: MessageSquareDot, name: 'Messages' },
   { id:3, to: 'analytics', icon: BriefcaseBusiness, name: 'Offres de stage' },
   { id:4, to: 'messages', icon: GraduationCap, name: 'Etudiants' },
@@ -72,16 +72,12 @@ export default function AdNavbar(){
  
     {/* Barre de navigation inférieure */}
       <nav className="w-full bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] order-2 lg:order-1 block lg:hidden fixed bottom-0 left-0 z-10">
-        {/*
-          - h-16 sm:h-20 -> Hauteur réduite sur les petits écrans
-          - px-2 sm:px-4 -> Padding horizontal réduit sur les petits écrans
-        */}
         <ul className="flex justify-around items-center h-14 sm:h-20 max-w-2xl mx-auto px-2 sm:px-4">
           {menuItems.map((item, index) => (
             <li key={item.id} className="relative">
               <Link 
                 to={item.to}
-                // w-14 h-14 sm:w-16 sm:h-16 -> Zone cliquable plus petite sur petits écrans
+                
                 className="flex flex-col items-center justify-center w-14 h-12 sm:w-16 sm:h-16"
                 onClick={(e) => {
                   e.preventDefault(); // Empêche le saut de page

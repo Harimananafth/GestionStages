@@ -8,7 +8,7 @@ export default function UserLayout(){
             <UserNavbar />
             <div className="grow  bg-[#F2F4F7] flex flex-col order-1 ">
                 <UserHeader />
-                <div className="grow p-10">
+                <div className="grow p-4 md:p-6 lg:p-10">
                     <Outlet />
                 </div>
             </div>

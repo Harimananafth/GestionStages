@@ -86,6 +86,34 @@ class StatistiqueController {
       });
     }
   }
+
+  static async userStats(req, res){
+    try{
+      const id = req.user.id
+
+      const nbCandidatures = await Candidature.count({where: {EtudiantId: id}})
+      const acceptees = await Candidature.count({where: {EtudiantId: id, statut: "Acceptée"}})
+      const refusees = await Candidature.count({where: {EtudiantId: id, statut: "Refusée"}})
+      const attentes = await Candidature.count({where: {EtudiantId: id, statut: "En attente"}})
+
+      return res.json({
+        message: "Statistiques globales récupérées avec succès.",
+        data: {
+          nbCandidatures,
+          acceptees,
+          refusees,
+          attentes
+        }
+      });
+
+    }catch(error){
+      console.error("Erreur Statistiques:", error);
+      return res.status(500).json({
+        message: "Erreur lors de la récupération des statistiques.",
+        data: error.message
+      });
+    }
+  }
 }
 
 module.exports = StatistiqueController;

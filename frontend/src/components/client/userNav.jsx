@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 // Données pour les éléments de menu
 const menuItems = [
-  { id: 1, to: 'home', icon: Home, name: 'Dashboard' },
+  { id: 1, to: 'home', icon: Home, name: 'Tableau de bord' },
   { id: 2, to: 'profile', icon: MessageSquareDot, name: 'Messages' },
   { id: 3, to: 'analytics', icon: BriefcaseBusiness, name: 'Offres de stage' },
   { id: 4, to: 'notifications', icon: FileUser, name: 'Candidatures' },
@@ -16,7 +16,7 @@ export default function UserNavbar() {
 
   return (
     <>
-      {/* ✅ Version bureau (sidebar verticale) */}
+      {/* Version bureau (sidebar verticale) */}
       <div className="min-h-screen flex items-center justify-center lg:block hidden">
         <nav
           className="relative bg-white shadow-lg flex h-screen items-center justify-center"
@@ -71,7 +71,7 @@ export default function UserNavbar() {
         </nav>
       </div>
 
-      {/* ✅ Version mobile (barre en bas) */}
+      {/*Version mobile (barre en bas) */}
       <nav className="w-full bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] order-2 lg:order-1 block lg:hidden fixed bottom-0 left-0 z-50">
         <ul className="flex justify-around items-center h-14 sm:h-20 max-w-2xl mx-auto px-2 sm:px-4">
           {menuItems.map((item, index) => (

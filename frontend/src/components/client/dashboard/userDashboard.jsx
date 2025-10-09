@@ -1,10 +1,15 @@
 import { useEffect } from "react"
+import UserCards from "./userCards"
+import Actu from "./actu"
 
 export default function UserDashboard(){
     useEffect(()=>{
         document.title = "Dashboard"
     }, [])
     return(
-        <h1>User dashboard</h1>
+        <div className="flex flex-col gap-3 min-h-full md:overflow-y-scroll animate-[text-appear-bottom_0.5s_ease-in]">
+            <UserCards />
+            <Actu />
+        </div>
     )
 }
