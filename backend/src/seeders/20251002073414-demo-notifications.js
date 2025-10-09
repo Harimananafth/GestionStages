@@ -12,8 +12,8 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        UtilisateurId: 2, // correspond à user@example.com
-        message: 'Une nouvelle offre de stage est disponible.',
+        UtilisateurId: null, // correspond à user@example.com
+        message: 'Une nouvelle offre de stage est disponible. Consultez la section offres pour plus de détails',
         type: 'actualité',
         lu: false,
         date_reception: new Date(),

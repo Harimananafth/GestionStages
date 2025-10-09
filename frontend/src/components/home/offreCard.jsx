@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom'
 
 
 
 export default function OffreCard(props){
+    const navigate = useNavigate()
     return(
         <div 
         key={props.id} 
@@ -19,7 +21,8 @@ export default function OffreCard(props){
                 <p className='textC font-medium'>Profil : {props.profil}</p>
                 <p className='text-xs font-extralight text-gray-500'>📅 De {props.debut} à {props.fin}</p>
             </div>
-            <button className='hover:bg-sky-700 bg-sky-600 text-white md:w-26 w-1/1 h-9 rounded-lg text-sm font-medium shadow-md  duration-300 hover:shadow-lg hover:cursor-pointer'>
+            <button className='hover:bg-sky-700 bg-sky-600 text-white md:w-26 w-1/1 h-9 rounded-lg text-sm font-medium shadow-md  duration-300 hover:shadow-lg hover:cursor-pointer'
+            onClick={() => navigate("/t/")}>
                 Voir
             </button>
         </div>

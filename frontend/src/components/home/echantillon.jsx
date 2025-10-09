@@ -1,5 +1,6 @@
 import useSWR from 'swr'
 import OffresList from './offresList';
+import { useNavigate } from 'react-router-dom'
 
 const API_URL = "http://localhost:5000";
 const fetcher = (...args) => fetch(...args).then(res => res.json())
@@ -8,6 +9,7 @@ const fetcher = (...args) => fetch(...args).then(res => res.json())
 export default  function Echantillon(){
     const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
     const { data, error, isLoading } = useSWR(`${ApiUrl}/offre/?limit=3`, fetcher)
+    const navigate = useNavigate()
 
     return(
         
@@ -25,7 +27,8 @@ export default  function Echantillon(){
                             <p className='text-sm font-semibold'>Aucune données</p>
                         )
                     }
-                    <button className='scale hover:bg-sky-700 bg-sky-600 text-white w-45 h-9 rounded-lg text-sm font-medium shadow-md  duration-300 hover:shadow-lg hover:cursor-pointer'>
+                    <button className='scale hover:bg-sky-700 bg-sky-600 text-white w-45 h-9 rounded-lg text-sm font-medium shadow-md  duration-300 hover:shadow-lg hover:cursor-pointer'
+                    onClick={() => navigate('/t/')}>
                         Voir toutes les offres
                     </button>
 
