@@ -82,7 +82,7 @@ export default function UserHeader(){
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 min-w-70 shadow">
+                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 min-w-70 max-h-70 overflow-y-auto p-3 shadow-xl">
                         {isLoading ? (
                             <span className="loading loading-dots loading-xl grow"></span>
                         ) : data && data.data ? (
@@ -90,7 +90,6 @@ export default function UserHeader(){
                         ) : (
                             null
                         )}
-
                         <p className='label text-xs text-gray-300 block hover:cursor-pointer mt-3' role='button' onClick={handleAllRead}> Tout marquer comme lu</p>
                     </ul>
                 </div>
