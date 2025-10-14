@@ -2,6 +2,7 @@ import { CirclePlus, EllipsisVertical, Pencil, Trash } from 'lucide-react'
 import { useEffect } from "react"
 import useSWR from 'swr'
 import { format } from 'date-fns'
+import CreateOfferModal from './createOffreModal'
 
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
@@ -10,8 +11,7 @@ const fetcher = (...args) => fetch(...args).then(res => res.json())
 export default function MainAdminOffre(){
     const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
 
-    const { data, error, isLoading } = useSWR(`${ApiUrl}/offre/`, fetcher)
-    console.log(data)
+    const { data, error, isLoading, mutate  } = useSWR(`${ApiUrl}/offre/`, fetcher)
 
     useEffect(()=>{
         document.title = "Offre de stage"
@@ -46,6 +46,10 @@ export default function MainAdminOffre(){
     // Liste des offres
 
     const OffresList = () => {
+      if(isLoading)
+        return (
+          <tbody className="loading loading-dots loading-xl grow"></tbody>
+      );
       if (error)
         return (
           <tbody className="upEntry text-red-600 font-normal text-xl grow flex items-center justify-center">
@@ -105,6 +109,8 @@ export default function MainAdminOffre(){
     }
 
 
+
+
     return(
         <div className="h-full w-full bg-white rounded-xl shadow-lg p-6 px-8 animate-[text-appear-bottom_0.5s_ease-in] flex flex-col gap-4" >
             <div className='flex justify-between items-center'>
@@ -117,7 +123,7 @@ export default function MainAdminOffre(){
                     <ul
                         tabIndex={0}
                         className="dropdown-content menu rounded-box z-1 w-52 p-2 shadow-sm textC   font-semibold bg-stone-50">
-                            <li><a> Offre de stage</a></li>
+                            <li><a onClick={()=>document.getElementById('createOffre').showModal()}> Offre de stage</a></li>
                             <li><a> Période de stage</a></li>
                     </ul>
                 </div>
@@ -129,7 +135,7 @@ export default function MainAdminOffre(){
                     <thead className='text-black'>
                     <tr>
                         <th>Titre</th>
-                        <th>Profil</th>
+                        <th>Profil (nombre)</th>
                         <th>Durée</th>
                         <th>Date de création</th>
                         <th></th>
@@ -138,6 +144,10 @@ export default function MainAdminOffre(){
                       {OffresList()}
                 </table>
             </div>
+
+
+            {/* Les pop-ups */}
+              <CreateOfferModal mutate={mutate}/>
         </div>
     )
 }

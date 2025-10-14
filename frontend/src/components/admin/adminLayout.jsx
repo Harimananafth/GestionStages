@@ -8,7 +8,7 @@ export default function AdminLayout(){
             <AdNavbar />
             <div className="grow  bg-[#F2F4F7] flex flex-col order-1 ">
                 <Header />
-                <div className="grow p-4 md:p-6 lg:p-10 overflow-y-auto">
+                <div className="grow p-4 md:p-6 lg:p-10 overflow-y-auto mb-20 lg:mb-0">
                     <Outlet />
                 </div>
             </div>
