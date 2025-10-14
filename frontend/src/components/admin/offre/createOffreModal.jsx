@@ -129,7 +129,7 @@ export default function CreateOfferModal({ mutate }) {
                 if (document.getElementById('createOffre')) {
                     document.getElementById('createOffre').close();
                 }
-            }, 2000);
+            }, 1000);
 
         } catch (error) {
             console.error('Erreur lors de la soumission du formulaire:', error);

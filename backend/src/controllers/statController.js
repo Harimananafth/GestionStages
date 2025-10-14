@@ -6,7 +6,6 @@ class StatistiqueController {
     try {
       const currentYear = new Date().getFullYear();
 
-      // On exécute tout en parallèle
       const [
         globalCounts,
         candidaturesByProfil,

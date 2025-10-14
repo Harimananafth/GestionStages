@@ -29,7 +29,7 @@ export default  function Echantillon(){
                         )
                     }
                     <button className='scale hover:bg-sky-700 bg-sky-600 text-white w-45 h-9 rounded-lg text-sm font-medium shadow-md  duration-300 hover:shadow-lg hover:cursor-pointer'
-                    onClick={() => navigate(ROUTES.USER.DASHBOARD)}>
+                    onClick={() => navigate(ROUTES.AUTH.ROOT)}>
                         Voir toutes les offres
                     </button>
 
