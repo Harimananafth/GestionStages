@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
 import Notification from '../common/notificationList';
+import { ROUTES } from '../../routes/paths';
 
 const fetcher = (url) => fetch(url, { credentials: 'include' }).then((res) => res.json());
 
@@ -48,7 +49,7 @@ export default function UserHeader() {
       if (response.ok) {
         localStorage.removeItem("utilisateur");
         setSuccess("Déconnecté avec succès.");
-        navigate("/");
+        navigate(ROUTES.AUTH.LOGIN);
       }
     } catch (err) {
       setMessage("Erreur réseau. Veuillez réessayer.");

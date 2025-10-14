@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Home, MessageSquareDot, BriefcaseBusiness, FileUser } from 'lucide-react';
 import { Link } from "react-router-dom";
+import { ROUTES } from '../../routes/paths';
 
 // Données pour les éléments de menu
 const menuItems = [
-  { id: 1, to: 'home', icon: Home, name: 'Tableau de bord' },
+  { id: 1, to: ROUTES.USER.DASHBOARD, icon: Home, name: 'Tableau de bord' },
   { id: 2, to: 'profile', icon: MessageSquareDot, name: 'Messages' },
   { id: 3, to: 'analytics', icon: BriefcaseBusiness, name: 'Offres de stage' },
   { id: 4, to: 'notifications', icon: FileUser, name: 'Candidatures' },

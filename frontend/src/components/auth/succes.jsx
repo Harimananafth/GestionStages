@@ -1,9 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { ROUTES } from "../../routes/paths";
 
 export default function Success() {
     const location = useLocation();
-    const navigate = useNavigate(); // ✅ parenthèses manquantes
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         document.title = "Connexion réussie"
@@ -22,11 +23,11 @@ export default function Success() {
         
         const timer = setTimeout(() => {
             if (parsedRoles.includes("admin")) {
-                navigate("/a/");
+                navigate(ROUTES.ADMIN.DASHBOARD);
             } else if (parsedRoles.includes("user")) {
-                navigate("/t/");
+                navigate(ROUTES.USER.DASHBOARD);
             } else {
-                navigate("/"); // fallback
+                navigate(ROUTES.HOME); // fallback
             }
         }, 1000);
 

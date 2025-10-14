@@ -1,5 +1,4 @@
 import { format } from 'date-fns'
-import {Server} from 'lucide-react'
 import OffreCard from './offreCard'
 
 export default function OffresList({ data, error }) {

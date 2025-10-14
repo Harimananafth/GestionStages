@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { ROUTES } from "../../routes/paths";
 
 export default function ProtectedRoute({ children, allowedRoles }) {
   const [loading, setLoading] = useState(true);
@@ -30,5 +31,5 @@ export default function ProtectedRoute({ children, allowedRoles }) {
   }, [allowedRoles]);
 
   if (loading) return <div className="h-screen w-screen flex justify-center items-center font-semibold">Chargement...</div>;
-  return authorized ? children : <Navigate to="/auth" replace />;
+  return authorized ? children : <Navigate to={ROUTES.AUTH.LOGIN} replace />;
 }

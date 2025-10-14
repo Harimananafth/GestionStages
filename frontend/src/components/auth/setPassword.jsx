@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { ROUTES } from "../../routes/paths";
 
 const SetPassword = () => {
   const navigate = useNavigate()
@@ -57,7 +58,7 @@ const SetPassword = () => {
         const user = data.user
         localStorage.setItem("utilisateur", JSON.stringify({ id, email: userEmail, roles, photo }));
 
-        setTimeout(() => navigate('/auth/sign-up/more-info', { state: { user } }), 1000);
+        setTimeout(() => navigate(ROUTES.AUTH.SIGN_UP.MORE_INFO, { state: { user } }), 1000);
 
       } else {
         setError(data.error || "Erreur lors de l'inscription.");

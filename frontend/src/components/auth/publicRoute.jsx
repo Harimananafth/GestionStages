@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { ROUTES } from "../../routes/paths";
 
 export default function PublicRoute({ children }) {
   const [loading, setLoading] = useState(true);
@@ -36,7 +37,7 @@ export default function PublicRoute({ children }) {
     );
 
   return isAuthenticated ? (
-    roles.includes("admin") ? <Navigate to="/a" replace /> : <Navigate to="/t" replace />
+    roles.includes("admin") ? <Navigate to={ROUTES.ADMIN.DASHBOARD} replace /> : <Navigate to="/t" replace />
   ) : (
     children
   );

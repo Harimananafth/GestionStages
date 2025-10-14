@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IMaskInput } from "react-imask";
+import { ROUTES } from "../../routes/paths";
 
 export default function MoreInfo() {
   const [loading, setLoading] = useState(false);
@@ -57,7 +58,7 @@ export default function MoreInfo() {
 
       if (response.ok) {
         setMessage({ type: "success", text: "Votre profil étudiant a été créé avec succès !" });
-        setTimeout(() => navigate("/t"), 1500);
+        setTimeout(() => navigate(ROUTES.USER.DASHBOARD), 1500);
       } else {
         setMessage({ type: "error", text: data.message || "Une erreur est survenue." });
       }

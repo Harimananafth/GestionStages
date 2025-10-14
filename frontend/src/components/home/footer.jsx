@@ -1,5 +1,3 @@
-import {Linkedin, Instagram} from 'lucide-react'
-
 export default function Footer(){
     return(
         <footer id='footer' className="footer sm:footer-horizontal justify-around bg-[#E9F3FF] text-[#4F5D75] p-10 relative">
