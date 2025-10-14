@@ -35,8 +35,8 @@ export default function Hero(){
                         <h1 className=' md:text-[3.5rem] text-3xl px-3 md:px-0 h-[192px]  xl:h-[150px] flex items-center lg:text-left text-center montserrat-hero font-bold'> 
                             <TypingEffect text="Trouvez le stage qui lance votre avenir, en quelques clics. "/>
                         </h1>
-                        <Link to="/auth/" >
-                            <button className='hover:bg-sky-700 bg-sky-600 flex items-center justify-center gap-4 font-semibold text-lg 2xl:text-xl w-60 h-12  2xl:w-72 2xl:h-14 rounded-full shadow-md hover:-translate-y-1 duration-300 text-white hover:shadow-lg hover:cursor-pointer'>
+                        <Link to="/auth/" className=''>
+                            <button className=' hover:bg-black bg-sky-600 flex items-center justify-center gap-4 font-semibold text-lg 2xl:text-xl w-60 h-12  2xl:w-72 2xl:h-14 rounded-full shadow-md hover:-translate-y-1 duration-300 text-white hover:shadow-lg hover:cursor-pointer'>
                                 <p>Commencer</p>
                                 <SquareArrowOutUpRight strokeWidth={2.75} size={14} />
                             </button>

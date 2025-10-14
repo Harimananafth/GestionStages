@@ -20,7 +20,7 @@ passport.use(
         }
 
         // utilisateur existant
-        // ⚠️ inclure googleProfile pour mettre à jour infos
+        // inclure googleProfile pour mettre à jour infos
         return done(null, { user, isNew: false, googleProfile: profile });
 
       } catch (err) {
