@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 const fetcher = (url) =>
@@ -11,6 +11,9 @@ const formatDateRange = (start, end) => {
 
 export default function EditOfferModal({ offreId, mutate }) {
   const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+
+    const [loading, setLoading] = useState(false)
+
 
   const { data: availablePeriodes, error: periodesError, isLoading: periodesLoading } = useSWR(`${ApiUrl}/periode`, fetcher);
   const { data: availableProfils, error: profilsError, isLoading: profilsLoading } = useSWR(`${ApiUrl}/profil`, fetcher);
@@ -155,7 +158,9 @@ export default function EditOfferModal({ offreId, mutate }) {
     } catch (err) {
       console.error(err);
       setFormMessage({ type: 'error', text: err.message || 'Erreur lors de la mise à jour.' });
-    }
+    }finally {
+      setLoading(false);
+    } 
   };
 
   const getProfilNameById = (id) => availableProfils?.data?.find((p) => p.id === id)?.nomProfil || 'Inconnu';
@@ -294,9 +299,13 @@ export default function EditOfferModal({ offreId, mutate }) {
                 <div className="modal-action mt-6">
                   <button
                     type="submit"
+                    disabled={loading}
                     className="w-full h-10 px-6 rounded-lg text-sm font-medium shadow-md bg-emerald-500 hover:bg-emerald-600 text-white"
                   >
-                    Enregistrer les modifications
+                    {loading ? (
+                        <span className="loading loading-spinner loading-md text-white "></span>
+                        ) : "Enregistrer les modifications"
+                    }
                   </button>
                 </div>
               </div>

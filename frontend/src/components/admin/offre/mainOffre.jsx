@@ -4,6 +4,8 @@ import useSWR from 'swr'
 import { format } from 'date-fns'
 import CreateOfferModal from './createOffreModal'
 import EditOfferModal from './editOffreModal'
+import CreatePeriodeModal from './createPeriodeModal'
+import DeleteOffreModal from './deleteOffreModal'
 
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
@@ -40,23 +42,6 @@ export default function MainAdminOffre(){
 
     const { data, error, isLoading, mutate  } = useSWR(`${ApiUrl}/offre/`, fetcher)
 
-    const handleDelete = async (e, id) => {
-      e.preventDefault()
-
-      try{
-        const response =  await fetch(`${ApiUrl}/offre/${id}`, {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include'
-        })
-        if (response.ok){
-          alert("L'offre a bien été supprimée.")
-        }
-      }catch(err){
-        alert("Erreur lors de la suppression, veuillez réessayer.")
-      }
-
-    }
 
     useEffect(()=>{
         document.title = "Offres de stage"
@@ -84,8 +69,10 @@ export default function MainAdminOffre(){
 
                         <li>
                           <a className='flex text-error justify-start items-center gap-2'
-                          onClick={
-                            (e) => handleDelete(e, offre.id) 
+                          onClick={() =>{
+                            setSelectedOffreId(offre.id);
+                            document.getElementById('deleteOffre').showModal();
+                          }
                           }>
                             <Trash size={16}/>
                             Supprimer
@@ -218,7 +205,7 @@ export default function MainAdminOffre(){
                         tabIndex={0}
                         className="dropdown-content menu rounded-box z-50 w-52 p-2 shadow-sm textC font-semibold bg-stone-50">
                             <li><a onClick={()=>document.getElementById('createOffre').showModal()}> Offre de stage</a></li>
-                            <li><a> Période de stage</a></li>
+                            <li><a onClick={()=>document.getElementById('createPeriode').showModal()}> Période de stage</a></li>
                     </ul>
                 </div>
             </div>
@@ -231,7 +218,10 @@ export default function MainAdminOffre(){
 
             {/* Les pop-ups */}
             <CreateOfferModal mutate={mutate}/>
+            <CreatePeriodeModal mutate={mutate}/>
             <EditOfferModal offreId={selectedOffreId} mutate={mutate} />
+            <DeleteOffreModal offreId={selectedOffreId}/>
+
 
         </div>
     )

@@ -7,7 +7,7 @@ export default function UserDashboard(){
         document.title = "Tableau de bord"
     }, [])
     return(
-        <div className="flex flex-col gap-3 min-h-full animate-[text-appear-bottom_0.5s_ease-in]">
+        <div className="flex flex-col gap-3 h-full animate-[text-appear-bottom_0.5s_ease-in]">
             <UserCards />
             <Actu />
         </div>

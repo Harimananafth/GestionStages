@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useSWR from 'swr';
 
 const fetcher = (url) =>
@@ -16,6 +16,9 @@ const formatDateRange = (start, end) => {
 export default function CreateOfferModal({ mutate }) {
 
     const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+    
+    const [loading, setLoading] = useState(false)
+
 
     // Récupération des données
     const { data: availablePeriodes, error: periodesError, isLoading: periodesLoading } = useSWR(`${ApiUrl}/periode`, fetcher);
@@ -64,6 +67,7 @@ export default function CreateOfferModal({ mutate }) {
     };
 
     const handleSubmit = async (e) => {
+        setLoading(true)
         e.preventDefault();
         setFormMessage({ type: '', text: '' });
 
@@ -134,7 +138,9 @@ export default function CreateOfferModal({ mutate }) {
         } catch (error) {
             console.error('Erreur lors de la soumission du formulaire:', error);
             setFormMessage({ type: 'error', text: error.message || "Une erreur est survenue lors de la création de l'offre." });
-        }
+        }finally {
+            setLoading(false);
+        } 
     };
 
     
@@ -235,8 +241,15 @@ export default function CreateOfferModal({ mutate }) {
                                 )}
 
                                 <div className="modal-action mt-6">
-                                    <button type="submit" className="w-full h-10 px-6 rounded-lg text-sm font-medium shadow-md duration-300 hover:shadow-lg hover:cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white">
-                                        Créer l'offre
+                                    <button 
+                                        type="submit" 
+                                        disabled={loading}  
+                                        className="w-full h-10 px-6 rounded-lg text-sm font-medium shadow-md duration-300 hover:shadow-lg hover:cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white"
+                                        >
+                                            {loading ? (
+                                                <span className="loading loading-spinner loading-md text-white "></span>
+                                                ) : "Créer l'offre"
+                                            }
                                     </button>
                                 </div>
                             </div>
