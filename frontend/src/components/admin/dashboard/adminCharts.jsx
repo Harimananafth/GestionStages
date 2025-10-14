@@ -43,7 +43,7 @@ export default function AdminCharts() {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-7 bg-white rounded-xl shadow-md grow mb-20 lg:mb-0 hover:scale-1.8 hover:cursor-default hover:shadow-lg duration-300">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-7  bg-white rounded-xl shadow-md grow mb-20 lg:mb-0 hover:scale-1.8 hover:cursor-default hover:shadow-lg duration-300">
 
       {/* ---- BAR CHART ---- */}
       <div className="md:col-span-2 h-80">

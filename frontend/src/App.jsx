@@ -13,6 +13,7 @@ import AdminDashboard from "./components/admin/dashboard/adminDashboard";
 import AdminLayout from "./components/admin/adminLayout";
 import PublicRoute from "./components/auth/publicRoute";
 import { ROUTES } from "./routes/paths";
+import MainAdminOffre from "./components/admin/offre/mainOffre";
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
           }
         >
           <Route index element={<AdminDashboard />} />
+          <Route path="offres" element={<MainAdminOffre />} />
         </Route>
       </Routes>
     </Router>

@@ -1,19 +1,37 @@
 import React, { useState } from 'react';
 import { Home, MessageSquareDot, BriefcaseBusiness, FileUser } from 'lucide-react';
-import { Link } from "react-router-dom";
-import { ROUTES } from '../../routes/paths';
+import { NavLink, useLocation } from "react-router-dom";
+import { ROUTES } from "../../routes/paths";
 
-// Données pour les éléments de menu
+// Données pour les éléments de menu (TOUTES les routes en absolu)
 const menuItems = [
   { id: 1, to: ROUTES.USER.DASHBOARD, icon: Home, name: 'Tableau de bord' },
-  { id: 2, to: 'profile', icon: MessageSquareDot, name: 'Messages' },
-  { id: 3, to: 'analytics', icon: BriefcaseBusiness, name: 'Offres de stage' },
-  { id: 4, to: 'notifications', icon: FileUser, name: 'Candidatures' },
+  { id: 2, to: '/t/profile', icon: MessageSquareDot, name: 'Messages' },
+  { id: 3, to: '/t/analytics', icon: BriefcaseBusiness, name: 'Offres de stage' },
+  { id: 4, to: '/t/notifications', icon: FileUser, name: 'Candidatures' },
 ];
+
+// Fonction pour normaliser les chemins (supprime slash final)
+function normalizePath(p) {
+  if (!p) return p;
+  if (p === '/') return '/';
+  return p.replace(/\/+$/, '');
+}
 
 export default function UserNavbar() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const location = useLocation();
+  const pathname = normalizePath(location.pathname);
+
+  // Trouver l'index actif
+  const activeIndex = menuItems.findIndex(item => {
+    const itemPath = normalizePath(item.to);
+    if (!item.to) return false;
+    // exact match ou sous-route
+    if (pathname === itemPath) return true;
+    if (pathname.startsWith(itemPath + '/')) return true;
+    return false;
+  });
 
   return (
     <>
@@ -31,8 +49,10 @@ export default function UserNavbar() {
                 transform:
                   hoveredIndex !== null
                     ? `translateY(${hoveredIndex * 64}px)`
-                    : 'translateY(0)',
-                opacity: hoveredIndex !== null ? 1 : 0,
+                    : activeIndex >= 0
+                      ? `translateY(${activeIndex * 64}px)`
+                      : 'translateY(0)',
+                opacity: hoveredIndex !== null || activeIndex >= 0 ? 1 : 0,
               }}
             />
 
@@ -43,16 +63,17 @@ export default function UserNavbar() {
                   className="w-12 h-12"
                   onMouseEnter={() => setHoveredIndex(index)}
                 >
-                  <Link
+                  <NavLink
                     to={item.to}
+                    end={item.to === ROUTES.USER.DASHBOARD} // exact match pour dashboard
                     className="group w-full h-full flex items-center justify-center rounded-xl relative transition-colors duration-300"
                   >
-                    {/* Icône */}
+                    {/* Icône avec couleur conditionnelle */}
                     <item.icon
                       className={`w-6 h-6 transition-colors duration-300 ${
-                        hoveredIndex === index
-                          ? 'text-white'
-                          : 'text-[#4F5D75]'
+                        hoveredIndex !== null
+                          ? (hoveredIndex === index ? 'text-white' : 'text-[#4F5D75]')
+                          : (activeIndex === index ? 'text-white' : 'text-[#4F5D75]')
                       }`}
                     />
 
@@ -64,7 +85,7 @@ export default function UserNavbar() {
                     >
                       {item.name}
                     </span>
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -72,20 +93,17 @@ export default function UserNavbar() {
         </nav>
       </div>
 
-      {/*Version mobile (barre en bas) */}
+      {/* Version mobile (barre en bas) */}
       <nav className="w-full bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] order-2 lg:order-1 block lg:hidden fixed bottom-0 left-0 z-50">
         <ul className="flex justify-around items-center h-14 sm:h-20 max-w-2xl mx-auto px-2 sm:px-4">
           {menuItems.map((item, index) => (
             <li key={item.id} className="relative">
-              <Link
+              <NavLink
                 to={item.to}
+                end={item.to === ROUTES.USER.DASHBOARD}
                 className="flex flex-col items-center justify-center w-14 h-12 sm:w-16 sm:h-16"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setActiveIndex(index);
-                }}
               >
-                {/* Indicateur actif (trait au-dessus de l’icône) */}
+                {/* Trait bleu au-dessus de l’icône active */}
                 <span
                   className={`
                     absolute -top-1 left-1/2 -translate-x-1/2
@@ -102,7 +120,7 @@ export default function UserNavbar() {
                     ${activeIndex === index ? 'text-sky-600' : 'text-[#4F5D75]'}
                   `}
                 />
-              </Link>
+              </NavLink>
             </li>
           ))}
         </ul>
