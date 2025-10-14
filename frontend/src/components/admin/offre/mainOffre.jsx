@@ -1,8 +1,9 @@
 import { CirclePlus, EllipsisVertical, Pencil, Trash } from 'lucide-react'
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import useSWR from 'swr'
 import { format } from 'date-fns'
 import CreateOfferModal from './createOffreModal'
+import EditOfferModal from './editOffreModal'
 
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
@@ -34,6 +35,7 @@ const OffreCard = ({ offre, buttonEdit }) => (
 
 
 export default function MainAdminOffre(){
+    const [selectedOffreId, setSelectedOffreId] = useState(null);
     const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
 
     const { data, error, isLoading, mutate  } = useSWR(`${ApiUrl}/offre/`, fetcher)
@@ -43,19 +45,25 @@ export default function MainAdminOffre(){
     })
 
     // Button modifier et supprimer
-    const buttonEdit = () => {
+    const buttonEdit = (offre) => {
         return(
             <div className="dropdown dropdown-end"> 
                 <EllipsisVertical tabIndex={0} size={20} role="button" className=" text-gray-600 rounded-lg text-sm font-medium duration-300 hover:cursor-pointer" />
                 <ul
-                    tabIndex={0}
-                    className="dropdown-content menu rounded-box z-50 w-fit p-2 shadow-lg textC font-semibold bg-white"> 
-                        <li>
-                          <a className='flex justify-start items-center gap-2 text-sky-900'>
-                            <Pencil size={16}/>
-                            Modifier
-                          </a>
-                        </li>
+                  tabIndex={0}
+                  className="dropdown-content menu rounded-box z-50 w-fit p-2 shadow-lg textC font-semibold bg-white"> 
+                  <li>
+                    <a
+                      onClick={() => {
+                        setSelectedOffreId(offre.id);
+                        document.getElementById('editOffre').showModal();
+                      }}
+                      className="flex justify-start items-center gap-2 text-sky-900"
+                    >
+                      <Pencil size={16}/> Modifier
+                    </a>
+                  </li>
+
                         <li>
                           <a className='flex text-error justify-start items-center gap-2'>
                             <Trash size={16}/>
@@ -68,9 +76,9 @@ export default function MainAdminOffre(){
     }
     
     // Bouton d'edit sur le tableau
-    const buttonEditForTable = () => (
+    const buttonEditForTable = (offre) => (
         <td className="w-px"> 
-            {buttonEdit()}
+            {buttonEdit(offre)}
         </td>
     )
 
@@ -153,7 +161,7 @@ export default function MainAdminOffre(){
                                 <td>{offre.profil}</td>
                                 <td>{offre.debut} à {offre.fin}</td>
                                 <td>{offre.datePub}</td>
-                                {buttonEditForTable()}
+                                {buttonEditForTable(offre)}
                             </tr>
                         ))}
                     </tbody>
@@ -162,7 +170,7 @@ export default function MainAdminOffre(){
 
             <div className="lg:hidden space-y-3"> {/* visible sur mobile, caché sur lg et plus */}
                 {offres.map((offre) => (
-                    <OffreCard key={offre.id} offre={offre} buttonEdit={buttonEdit} />
+                    <OffreCard key={offre.id} offre={offre} buttonEdit={() => buttonEdit(offre)} />
                 ))}
             </div>
         </>
@@ -202,6 +210,8 @@ export default function MainAdminOffre(){
 
             {/* Les pop-ups */}
             <CreateOfferModal mutate={mutate}/>
+            <EditOfferModal offreId={selectedOffreId} mutate={mutate} />
+
         </div>
     )
 }

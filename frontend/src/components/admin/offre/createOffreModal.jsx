@@ -205,7 +205,7 @@ export default function CreateOfferModal({ mutate }) {
                                             )}
                                         </select>
                                         <input type="number" value={nombreProfil} onChange={(e) => setNombreProfil(e.target.value ? parseInt(e.target.value) : '')} min="1" className={`${inputStyle} w-full sm:w-24`} />
-                                        <button type="button" onClick={handleAddProfil} className="w-full sm:w-auto h-7 px-4 rounded-lg text-xs font-medium shadow-md duration-300 hover:shadow-lg hover:cursor-pointer whitespace-nowrap bg-sky-500 hover:bg-sky-600 text-white">
+                                        <button type="button" onClick={handleAddProfil} className="w-full h-7 px-4 rounded-lg text-xs font-medium shadow-md duration-300 hover:shadow-lg hover:cursor-pointer whitespace-nowrap bg-sky-500 hover:bg-sky-600 text-white">
                                             Ajouter
                                         </button>
                                     </div>

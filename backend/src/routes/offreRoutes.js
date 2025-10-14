@@ -7,6 +7,7 @@ router.post("/", authMiddleware, OffreController.createOffre)
 router.delete("/:id", authMiddleware, OffreController.deleteOffre)
 router.get("/", OffreController.getAllOffres)
 router.put("/:id", authMiddleware, OffreController.updateOffre)
+router.get("/:id", OffreController.getOffreById)
 
 
 module.exports = {
