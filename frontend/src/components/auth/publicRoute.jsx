@@ -5,7 +5,7 @@ import { ROUTES } from "../../routes/paths";
 export default function PublicRoute({ children }) {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem("utilisateur");
   const roles = user ? JSON.parse(user).roles : [];
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function PublicRoute({ children }) {
     );
 
   return isAuthenticated ? (
-    roles.includes("admin") ? <Navigate to={ROUTES.ADMIN.DASHBOARD} replace /> : <Navigate to="/t" replace />
+    roles.includes("admin") ? <Navigate to={ROUTES.ADMIN.DASHBOARD} replace /> : <Navigate to={ROUTES.USER.DASHBOARD} replace />
   ) : (
     children
   );

@@ -3,7 +3,6 @@ import OffresList from './offresList';
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../routes/paths';
 
-const API_URL = "http://localhost:5000";
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 

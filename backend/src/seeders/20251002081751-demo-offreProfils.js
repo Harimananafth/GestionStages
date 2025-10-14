@@ -11,6 +11,13 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        OffreId: 1, // 'Stage Développement Web'
+        ProfilId: 3, // 'Développeur Front-end'
+        nbProfil: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
         OffreId: 2, // 'Stage Data Science'
         ProfilId: 3, // 'Data Scientist'
         nbProfil: 1,
