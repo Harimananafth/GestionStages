@@ -40,6 +40,24 @@ export default function MainAdminOffre(){
 
     const { data, error, isLoading, mutate  } = useSWR(`${ApiUrl}/offre/`, fetcher)
 
+    const handleDelete = async (e, id) => {
+      e.preventDefault()
+
+      try{
+        const response =  await fetch(`${ApiUrl}/offre/${id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include'
+        })
+        if (response.ok){
+          alert("L'offre a bien été supprimée.")
+        }
+      }catch(err){
+        alert("Erreur lors de la suppression, veuillez réessayer.")
+      }
+
+    }
+
     useEffect(()=>{
         document.title = "Offres de stage"
     })
@@ -65,7 +83,10 @@ export default function MainAdminOffre(){
                   </li>
 
                         <li>
-                          <a className='flex text-error justify-start items-center gap-2'>
+                          <a className='flex text-error justify-start items-center gap-2'
+                          onClick={
+                            (e) => handleDelete(e, offre.id) 
+                          }>
                             <Trash size={16}/>
                             Supprimer
                           </a>
