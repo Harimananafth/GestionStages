@@ -77,6 +77,7 @@ export default function CreatePeriodeModal() {
                     e.target.reset();
                     const modal = document.getElementById('createPeriode');
                     if (modal) modal.close();
+                    window.location.reload()
                 }, 1000);
             } else {
                 setError(data.message || "Erreur lors de la création.");

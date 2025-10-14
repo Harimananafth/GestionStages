@@ -8,7 +8,7 @@ export default function Actu(){
     const { data, error, isLoading } = useSWR(`${ApiUrl}/notification`, fetcher);
 
     return (
-        <div className=" grow bg-white rounded-xl shadow-md hover:scale-1.8 hover:cursor-default hover:shadow-lg duration-300 p-7 flex flex-col justify-center items-start gap-5">
+        <div className=" grow bg-white rounded-xl shadow-md hover:scale-1.8 hover:cursor-default hover:shadow-lg duration-300 p-7 flex flex-col justify-start items-start gap-5">
             <h1 className="montserrat-hero font-bold text-xl">Actualités</h1>
             <div className="flex flex-col gap-2 overflow-y-auto w-full lg:max-h-56">
                 {error && <p className='text-error text-sm'>Erreur lors du chargement</p>}
