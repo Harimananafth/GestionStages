@@ -166,7 +166,7 @@ export default function MainAdminOffre(){
     //  Table et cartes 
     return (
       <>
-        <div className="overflow-x-auto hidden lg:block"> 
+        <div className=" hidden lg:block"> 
           <table className="table table-zebra w-full">
             <thead className='text-black'>
               <tr>
@@ -211,8 +211,8 @@ export default function MainAdminOffre(){
 
   //  Rendu principal 
   return(
-    <div className="h-full w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 
-                    animate-[text-appear-bottom_0.5s_ease-in] flex flex-col gap-4 min-h-screen lg:min-h-0" >
+    <div className="min-h-full w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 
+                    animate-[text-appear-bottom_0.5s_ease-in] flex flex-col gap-4" >
       
       <div className='flex justify-between items-center flex-wrap gap-2'>
         <h1 className="montserrat-hero font-bold text-xl text-sky-400">
@@ -234,7 +234,7 @@ export default function MainAdminOffre(){
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto min-h-0">
+      <div className="flex-1">
         {OffresList()}
       </div>
 

@@ -11,6 +11,15 @@ module.exports = {
         statut: 'En attente',
         date_candidature: new Date('2025-01-15'),
         updatedAt: new Date()
+      },      
+      {
+        EtudiantId: 1, // correspond à Rabeharison Fitahiana
+        OffreId: 2,    // correspond à 'Stage Développement Web'
+        cv_path: 'uploads/cv_rabeharison.pdf',
+        lm_path: 'uploads/lm_rabeharison.pdf',
+        statut: 'En attente',
+        date_candidature: new Date('2025-01-15'),
+        updatedAt: new Date()
       },
       {
         EtudiantId: 2, // correspond à Rakoto Miora
