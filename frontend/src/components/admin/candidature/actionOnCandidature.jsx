@@ -1,4 +1,4 @@
-import { FileText, MoveLeft, User, Check, X, Clock } from "lucide-react";
+import { FileText, MoveLeft, User, Check, X, Clock, FileUser } from "lucide-react";
 import { useState } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import useSWR from 'swr'
@@ -32,7 +32,7 @@ export default function ActionOnCandidature() {
         <img
             src={data.data.photo} 
             alt={`Photo de profil de ${data.data.nom}`}
-            className="w-12 h-12 rounded-full object-cover"
+            className="w-16 h-16 rounded-full object-cover"
         />
     ) : (
         <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
@@ -74,7 +74,7 @@ export default function ActionOnCandidature() {
     );}
 
     return (
-        <div className="h-full w-full bg-white rounded-xl shadow-lg p-6 lg:p-9 animate-[text-appear-bottom_0.5s_ease-in] flex flex-col gap-4">
+        <div className="h-full w-full bg-white rounded-xl shadow-lg p-4 lg:p-9 animate-[text-appear-bottom_0.5s_ease-in] flex flex-col gap-4">
 
             <a className="flex justify-start items-center gap-2 font-medium text-sky-600 hover:cursor-pointer"
                 onClick={() => navigate(-1)}>
@@ -83,13 +83,13 @@ export default function ActionOnCandidature() {
             </a>
 
 
-            <div className="flex flex-col gap-6 grow justify-center">
+            <div className="flex flex-col gap-6 grow justify-center p-6 border border-gray-100 shadow-sm rounded-xl">
 
                 {/* Info Candidat */}
-                <div className="flex items-center gap-4 mb-3">
+                <div className="flex items-center gap-4 ">
                     {profileImage}
                     <div>
-                        <p className="font-bold text-lg text-gray-900">
+                        <p className="font-bold text-xl text-gray-900">
                             {data?.data.nom || ""}
                         </p>
                         <p className="text-sm text-gray-600 mt-0.5">
@@ -98,6 +98,8 @@ export default function ActionOnCandidature() {
                     </div>
                 </div>
 
+                <hr className="text-gray-200"/>
+
                 {/* Boutons de fichiers */}
                 <div className="flex flex-col sm:flex-row gap-3">
                     <button
@@ -105,7 +107,7 @@ export default function ActionOnCandidature() {
                         className="flex-1 px-4 py-3 flex justify-center items-center gap-2 bg-sky-500 text-white rounded-lg text-base font-semibold shadow-md transition duration-300 hover:bg-sky-600 hover:shadow-lg disabled:opacity-50"
                         disabled={!data?.data.cv_path || loading}
                     >
-                        <FileText color="white" size={20} />
+                        <FileUser color="white" size={20} />
                         Voir le CV
                     </button>
                     <button
