@@ -8,7 +8,7 @@ const CandidatureCard = ({ nom, photo, email, ecole, niveau, navigate, id, titre
     // Icône par défaut si pas de photo
     const ProfileImage = photo ? (
         <img
-            src={`${photo}`}
+            src={photo}
             alt={`Photo de profil de ${nom}`}
             className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover"
         />

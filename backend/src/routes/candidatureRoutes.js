@@ -5,6 +5,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
 
 router.get("/", authMiddleware,  CandidatureController.getAllcandidature)
 router.post("/", authMiddleware, CandidatureController.createCandidature)
+router.get("/t/:id", authMiddleware, CandidatureController.getCandidatureById)
 router.get("/:id", authMiddleware, CandidatureController.getCandidatureCard)
 router.put("/:id", authMiddleware, CandidatureController.updateCandidature)
 router.put("/status/:id", authMiddleware, CandidatureController.updateCandidatureStatus)

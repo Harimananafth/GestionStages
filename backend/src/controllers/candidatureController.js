@@ -195,6 +195,52 @@ class CandidatureController {
         }
     }
 
+    // récupérer une candidature spécifique
+    static async getCandidatureById(req, res) {
+        try {
+            const id = req.params.id;
+
+            if (!id) {
+            return res.status(400).json({ message: "ID de la candidature manquante." });
+            }
+
+            const candidature = await Candidature.findByPk(id, {
+            include: [
+                {
+                    model: Etudiant,
+                    attributes: ['id', 'nom', 'prenom'],
+                    include: [
+                        {
+                        model: Utilisateur,
+                        attributes: ['photo'],
+                        },
+                    ],
+                }
+            ],
+            });
+
+
+            const data = {
+                idCandidature: candidature.id,
+                nom: `${candidature.Etudiant.nom} ${candidature.Etudiant.prenom}`,
+                statut : candidature.statut,
+                photo : candidature.Etudiant.Utilisateur.photo,
+                cv_path : candidature.cv_path,
+                lm_path : candidature.lm_path
+            }
+
+            const message = "La candidature ont été récupérées avec succès.";
+            return res.json({ message, data });
+
+        } catch (error) {
+            console.error(error);
+            const message = "La candidature n'a pas pu être récupérée. Réessayez plus tard.";
+            return res.status(500).json({ message, data: error.message });
+        }
+    }
+
+    
+
 }
 
 module.exports = CandidatureController;
