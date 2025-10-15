@@ -1,5 +1,5 @@
 const { Candidature, Offre, Utilisateur, Etudiant, sequelize } = require('../Models');
-const { ValidationError } = require('sequelize');
+const { ValidationError, where } = require('sequelize');
 const notificationController = require('./notificationController');
 
 class CandidatureController {
@@ -144,6 +144,49 @@ class CandidatureController {
                 return res.status(404).json({ message: "Candidature introuvable." });
             }
             const message = `La candidature n'a pas pu être supprimée. Réessayez dans quelques instants.`;
+            return res.status(500).json({ message, data: error });
+        }
+    }
+
+    // Méthode pour récupérer les infos des candidatures par rapport à une offre
+    static async getCandidatureCard(req, res) {
+        try {
+            const id = req.params.id
+
+            const candidatures = await Candidature.findAll( {
+                where : {OffreId : id},
+                include: [
+                    {
+                    model: Etudiant,
+                    attributes: ['id', 'nom', 'prenom', 'ecole', 'niveau'],
+                    include : [
+                        {
+                            model : Utilisateur,
+                            attributes : ['photo', 'email']
+                        }
+                    ]
+                    
+                    }
+                ]
+            });
+
+            const data = candidatures.map(c =>{
+                            return {
+                                idCandidature : c.id,
+                                nom : c.Etudiant.nom + " " + c.Etudiant.prenom,
+                                photo : c.Etudiant.Utilisateur.photo,
+                                email : c.Etudiant.Utilisateur.email,
+                                ecole : c.Etudiant.ecole,
+                                niveau : c.Etudiant.niveau
+                            }
+                        })
+            
+
+            const message = 'Les candidatures ont été récupérées avec succès.';
+            return res.json({ message, data });
+        } catch (error) {
+            console.error(error)
+            const message = "Les candidatures n'ont pu être récupérée. Réessayez dans quelques instants.";
             return res.status(500).json({ message, data: error });
         }
     }
