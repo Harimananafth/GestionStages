@@ -10,6 +10,8 @@ export default function UserCards() {
   const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
   const { data, error, isLoading } = useSWR(`${ApiUrl}/stats/user`, fetcher);
 
+  console.log(data)
+
   const [stats, setStats] = useState({
     nbCandidatures : 0,
     acceptees : 0,
@@ -24,7 +26,7 @@ export default function UserCards() {
       const nbCandidatures = d.nbCandidatures || 0
       const acceptees = d.acceptees || 0
       const refusees = d.refusees || 0
-      const attentes = d.nbCandidatures || 0
+      const attentes = d.attentes || 0
 
       setStats({ nbCandidatures, acceptees, refusees, attentes });
     }

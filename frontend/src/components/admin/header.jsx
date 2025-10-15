@@ -66,7 +66,7 @@ export default function UserHeader(){
         }
     }
     return (
-        <div className="navbar bg-white shadow-sm flex flex-col justify-between items-center gap-4 md:flex-row">
+        <div className="navbar md:px-5 bg-white shadow-sm flex flex-col justify-between items-center gap-4 md:flex-row">
             <div className="flex gap-2 items-center hover:cursor-default rounded-xl md:grayscale-100 hover:grayscale-0 hover:-translate-y-1 duration-300">
                 <img src="/images/logo.png" alt="" className="h-6"/>
                 <p className="font-semibold text-lg lg-light">Neovate App</p>
@@ -84,11 +84,13 @@ export default function UserHeader(){
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 min-w-70 max-h-70 overflow-y-auto p-3 shadow-xl">
+                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 p-3 shadow-xl">
                         {isLoading ? (
                             <span className="loading loading-dots loading-xl grow"></span>
                         ) : data && data.data ? (
-                            <Notification key={data.data.id} data={data} error={error} />
+                                <div className='w-86 max-h-100 overflow-y-scroll px-1 box-content'>
+                                    <Notification key={data.data.id} data={data} error={error} />
+                                </div>
                         ) : (
                             null
                         )}

@@ -18,7 +18,7 @@ module.exports = {
       },
       {
         id_utilisateur: 3, // correspond à moderator@example.com (si tu l'as)
-        id_role: 1,        // par exemple admin ou autre rôle
+        id_role: 2,        // par exemple admin ou autre rôle
         createdAt: new Date(),
         updatedAt: new Date()
       }

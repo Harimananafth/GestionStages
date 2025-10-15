@@ -27,6 +27,26 @@ export default function ActionOnCandidature() {
 
     const { data, error, isLoading, mutate } = useSWR(`${ApiUrl}/candidature/t/${id}`, fetcher);
 
+    const handleUpdateStatus = async (statut) => {
+        setLoading(true)
+        try{
+            const res = await fetch(`${ApiUrl}/candidature/status/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({statut: statut}),
+            })
+
+            if (res.ok){
+                mutate()
+            }
+        }catch(error){
+            alert(error.message || "Erreur lors de la mis à jour du statut.")
+        }finally{
+            setLoading(false)
+        }
+    }
+
 
     const profileImage = data?.data.photo ? (
         <img
@@ -103,7 +123,6 @@ export default function ActionOnCandidature() {
                 {/* Boutons de fichiers */}
                 <div className="flex flex-col sm:flex-row gap-3">
                     <button
-                        onClick={() => handleViewFile(data?.data.cv_path)}
                         className="flex-1 px-4 py-3 flex justify-center items-center gap-2 bg-sky-500 text-white rounded-lg text-base font-semibold shadow-md transition duration-300 hover:bg-sky-600 hover:shadow-lg disabled:opacity-50"
                         disabled={!data?.data.cv_path || loading}
                     >
@@ -111,7 +130,6 @@ export default function ActionOnCandidature() {
                         Voir le CV
                     </button>
                     <button
-                        onClick={() => handleViewFile(data?.data.lm_path)}
                         className="flex-1 px-4 py-3 flex justify-center items-center gap-2 bg-sky-500 text-white rounded-lg text-base font-semibold shadow-md transition duration-300 hover:bg-sky-600 hover:shadow-lg disabled:opacity-50"
                         disabled={!data?.data.lm_path || loading}
                     >
