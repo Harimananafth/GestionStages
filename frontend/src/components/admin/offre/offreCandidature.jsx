@@ -1,10 +1,10 @@
 import { MoveLeft, User, Mail, BookOpen, University } from "lucide-react" 
-import { useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import useSWR from 'swr'
+import { ROUTES } from '../../../routes/paths'
 
 // Composant Card de Candidature 
-const CandidatureCard = ({ nom, photo, email, ecole, niveau}) => {
+const CandidatureCard = ({ nom, photo, email, ecole, niveau, navigate, id, titre}) => {
     // Icône par défaut si pas de photo
     const ProfileImage = photo ? (
         <img
@@ -42,7 +42,8 @@ const CandidatureCard = ({ nom, photo, email, ecole, niveau}) => {
                 </div>
             </div>
             
-            <button className="ml-auto text-sky-500 hover:text-sky-600 text-sm font-semibold">
+            <button className="ml-auto text-sky-500 hover:text-sky-600 text-sm font-semibold underline underline-offset-2"
+            onClick={()=>navigate(ROUTES.ADMIN.CANDIDATURE_ACTION(id), { state: { titre } })}>
                 Action
             </button>
         </div>
@@ -127,6 +128,10 @@ export default function OffreCandidature(){
                             email={candidat.email}
                             ecole={candidat.ecole}
                             niveau={candidat.niveau}
+                            id={candidat.idCandidature}
+                            titre={titre}
+                            navigate={navigate}
+
                         />
                     ))}
                 </div>

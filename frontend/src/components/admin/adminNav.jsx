@@ -16,8 +16,8 @@ const menuItems = [
   { id:2, to: '/a/messages', icon: MessageSquareDot, name: 'Messages' },
   { id:3, to: ROUTES.ADMIN.OFFRE, icon: BriefcaseBusiness, name: 'Offres de stage' },
   { id:4, to: '/a/etudiants', icon: GraduationCap, name: 'Etudiants' },
-  { id:5, to: '/a/notifications', icon: FileUser, name: 'Candidatures' },
-  { id:6, to: '/a/settings', icon: FolderCog, name: 'Profils' },
+  { id:5, to: '/a/candidatures', icon: FileUser, name: 'Candidatures' },
+  { id:6, to: '/a/profils', icon: FolderCog, name: 'Profils' },
 ];
 
 function normalizePath(p) {

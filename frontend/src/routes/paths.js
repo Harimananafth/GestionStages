@@ -23,5 +23,6 @@ export const ROUTES = {
     DASHBOARD: "/a",
     OFFRE: "/a/offres",
     OFFRE_CANDIDATURE: (id) => `/a/offres/${id}`,
+    CANDIDATURE_ACTION: (id) => `/a/candidatures/${id}`
   },
 };
