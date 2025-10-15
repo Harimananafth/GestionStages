@@ -148,48 +148,53 @@ class CandidatureController {
         }
     }
 
-    // Méthode pour récupérer les infos des candidatures par rapport à une offre
     static async getCandidatureCard(req, res) {
         try {
-            const id = req.params.id
+            const id = req.params.id;
 
-            const candidatures = await Candidature.findAll( {
-                where : {OffreId : id},
+            if (!id) {
+            return res.status(400).json({ message: "ID de l'offre manquant." });
+            }
+
+            const candidatures = await Candidature.findAll({
+            where: { OffreId: id },
+            include: [
+                {
+                model: Etudiant,
+                attributes: ['id', 'nom', 'prenom', 'ecole', 'niveau'],
                 include: [
                     {
-                    model: Etudiant,
-                    attributes: ['id', 'nom', 'prenom', 'ecole', 'niveau'],
-                    include : [
-                        {
-                            model : Utilisateur,
-                            attributes : ['photo', 'email']
-                        }
-                    ]
-                    
-                    }
-                ]
+                    model: Utilisateur,
+                    attributes: ['photo', 'email'],
+                    },
+                ],
+                },
+            ],
             });
 
-            const data = candidatures.map(c =>{
-                            return {
-                                idCandidature : c.id,
-                                nom : c.Etudiant.nom + " " + c.Etudiant.prenom,
-                                photo : c.Etudiant.Utilisateur.photo,
-                                email : c.Etudiant.Utilisateur.email,
-                                ecole : c.Etudiant.ecole,
-                                niveau : c.Etudiant.niveau
-                            }
-                        })
-            
+            // if (!candidatures.length) {
+            //     return res.status(404).json({ message: "Aucune candidature trouvée pour cette offre." });
+            // }
 
-            const message = 'Les candidatures ont été récupérées avec succès.';
+            const data = candidatures.map(c => ({
+            idCandidature: c.id,
+            nom: `${c.Etudiant.nom} ${c.Etudiant.prenom}`,
+            photo: c.Etudiant?.Utilisateur?.photo || null,
+            email: c.Etudiant?.Utilisateur?.email || null,
+            ecole: c.Etudiant.ecole,
+            niveau: c.Etudiant.niveau,
+            }));
+
+            const message = "Les candidatures ont été récupérées avec succès.";
             return res.json({ message, data });
+
         } catch (error) {
-            console.error(error)
-            const message = "Les candidatures n'ont pu être récupérée. Réessayez dans quelques instants.";
-            return res.status(500).json({ message, data: error });
+            console.error(error);
+            const message = "Les candidatures n'ont pas pu être récupérées. Réessayez plus tard.";
+            return res.status(500).json({ message, data: error.message });
         }
     }
+
 }
 
 module.exports = CandidatureController;

@@ -1,3 +1,141 @@
+import { MoveLeft, User, Mail, BookOpen, University } from "lucide-react" 
+import { useEffect } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import useSWR from 'swr'
+
+// Composant Card de Candidature 
+const CandidatureCard = ({ nom, photo, email, ecole, niveau}) => {
+    // Icône par défaut si pas de photo
+    const ProfileImage = photo ? (
+        <img
+            src={`${photo}`}
+            alt={`Photo de profil de ${nom}`}
+            className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover"
+        />
+    ) : (
+        <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gray-200 flex items-center justify-center">
+            <User size={30} className="text-gray-500" />
+        </div>
+    );
+
+    return (
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 sm:p-6 bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition duration-300">
+            <div className="flex-shrink-0 flex items-center gap-4">
+                {ProfileImage}
+                <div>
+                    <p className="montserrat-hero font-bold text-base sm:text-lg text-gray-800">{nom}</p>
+                    <p className="text-sm text-sky-600 font-medium flex items-center gap-1 mt-1">
+                        <University size={16} className="text-sky-400 hidden sm:inline" />
+                        {ecole}
+                    </p>
+                </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row sm:ml-auto w-full sm:w-auto mt-2 sm:mt-0 gap-2 sm:gap-6 text-sm text-gray-600">
+                <div className="flex items-center gap-2">
+                    <Mail size={16} className="text-sky-400 flex-shrink-0" />
+                    <span className="truncate">{email}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <BookOpen size={16} className="text-sky-400 flex-shrink-0" />
+                    <span className="font-medium">{niveau}</span>
+                </div>
+            </div>
+            
+            <button className="ml-auto text-sky-500 hover:text-sky-600 text-sm font-semibold">
+                Action
+            </button>
+        </div>
+    );
+};
+
+
+
+const fetcher = async (url) =>
+    fetch(url, { credentials: 'include' }).then(async (res) => {
+        if (!res.ok) {
+            const error = new Error('An error occurred while fetching the data.');
+            error.info = await res.json();
+            error.status = res.status;
+            throw error;
+        }
+        return res.json();
+    });
+
+
+// Composant principal
 export default function OffreCandidature(){
-    return <h1>Offre</h1>
+    const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+
+    const { id } = useParams();
+
+    const { data, error, isLoading } = useSWR(`${ApiUrl}/candidature/${id}`, fetcher);
+
+    const location = useLocation();
+
+    const navigate = useNavigate();
+
+    
+    const titre = location.state?.titre || '';
+    
+    
+    const candidatures = data?.data || [];
+    
+    
+    if (isLoading) return (
+        <div className="h-full w-full flex justify-center items-center bg-white shadow-lg rounded-xl p-8 min-h-screen lg:min-h-0">
+            <span className="loading loading-dots loading-xl text-sky-500"></span>
+        </div>
+    );
+    if (error) {
+        return (
+        <div className="h-full w-full flex justify-center items-center bg-white shadow-lg rounded-xl p-8 min-h-screen lg:min-h-0">
+            <p className="text-error font-semibold text-lg">
+               { error.info.message || "Erreur lors du chargement des candidatures"}
+            </p>
+        </div>
+    );}
+
+    return (
+        <div className="h-full w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8
+                        animate-[text-appear-bottom_0.5s_ease-in] flex flex-col gap-6">
+            
+            {/* Entête */}
+            <div>
+                <a className="flex justify-start items-center gap-2 montserrat-hero font-bold text-sm text-sky-500 hover:text-sky-600 hover:cursor-pointer transition duration-200"
+                onClick={()=>navigate(-1)}>
+                    <MoveLeft size={20} />
+                    <span className="hidden sm:inline">Retour aux offres</span>
+                    <span className="sm:hidden">Retour</span>
+                </a>
+                <h1 className="montserrat-hero font-bold text-lg sm:text-2xl mt-3 text-gray-800">
+                   <span className="font-medium text-gray-500">Candidature(s) pour : </span>{titre}
+                </h1>
+                <p className="text-gray-500 mt-1 text-sm">{candidatures.length} candidat(s) trouvé(s)</p>
+            </div>
+
+            <hr className="text-gray-200"/>
+
+            {/*Liste des Candidatures */}
+            {candidatures.length > 0 ? (
+                <div className="flex flex-col gap-4 overflow-y-auto max-h-[70vh] p-1">
+                    {candidatures.map((candidat) => (
+                        <CandidatureCard
+                            key={candidat.idCandidature}
+                            nom={candidat.nom}
+                            photo={candidat.photo}
+                            email={candidat.email}
+                            ecole={candidat.ecole}
+                            niveau={candidat.niveau}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div className="flex flex-col items-center justify-center p-12 h-full">
+                    <p className="text-lg font-semibold text-gray-600">Aucune candidature trouvée pour cette offre.</p>
+                    <p className="text-sm text-gray-500 mt-2">Revenez plus tard ou vérifiez les autres offres.</p>
+                </div>
+            )}
+        </div>
+    )
 }

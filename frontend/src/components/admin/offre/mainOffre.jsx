@@ -15,7 +15,7 @@ const fetcher = (...args) => fetch(...args).then(res => res.json())
 const OffreCard = ({ offre, buttonEdit, openCandidature }) => (
   <div
     key={offre.id}
-    onClick={() => {openCandidature(id)}}
+    onClick={() => {openCandidature()}}
     className="card bg-base-100 shadow-md mb-4 p-4 border border-gray-100 
                animate-[text-appear-bottom_0.3s_ease-in] hover:bg-gray-50 cursor-pointer"
   >
@@ -41,6 +41,8 @@ const OffreCard = ({ offre, buttonEdit, openCandidature }) => (
   </div>
 );
 
+
+
 //  Composant principal 
 export default function MainAdminOffre(){
   const [selectedOffreId, setSelectedOffreId] = useState(null);
@@ -53,8 +55,8 @@ export default function MainAdminOffre(){
     document.title = "Offres de stage"
   }, []);
 
-  const openCandidature = (id) => {
-    navigate(ROUTES.ADMIN.OFFRE_CANDIDATURE(id))
+  const openCandidature = (id, titre) => {
+    navigate(ROUTES.ADMIN.OFFRE_CANDIDATURE(id), { state: { titre } })
   }
 
   // Bouton Edit / Delete 
@@ -179,7 +181,7 @@ export default function MainAdminOffre(){
               {offres.map((offre) => (
                 <tr 
                   key={offre.id}
-                  onClick={() => {openCandidature(offre.id)}}
+                  onClick={() => {openCandidature(offre.id, offre.titre)}}
                   className="hover:bg-gray-100 cursor-pointer"
                 >
                   <td className="font-semibold text-sky-800">{offre.titre}</td>
@@ -199,7 +201,7 @@ export default function MainAdminOffre(){
               key={offre.id} 
               offre={offre} 
               buttonEdit={() => buttonEdit(offre)}
-              openCandidature={() => openCandidature(offre.id)} 
+              openCandidature={() => openCandidature(offre.id, offre.titre)} 
             />
           ))}
         </div>
