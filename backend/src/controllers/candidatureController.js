@@ -5,7 +5,27 @@ const notificationController = require('./notificationController');
 
 class CandidatureController {
 
-    // ... getAllcandidature ... (inchangé)
+    // Méthode pour lister toutes les candidatures
+
+    static async getAllcandidature(req, res) {
+
+        try {
+
+            const candidatures = await Candidature.findAll();
+
+            const message = `La liste des candidatures a été récupérée avec succès.`;
+
+            return res.json({ message, data: candidatures });
+
+        } catch (error) {
+
+            const message = `La liste des candidatures n'a pas pu être récupérée. Réessayez dans quelques instants.`;
+
+            return res.status(500).json({ message, data: error });
+
+        }
+
+    }
 
     // Méthode pour ajouter une candidature
     static async createCandidature(req, res) {
@@ -64,7 +84,53 @@ class CandidatureController {
         }
     }
 
-    // ... updateCandidature ... (inchangé, s'il est gardé)
+    // Méthode pour modifier une candidature
+
+    static async updateCandidature(req, res) {
+
+    const id = parseInt(req.params.id);
+
+        try {
+
+            const updatedCandidature = await sequelize.transaction(async (t) => {
+
+            const [affectedRows] = await Candidature.update(req.body, { where: { id }, transaction: t });
+
+            if (!affectedRows) throw new Error('not_found');
+
+            return await Candidature.findByPk(id, { transaction: t });
+
+            });
+
+
+
+            const message = `La candidature a été mise à jour avec succès.`;
+
+            return res.json({ message, data: updatedCandidature });
+
+
+
+        } catch (error) {
+
+            if (error.message === 'not_found') {
+
+                return res.status(404).json({ message: "Candidature introuvable." });
+
+        }
+
+            if (error instanceof ValidationError) {
+
+                return res.status(400).json({ message: error.message, data: error });
+
+        }
+
+            const message = `La candidature n'a pas pu être mise à jour. Réessayez dans quelques instants.`;
+
+            return res.status(500).json({ message, data: error });
+
+        }
+
+    }
 
     // Méthode pour modifier uniquement le statut d'une candidature
     static async updateCandidatureStatus(req, res) {
@@ -155,7 +221,53 @@ class CandidatureController {
         }
     }
 
-    // ... deleteCandidature ... (inchangé)
+    // Méthode pour supprimer une candidature
+
+    static async deleteCandidature(req, res) {
+
+        const id = parseInt(req.params.id);
+
+
+
+    try {
+
+        const deletedCandidature = await sequelize.transaction(async (t) => {
+
+        const candidature = await Candidature.findByPk(id, { transaction: t });
+
+        if (!candidature) throw new Error('not_found');
+
+
+
+        await Candidature.destroy({ where: { id }, transaction: t });
+
+        return candidature;
+
+    });
+
+
+
+    const message = `La candidature a été supprimée avec succès.`;
+
+    return res.json({ message, data: deletedCandidature });
+
+
+
+    } catch (error) {
+
+        if (error.message === 'not_found') {
+
+        return res.status(404).json({ message: "Candidature introuvable." });
+
+    }
+
+        const message = `La candidature n'a pas pu être supprimée. Réessayez dans quelques instants.`;
+
+        return res.status(500).json({ message, data: error });
+
+    }
+
+    }
 
     static async getCandidatureCard(req, res) {
         try {

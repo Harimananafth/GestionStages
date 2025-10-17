@@ -9,7 +9,7 @@ module.exports = {
         titre: 'Développeur Full-Stack (Node/React)',
         is_disponible: true,
         PeriodeId: 1, // Été 2025
-        createdAt: new Date(now.getTime() - 10 * 86400000), // Publiée il y a 10j
+        date_publication: new Date(now.getTime() - 10 * 86400000), // Publiée il y a 10j
         updatedAt: now
       },
       // 2: Offre Été - Admin Réseau
@@ -17,7 +17,7 @@ module.exports = {
         titre: 'Stage Admin Sys & Réseau',
         is_disponible: true,
         PeriodeId: 1, // Été 2025
-        createdAt: new Date(now.getTime() - 8 * 86400000), // Publiée il y a 8j
+        date_publication: new Date(now.getTime() - 8 * 86400000), // Publiée il y a 8j
         updatedAt: now
       },
       // 3: Offre Hiver - Data
@@ -25,7 +25,7 @@ module.exports = {
         titre: 'Data Scientist Junior',
         is_disponible: true,
         PeriodeId: 2, // Hiver 2026
-        createdAt: new Date(now.getTime() - 5 * 86400000), // Publiée il y a 5j
+        date_publication: new Date(now.getTime() - 5 * 86400000), // Publiée il y a 5j
         updatedAt: now
       },
       // 4: Offre Hiver - Multi-profils
@@ -33,7 +33,7 @@ module.exports = {
         titre: 'Stage multi-profils tech Hiver 2026',
         is_disponible: true,
         PeriodeId: 2, // Hiver 2026
-        createdAt: new Date(now.getTime() - 2 * 86400000), // Publiée il y a 2j
+        date_publication: new Date(now.getTime() - 2 * 86400000), // Publiée il y a 2j
         updatedAt: now
       },
       // 5: Offre Ancienne (Indisponible)
@@ -41,7 +41,7 @@ module.exports = {
         titre: 'Stage de fin d\'études (anciens projets)',
         is_disponible: false, // Ancienne offre
         PeriodeId: 1, // Été 2025 (on fait semblant qu'elle est passée)
-        createdAt: new Date(now.getTime() - 90 * 86400000), // Publiée il y a 90j
+        date_publication: new Date(now.getTime() - 90 * 86400000), // Publiée il y a 90j
         updatedAt: new Date(now.getTime() - 30 * 86400000) // Modifiée il y a 30j
       }
     ], {});

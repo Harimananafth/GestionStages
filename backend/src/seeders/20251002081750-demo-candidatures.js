@@ -12,7 +12,7 @@ module.exports = {
       cv_path: 'uploads/cv_alice_dupont.pdf',
       lm_path: 'uploads/lm_alice_dupont.pdf',
       statut: 'Acceptée', // Prend 1/2 places
-      createdAt: new Date(now.getTime() - 8 * 86400000), // Candidate il y a 8j
+      date_candidature: new Date(now.getTime() - 8 * 86400000), // Candidate il y a 8j
       updatedAt: new Date(now.getTime() - 2 * 86400000) // Acceptée il y a 2j
     };
     
@@ -23,7 +23,7 @@ module.exports = {
       cv_path: 'uploads/cv_david_petit.pdf',
       lm_path: 'uploads/lm_david_petit.pdf',
       statut: 'Acceptée', // Prend 2/2 places
-      createdAt: new Date(now.getTime() - 7 * 86400000),
+      date_candidature: new Date(now.getTime() - 7 * 86400000),
       updatedAt: new Date(now.getTime() - 1 * 86400000) // Accepté hier
     };
     
@@ -35,7 +35,7 @@ module.exports = {
       cv_path: 'uploads/cv_claire_durand.pdf',
       lm_path: 'uploads/lm_claire_durand.pdf',
       statut: 'Refusée', // N'occupe pas de place
-      createdAt: new Date(now.getTime() - 6 * 86400000),
+      date_candidature: new Date(now.getTime() - 6 * 86400000),
       updatedAt: new Date(now.getTime() - 3 * 86400000)
     };
 
@@ -47,7 +47,7 @@ module.exports = {
       cv_path: 'uploads/cv_bob_martin.pdf',
       lm_path: 'uploads/lm_bob_martin.pdf',
       statut: 'Acceptée', // Prend 1/1 place
-      createdAt: new Date(now.getTime() - 7 * 86400000),
+      date_candidature: new Date(now.getTime() - 7 * 86400000),
       updatedAt: new Date(now.getTime() - 4 * 86400000)
     };
     
@@ -59,7 +59,7 @@ module.exports = {
       cv_path: 'uploads/cv_fabien_moreau.pdf',
       lm_path: 'uploads/lm_fabien_moreau.pdf',
       statut: 'En attente', // Reste en attente
-      createdAt: new Date(now.getTime() - 3 * 86400000),
+      date_candidature: new Date(now.getTime() - 3 * 86400000),
       updatedAt: new Date(now.getTime() - 3 * 86400000)
     };
 
@@ -71,7 +71,7 @@ module.exports = {
       cv_path: 'uploads/cv_eva_roy.pdf',
       lm_path: 'uploads/lm_eva_roy.pdf',
       statut: 'En attente', // 0/2 places prises
-      createdAt: new Date(now.getTime() - 4 * 86400000),
+      date_candidature: new Date(now.getTime() - 4 * 86400000),
       updatedAt: new Date(now.getTime() - 4 * 86400000)
     };
 
@@ -83,7 +83,7 @@ module.exports = {
       cv_path: 'uploads/cv_alice_dupont_bis.pdf',
       lm_path: 'uploads/lm_alice_dupont_bis.pdf',
       statut: 'En attente',
-      createdAt: new Date(now.getTime() - 1 * 86400000),
+      date_candidature: new Date(now.getTime() - 1 * 86400000),
       updatedAt: new Date(now.getTime() - 1 * 86400000)
     };
     
@@ -95,7 +95,7 @@ module.exports = {
       cv_path: 'uploads/cv_claire_durand_old.pdf',
       lm_path: 'uploads/lm_claire_durand_old.pdf',
       statut: 'Acceptée', // Place prise (dans le passé)
-      createdAt: new Date(now.getTime() - 80 * 86400000),
+      date_candidature: new Date(now.getTime() - 80 * 86400000),
       updatedAt: new Date(now.getTime() - 70 * 86400000)
     };
     
@@ -106,7 +106,7 @@ module.exports = {
       cv_path: 'uploads/cv_fabien_moreau_old.pdf',
       lm_path: 'uploads/lm_fabien_moreau_old.pdf',
       statut: 'Refusée',
-      createdAt: new Date(now.getTime() - 75 * 86400000),
+      date_candidature: new Date(now.getTime() - 75 * 86400000),
       updatedAt: new Date(now.getTime() - 70 * 86400000)
     };
 
