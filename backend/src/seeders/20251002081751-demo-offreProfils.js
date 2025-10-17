@@ -1,40 +1,75 @@
 'use strict';
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('offreProfils', [
+  async up (queryInterface, Sequelize) {
+    const now = new Date();
+    await queryInterface.bulkInsert('offreProfils', [
+      // Offre 1 (Full-Stack) : 2 places pour Profil 1 (Full-Stack)
       {
-        OffreId: 1, // 'Stage Développement Web'
-        ProfilId: 1, // 'Développeur Front-end'
+        OffreId: 1,
+        ProfilId: 1,
         nbProfil: 2,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: now,
+        updatedAt: now
       },
+      
+      // Offre 2 (Admin Réseau) : 1 place pour Profil 2 (Admin Réseau)
       {
-        OffreId: 1, // 'Stage Développement Web'
-        ProfilId: 3, // 'Développeur Front-end'
+        OffreId: 2,
+        ProfilId: 2,
         nbProfil: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: now,
+        updatedAt: now
       },
+      
+      // Offre 3 (Data) : 2 places pour Profil 3 (Data Scientist)
       {
-        OffreId: 2, // 'Stage Data Science'
-        ProfilId: 3, // 'Data Scientist'
-        nbProfil: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        OffreId: 3,
+        ProfilId: 3,
+        nbProfil: 2,
+        createdAt: now,
+        updatedAt: now
       },
+      
+      // Offre 4 (Multi)
+      // 1 place pour Profil 1 (Full-Stack)
       {
-        OffreId: 3, // 'Stage Réseaux et Télécom'
-        ProfilId: 4, // 'Administrateur Réseaux'
+        OffreId: 4,
+        ProfilId: 1,
         nbProfil: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: now,
+        updatedAt: now
+      },
+      // 2 places pour Profil 5 (Mobile)
+      {
+        OffreId: 4,
+        ProfilId: 5,
+        nbProfil: 2,
+        createdAt: now,
+        updatedAt: now
+      },
+
+      // Offre 5 (Ancienne)
+      // 1 place pour Profil 4 (UX/UI)
+      {
+        OffreId: 5,
+        ProfilId: 4,
+        nbProfil: 1,
+        createdAt: now,
+        updatedAt: now
+      },
+      // 1 place pour Profil 6 (Chef Projet)
+      {
+        OffreId: 5,
+        ProfilId: 6,
+        nbProfil: 1,
+        createdAt: now,
+        updatedAt: now
       }
-    ]);
+    ], {});
   },
 
-  async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('offreProfils', null, {});
+  async down (queryInterface, Sequelize) {
+    await queryInterface.bulkDelete('offreProfils', null, {});
   }
 };

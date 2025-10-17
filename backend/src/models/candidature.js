@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Candidature.belongsTo(models.Etudiant);
       Candidature.belongsTo(models.Offre);
+      Candidature.belongsTo(models.Profil);
     }
   }
   Candidature.init({
@@ -42,6 +43,17 @@ module.exports = (sequelize, DataTypes) => {
         },
         notNull: { msg: 'Le statut est requis' },
         notEmpty: { msg: 'Le statut ne peut pas être vide' }
+      }
+    },
+    ProfilId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'profils', 
+        key: 'id'
+      },
+      validate: {
+        notNull: { msg: 'Le profil est requis pour la candidature' }
       }
     }
   }, {
