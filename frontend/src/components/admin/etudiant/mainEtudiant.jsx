@@ -59,7 +59,7 @@ export default function MainAdminEtudiant() {
   }, [searchTerm]);
 
   // Définition de l'URL pour SWR
-  const apiUrl = (debouncedSearchTerm.length >= 3)
+  const apiUrl = (debouncedSearchTerm.length >= 1)
     ? `${ApiUrl}/etudiant/?search=${debouncedSearchTerm}`
     : `${ApiUrl}/etudiant/`; 
 
@@ -195,7 +195,7 @@ export default function MainAdminEtudiant() {
 
   // Rendu principal
   return (
-    <div className="min-h-full w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 
+    <div className="h-full w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 
                     animate-[text-appear-bottom_0.5s_ease-in] flex flex-col gap-4">
 
       <div className='flex justify-between items-center flex-wrap gap-4'>

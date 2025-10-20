@@ -26,8 +26,8 @@ class EtudiantController {
         try {
             if (req.query.search) {
                 const search = req.query.search;
-                if (search.length < 3) {
-                    const message = `Le terme de recherche doit contenir au moins 3 caractères.`;
+                if (search.length < 1) {
+                    const message = `Le terme de recherche doit contenir au moins 1 caractère.`;
                     return res.status(400).json({ message });
                 }
 

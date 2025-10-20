@@ -160,7 +160,7 @@ export default function MoreInfo() {
                 type="text"
                 name="spec"
                 className="input min-w-full text-[0.85rem] text-[#4F5D75] border-1 border-gray-200 focus:border-sky-400 focus:border-1 rounded-lg focus:outline-none duration-300"
-                placeholder="Développeur web fullstack"
+                placeholder="Développement web fullstack"
                 required
               />
             </fieldset>
