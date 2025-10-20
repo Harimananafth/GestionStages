@@ -166,7 +166,7 @@ export default function MainAdminEtudiant() {
               {etudiants.map((etudiant) => (
                 <tr
                   key={etudiant.id}
-                  className="hover:bg-gray-100"
+                  className="hover:bg-gray-100 cursor-pointer"
                 >
                   <td className="font-semibold text-sky-800">{etudiant.nomComplet}</td>
                   <td>{etudiant.telephone}</td>

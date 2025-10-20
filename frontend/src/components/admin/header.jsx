@@ -84,7 +84,7 @@ export default function UserHeader(){
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 p-3 shadow-xl">
+                        className="menu z-50 menu-sm dropdown-content bg-base-100 rounded-box mt-3 p-3 shadow-xl">
                         {isLoading ? (
                             <span className="loading loading-dots loading-xl grow"></span>
                         ) : data && data.data ? (

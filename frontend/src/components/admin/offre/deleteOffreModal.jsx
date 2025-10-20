@@ -1,5 +1,4 @@
 import { useState } from "react"
-// Assurez-vous d'avoir installé react-hot-toast : npm install react-hot-toast
 import toast from 'react-hot-toast'; 
 
 /**
@@ -69,7 +68,7 @@ export default function DeleteOffreModal({ offreId, mutate }) {
                 <h3 className="font-bold text-xl text-error">Suppression d'une offre</h3>
                 <p className="py-4 text-gray-700">
                     Êtes-vous certain(e) de vouloir supprimer définitivement cette offre (ID: {offreId || 'N/A'}) ? 
-                    Cette action est **irréversible** et toutes les candidatures associées pourraient être affectées.
+                    Cette action est <strong>irréversible</strong> et toutes les candidatures associées pourraient être affectées.
                 </p>
 
                 <div className="flex items-center justify-end gap-3 mt-5">

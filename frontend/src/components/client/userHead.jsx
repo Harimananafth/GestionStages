@@ -24,6 +24,7 @@ export default function UserHeader() {
 
 
 
+
   useEffect(() => {
         if(getInfoError)  console.log(getInfoError)
   
@@ -126,7 +127,7 @@ export default function UserHeader() {
                 {getInfoIsLoading ? (
                     <span className="loading loading-dots loading-xs"></span>
                 ) : (
-                  EtudiantInfo ? EtudiantInfo?.data.prenom + " " + EtudiantInfo?.data.nom : ""
+                  EtudiantInfo ? EtudiantInfo?.data.prenom.split(" ")[0] + " " + EtudiantInfo?.data.nom : ""
                 )
                 }
             </h1>
