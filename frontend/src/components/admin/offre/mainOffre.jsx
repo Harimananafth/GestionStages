@@ -246,7 +246,7 @@ export default function MainAdminOffre(){
       <CreateOfferModal mutate={mutate}/>
       <CreatePeriodeModal mutate={mutate}/>
       <EditOfferModal offreId={selectedOffreId} mutate={mutate} />
-      <DeleteOffreModal offreId={selectedOffreId}/>
+      <DeleteOffreModal offreId={selectedOffreId} mutate={mutate}/>
     </div>
   )
 }

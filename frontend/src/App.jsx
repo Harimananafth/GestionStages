@@ -17,6 +17,7 @@ import MainAdminOffre from "./components/admin/offre/mainOffre";
 import OffreCandidature from "./components/admin/offre/offreCandidature";
 import ActionOnCandidature from "./components/admin/candidature/actionOnCandidature";
 import MainAdminCandidatures from "./components/admin/candidature/mainCandidature";
+import MainAdminEtudiant from "./components/admin/etudiant/mainEtudiant";
 
 function App() {
   return (
@@ -72,6 +73,7 @@ function App() {
           <Route path="offres/:id" element={<OffreCandidature />} />
           <Route path="candidatures/:id" element={<ActionOnCandidature />} />
           <Route path="candidatures" element={<MainAdminCandidatures />} />
+          <Route path="etudiants" element={<MainAdminEtudiant />} />
         </Route>
       </Routes>
     </Router>

@@ -15,7 +15,7 @@ const menuItems = [
   { id:1, to: ROUTES.ADMIN.DASHBOARD, icon: Home, name: 'Tableau de bord' },
   { id:2, to: '/a/messages', icon: MessageSquareDot, name: 'Messages' },
   { id:3, to: ROUTES.ADMIN.OFFRE, icon: BriefcaseBusiness, name: 'Offres de stage' },
-  { id:4, to: '/a/etudiants', icon: GraduationCap, name: 'Etudiants' },
+  { id:4, to: ROUTES.ADMIN.ETUDIANT, icon: GraduationCap, name: 'Etudiants' },
   { id:5, to: ROUTES.ADMIN.CANDIDATURE, icon: FileUser, name: 'Candidatures' },
   { id:6, to: '/a/profils', icon: FolderCog, name: 'Profils' },
 ];
