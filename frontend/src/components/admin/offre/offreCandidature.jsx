@@ -1,10 +1,10 @@
 import { MoveLeft, User, Mail, BookOpen, University, FileUser, Check, X, Clock } from "lucide-react" 
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import useSWR from 'swr'
-import { useState, useMemo } from "react"; // AJOUT: useState et useMemo pour le tri
+import { useState, useMemo } from "react"; 
 import { ROUTES } from '../../../routes/paths'
 
-// Composant Card de Candidature (inchangé, sauf l'ajout de statut en prop pour la couleur)
+
 const CandidatureCard = ({ nom, photo, email, ecole, niveau, navigate, id, titre, profil, statut }) => {
     // Icône par défaut si pas de photo
     const ProfileImage = photo ? (
@@ -24,15 +24,15 @@ const CandidatureCard = ({ nom, photo, email, ecole, niveau, navigate, id, titre
     let statusIcon = <Clock size={16} className="text-gray-400" />;
     switch (statut) {
         case 'Acceptée':
-            statusColor = "text-success"; // Classe à définir (vert)
+            statusColor = "text-success";
             statusIcon = <Check size={16} className="text-success" />;
             break;
         case 'Refusée':
-            statusColor = "text-error"; // Classe à définir (rouge)
+            statusColor = "text-error"; 
             statusIcon = <X size={16} className="text-error" />;
             break;
         default: // En attente
-            statusColor = "text-warning"; // Classe à définir (jaune/orange)
+            statusColor = "text-warning"; 
             statusIcon = <Clock size={16} className="text-warning" />;
     }
 
@@ -78,7 +78,7 @@ const CandidatureCard = ({ nom, photo, email, ecole, niveau, navigate, id, titre
 };
 
 
-// fetcher (inchangé)
+// fetcher 
 const fetcher = async (url) =>
     fetch(url, { credentials: 'include' }).then(async (res) => {
         if (!res.ok) {
@@ -99,8 +99,8 @@ export default function OffreCandidature(){
     const navigate = useNavigate();
     const location = useLocation();
 
-    // AJOUT: État pour le filtre de statut
-    const [filterStatus, setFilterStatus] = useState('Tous'); // Valeurs possibles: 'Tous', 'Acceptée', 'Refusée', 'En attente'
+    // État pour le filtre de statut
+    const [filterStatus, setFilterStatus] = useState('Tous'); 
 
     const { data, error, isLoading } = useSWR(`${ApiUrl}/candidature/${id}`, fetcher);
 
@@ -109,13 +109,13 @@ export default function OffreCandidature(){
     // Données brutes
     const candidatures = data?.data || [];
     
-    // AJOUT: Filtrage des candidatures avec useMemo pour optimiser les performances
+    // Filtrage des candidatures avec useMemo pour optimiser les performances
     const filteredCandidatures = useMemo(() => {
         if (filterStatus === 'Tous') {
             return candidatures;
         }
         return candidatures.filter(c => c.statut === filterStatus);
-    }, [candidatures, filterStatus]); // Dépendances: les candidatures et le statut sélectionné
+    }, [candidatures, filterStatus]);
     
     
     if (isLoading) return (
@@ -154,7 +154,7 @@ export default function OffreCandidature(){
 
             <hr className="text-gray-200"/>
             
-            {/* AJOUT: Système de tri/filtre */}
+            {/*Système de tri/filtre */}
             <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-4">
                 <p className="text-sm font-semibold text-gray-700">Filtrer par statut :</p>
                 
@@ -195,7 +195,7 @@ export default function OffreCandidature(){
                             id={candidat.idCandidature}
                             titre={titre}
                             navigate={navigate}
-                            statut={candidat.statut} // AJOUT: Passage du statut à la Card
+                            statut={candidat.statut}
                         />
                     ))}
                 </div>
