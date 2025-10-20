@@ -277,7 +277,7 @@ export default function MainAdminCandidatures() {
         <div className="h-full w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 
                          animate-[text-appear-bottom_0.5s_ease-in] flex flex-col gap-2">
             
-            <h1 className="montserrat-hero font-bold text-xl text-gray-800">
+            <h1 className="montserrat-hero font-bold text-xl text-sky-400">
                 Toutes les candidatures
             </h1>
             
