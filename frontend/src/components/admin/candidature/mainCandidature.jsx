@@ -1,7 +1,9 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { format } from 'date-fns';
 import useSWR from 'swr';
+import { ROUTES } from '../../../routes/paths'
 import { Calendar, User, Check, X, Clock, RotateCcw, ArrowUp, ArrowDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'
 
 
 const NIVEAUX = ['Tous les niveaux', 'L1', 'L2', 'L3', 'M1', 'M2'];
@@ -37,8 +39,8 @@ const getStatusDetails = (statut) => {
 };
 
 // Composant de ligne pour la table (Vue Desktop)
-const CandidatureRow = ({ candidat }) => {
-    const { nom, profilPostule, niveau, date_depot, statut } = candidat;
+const CandidatureRow = ({ candidat, navigate }) => {
+    const { nom, profilPostule, niveau, date_depot, statut, titre , idCandidature } = candidat;
     
     const formattedDate = date_depot
         ? format(new Date(date_depot), 'dd-MM-yyyy')
@@ -46,12 +48,15 @@ const CandidatureRow = ({ candidat }) => {
 
     const { statusClass, statusText } = getStatusDetails(statut);
 
+
     return (
-        <tr className="hover:bg-gray-100 transition duration-150 cursor-pointer">
+        <tr className="hover:bg-gray-100 transition duration-150 cursor-pointer"
+        onClick={()=>navigate(ROUTES.ADMIN.CANDIDATURE_ACTION(idCandidature), { state: { titre } })}>
             <td className="font-semibold text-gray-800 flex items-center gap-3">
                 <User size={18} className="text-sky-500 hidden sm:inline" />
                 {nom}
             </td>
+            <td>{titre}</td>
             <td>{profilPostule}</td>
             <td>{niveau}</td>
             <td>{formattedDate}</td>
@@ -63,8 +68,8 @@ const CandidatureRow = ({ candidat }) => {
 };
 
 // Composant de carte  (Vue Mobile)
-const CandidatureCard = ({ candidat }) => {
-    const { nom, profilPostule, niveau, date_depot, statut } = candidat;
+const CandidatureCard = ({ candidat, navigate }) => {
+    const { nom, profilPostule, niveau, date_depot, statut, titre, idCandidature } = candidat;
 
     const formattedDate = date_depot
         ? format(new Date(date_depot), 'dd-MM-yyyy')
@@ -74,9 +79,10 @@ const CandidatureCard = ({ candidat }) => {
 
     return (
         <div 
-            key={candidat.idCandidature}
+            key={idCandidature}
             className="card bg-white shadow-md mb-4 p-4 border border-gray-200 
                         animate-[text-appear-bottom_0.3s_ease-in] hover:bg-gray-50 cursor-pointer"
+            onClick={()=>navigate(ROUTES.ADMIN.CANDIDATURE_ACTION(idCandidature), { state: { titre } })}
         >
             <div className="flex justify-between items-start">
                 <h2 className="text-base font-bold text-sky-600 flex items-center gap-2">
@@ -87,6 +93,10 @@ const CandidatureCard = ({ candidat }) => {
                 </div>
             </div>
             <div className="divider my-1"></div>
+            <p className="text-sm">
+                <span className="font-semibold text-gray-700">Offre : </span>
+                {titre}
+            </p>
             <p className="text-sm">
                 <span className="font-semibold text-gray-700">Poste: </span>
                 {profilPostule}
@@ -140,6 +150,7 @@ export default function MainAdminCandidatures() {
     const [filterProfil, setFilterProfil] = useState('Tous les profils');
     const [filterNiveau, setFilterNiveau] = useState('Tous les niveaux');
     const [filterDate, setFilterDate] = useState('');
+    const navigate = useNavigate()
     
     // États pour le tri
     const [sortColumn, setSortColumn] = useState('date_depot'); // Colonne par défaut
@@ -336,6 +347,7 @@ export default function MainAdminCandidatures() {
                                     <tr className="bg-gray-50">
                                         {/* Tri sur 'nom' */}
                                         <SortableHeader title="Nom" column="nom" sortColumn={sortColumn} sortOrder={sortOrder} onSort={handleSort} />
+                                        <SortableHeader title="Offre" column="titre" sortColumn={sortColumn} sortOrder={sortOrder} onSort={handleSort} />
                                         <SortableHeader title="Profil postulé" column="profilPostule" sortColumn={sortColumn} sortOrder={sortOrder} onSort={handleSort} />
                                         <SortableHeader title="Niveau" column="niveau" sortColumn={sortColumn} sortOrder={sortOrder} onSort={handleSort} />
                                         <SortableHeader title="Date de dépôt" column="date_depot" sortColumn={sortColumn} sortOrder={sortOrder} onSort={handleSort} />
@@ -347,6 +359,7 @@ export default function MainAdminCandidatures() {
                                         <CandidatureRow 
                                             key={candidat.idCandidature}
                                             candidat={candidat} 
+                                            navigate={navigate}
                                         />
                                     ))}
                                 </tbody>
@@ -359,6 +372,7 @@ export default function MainAdminCandidatures() {
                                 <CandidatureCard 
                                     key={candidat.idCandidature}
                                     candidat={candidat} 
+                                    navigate={navigate}
                                 />
                             ))}
                         </div>

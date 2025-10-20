@@ -72,6 +72,10 @@ class CandidatureController {
                 {
                     model: Profil,
                     attributes: ['nomProfil']
+                },
+                {
+                    model: Offre,
+                    attributes: ['titre']
                 }
             ],
             });
@@ -79,6 +83,7 @@ class CandidatureController {
             const data = candidatures.map(c => ({
                 idCandidature: c.id,
                 nom: `${c.Etudiant.nom} ${c.Etudiant.prenom}`,
+                titre : c.Offre.titre,
                 profilPostule: c.Profil ? c.Profil.nomProfil : 'N/A',
                 date_depot: c.date_candidature,
                 ecole: c.Etudiant.ecole,
