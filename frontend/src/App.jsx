@@ -16,6 +16,7 @@ import { ROUTES } from "./routes/paths";
 import MainAdminOffre from "./components/admin/offre/mainOffre";
 import OffreCandidature from "./components/admin/offre/offreCandidature";
 import ActionOnCandidature from "./components/admin/candidature/actionOnCandidature";
+import MainAdminCandidatures from "./components/admin/candidature/mainCandidature";
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function App() {
           <Route path="offres" element={<MainAdminOffre />} />
           <Route path="offres/:id" element={<OffreCandidature />} />
           <Route path="candidatures/:id" element={<ActionOnCandidature />} />
+          <Route path="candidatures" element={<MainAdminCandidatures />} />
         </Route>
       </Routes>
     </Router>

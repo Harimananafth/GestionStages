@@ -57,19 +57,43 @@ class CandidatureController {
     static async getAllcandidature(req, res) {
 
         try {
+            const candidatures = await Candidature.findAll({
+            include: [
+                {
+                    model: Etudiant,
+                    attributes: ['id', 'nom', 'prenom', 'ecole', 'niveau'],
+                    include: [
+                        {
+                        model: Utilisateur,
+                        attributes: ['photo', 'email'],
+                        },
+                    ],
+                },
+                {
+                    model: Profil,
+                    attributes: ['nomProfil']
+                }
+            ],
+            });
 
-            const candidatures = await Candidature.findAll();
+            const data = candidatures.map(c => ({
+                idCandidature: c.id,
+                nom: `${c.Etudiant.nom} ${c.Etudiant.prenom}`,
+                profilPostule: c.Profil ? c.Profil.nomProfil : 'N/A',
+                date_depot: c.date_candidature,
+                ecole: c.Etudiant.ecole,
+                niveau: c.Etudiant.niveau,
+                statut : c.statut
+            }));
 
-            const message = `La liste des candidatures a été récupérée avec succès.`;
+            const message = "Les candidatures ont été récupérées avec succès.";
+            return res.json({ message, data });
 
-            return res.json({ message, data: candidatures });
-
-        } catch (error) {
-
-            const message = `La liste des candidatures n'a pas pu être récupérée. Réessayez dans quelques instants.`;
-
-            return res.status(500).json({ message, data: error });
-
+        } catch (error)
+         {
+            console.error(error);
+            const message = "Les candidatures n'ont pas pu être récupérées. Réessayez plus tard.";
+            return res.status(500).json({ message, data: error.message });
         }
 
     }
@@ -358,6 +382,7 @@ class CandidatureController {
                 idCandidature: c.id,
                 nom: `${c.Etudiant.nom} ${c.Etudiant.prenom}`,
                 profilPostule: c.Profil ? c.Profil.nomProfil : 'N/A',
+                date_depot: c.date_candidature,
                 photo: c.Etudiant?.Utilisateur?.photo || null,
                 email: c.Etudiant?.Utilisateur?.email || null,
                 ecole: c.Etudiant.ecole,
