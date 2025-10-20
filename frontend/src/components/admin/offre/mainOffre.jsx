@@ -38,6 +38,7 @@ const OffreCard = ({ offre, buttonEdit, openCandidature }) => (
       <span className="font-semibold">Publié le: </span>
       {offre.datePub}
     </p>
+    <div className={`badge badge-outline text-xs mt-3 ${offre.is_disponible ? "badge-success" : "badge-error"}`}>{offre.is_disponible ? "Disponible" : "Indisponible"}</div>
   </div>
 );
 
@@ -137,6 +138,7 @@ export default function MainAdminOffre(){
         profil: profilString,
         debut,
         datePub,
+        is_disponible : offre.is_disponible,
         fin
       };
     });
@@ -174,6 +176,7 @@ export default function MainAdminOffre(){
                 <th>Profil (nombre)</th>
                 <th className='w-1/4'>Durée</th> 
                 <th>Date de création</th>
+                <th>Statut</th>
                 <th className='w-px'></th>
               </tr>
             </thead>
@@ -188,6 +191,7 @@ export default function MainAdminOffre(){
                   <td>{offre.profil}</td>
                   <td>{offre.debut} à {offre.fin}</td>
                   <td>{offre.datePub}</td>
+                  <td><div className={`badge badge-outline text-xs ${offre.is_disponible ? "badge-success" : "badge-error"}`}>{offre.is_disponible ? "Disponible" : "Indisponible"}</div></td>
                   {buttonEditForTable(offre)}
                 </tr>
               ))}

@@ -13,16 +13,23 @@ export default function UserHeader() {
 
   const [newNotification, setNewNotification] = useState(false);
   const user = JSON.parse(localStorage.getItem("utilisateur"));
+
   const { data, error, isLoading, mutate } = useSWR(`${ApiUrl}/notification/user`, fetcher);
+  const { data : EtudiantInfo, error : getInfoError, isLoading : getInfoIsLoading} = useSWR(`${ApiUrl}/etudiant/${user.id}`, fetcher)
+
   const navigate = useNavigate();
   const [message, setMessage] = useState(null);
   const [success, setSuccess] = useState(null);
   const photoUrl = `${ApiUrl}/user/photo`
 
+
+
   useEffect(() => {
-    const hasUnread = data?.data?.some(n => !n.lu) || false;
-    setNewNotification(hasUnread);
-  }, [data]);
+        if(getInfoError)  console.log(getInfoError)
+  
+        const hasUnread = data?.data?.some(n => !n.lu) || false;
+        setNewNotification(hasUnread);
+  }, [data, EtudiantInfo]);
 
   const handleAllRead = async () => {
     try {
@@ -115,8 +122,13 @@ export default function UserHeader() {
                 />
               </div>
             </div>
-            <h1 className="font-semibold lg-light text-sm md:text-base max-w-[120px] md:max-w-none">
-              {user.email}
+            <h1 className='font-semibold lg-light'>
+                {getInfoIsLoading ? (
+                    <span className="loading loading-dots loading-xs"></span>
+                ) : (
+                  EtudiantInfo ? EtudiantInfo?.data.prenom + " " + EtudiantInfo?.data.nom : ""
+                )
+                }
             </h1>
           </div>
           <ul

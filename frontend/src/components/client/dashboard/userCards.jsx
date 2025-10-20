@@ -10,8 +10,6 @@ export default function UserCards() {
   const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
   const { data, error, isLoading } = useSWR(`${ApiUrl}/stats/user`, fetcher);
 
-  console.log(data)
-
   const [stats, setStats] = useState({
     nbCandidatures : 0,
     acceptees : 0,
