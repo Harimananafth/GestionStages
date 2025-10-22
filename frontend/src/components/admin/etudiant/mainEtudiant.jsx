@@ -2,7 +2,6 @@ import { EllipsisVertical, Search, Trash } from 'lucide-react'
 import { useEffect, useState } from "react"
 import useSWR from 'swr'
 import DeleteEtudiantModal from './deleteEtudiantModal' 
-// Correction: Ajout de useNavigate pour la navigation
 import { useNavigate } from "react-router-dom"; 
 import { ROUTES } from '../../../routes/paths'
 
@@ -10,19 +9,15 @@ import { ROUTES } from '../../../routes/paths'
 const fetcher = (...args) => fetch(...args, { credentials: 'include' }).then(res => res.json())
 
 // Carte pour le responsive (mobile)
-// Correction: La fonction navigate doit être passée en prop ou définie dans le scope
-// Ici, on la retire des props car elle sera passée dans actionMenu
 const EtudiantCard = ({ etudiant, actionMenu, navigate }) => ( 
   <div
     key={etudiant.id}
     className="card bg-base-100 shadow-md mb-4 p-4 border border-gray-100 
                animate-[text-appear-bottom_0.3s_ease-in] hover:bg-gray-50"
-    // Correction: Utilisation de la prop navigate
     onClick={() => navigate(ROUTES.ADMIN.ETUDIANT_FICHE(etudiant.id))}> 
     <div className="flex justify-between items-start">
       <h2 className="text-lg font-bold text-sky-600">{etudiant.nomComplet}</h2>
       <div className="flex-shrink-0">
-        {/* Correction: actionMenu est une fonction qui prend un événement */}
         {actionMenu()} 
       </div>
     </div>
@@ -53,13 +48,11 @@ export default function MainAdminEtudiant() {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
-  // Correction: Initialisation de la fonction de navigation
   const navigate = useNavigate(); 
 
   // Effet de debounce pour la recherche
   useEffect(() => {
     const handler = setTimeout(() => {
-      // Correction: Ne recherche qu'à partir de 3 caractères minimum
       if (searchTerm.length === 0 || searchTerm.length >= 3) {
         setDebouncedSearchTerm(searchTerm);
       }
@@ -71,12 +64,10 @@ export default function MainAdminEtudiant() {
   }, [searchTerm]);
 
   // Définition de l'URL pour SWR
-  // Correction: La recherche s'applique si debouncedSearchTerm a au moins 3 caractères, ou 0 s'il est vide.
   const apiUrl = (debouncedSearchTerm.length >= 3)
     ? `${ApiUrl}/etudiant/?search=${debouncedSearchTerm}`
     : (debouncedSearchTerm.length === 0 ? `${ApiUrl}/etudiant/` : null); // Le null empêche la requête si < 3 et pas vide
 
-  // Correction: Si apiUrl est null, SWR ne lancera pas la requête
   const { data, error, isLoading, mutate } = useSWR(apiUrl, fetcher);
 
   useEffect(() => {
@@ -84,12 +75,10 @@ export default function MainAdminEtudiant() {
   }, []);
 
   // Menu d'action (Supprimer)
-  // Correction: actionMenu ne reçoit plus 'e' en argument pour le rendre utilisable dans EtudiantCard
   const actionMenu = (etudiant) => { 
     return (
       <div
         className="dropdown dropdown-end"
-        // Correction: Gestion du clic directement sur le div parent
         onClick={(e) => e.stopPropagation()} 
       >
         <EllipsisVertical
@@ -105,7 +94,7 @@ export default function MainAdminEtudiant() {
           <li>
             <a
               className="flex text-error justify-start items-center gap-2"
-              onClick={(e) => { // Correction: StopPropagation ici pour l'item de menu
+              onClick={(e) => { 
                 e.stopPropagation(); 
                 setSelectedEtudiantId(etudiant.id);
                 document.getElementById('deleteEtudiant').showModal();
@@ -121,10 +110,8 @@ export default function MainAdminEtudiant() {
   }
 
   // Wrapper pour le menu d'action dans le tableau
-  // Correction: On retire 'e' de l'argument car actionMenu ne le reçoit plus
   const actionMenuForTable = (etudiant) => ( 
     <td className="w-px" onClick={(e) => e.stopPropagation()}>
-      {/* Correction: On passe l'étudiant à actionMenu */}
       {actionMenu(etudiant)} 
     </td>
   )
@@ -159,7 +146,6 @@ export default function MainAdminEtudiant() {
         </div>
       );
     
-    // Correction: Si debouncedSearchTerm est actif, on affiche "Aucun étudiant ne correspond..."
     if (etudiants.length === 0)
       return (
         <div className="text-center text-gray-500 font-medium p-10">
@@ -195,7 +181,6 @@ export default function MainAdminEtudiant() {
                   <td>{etudiant.telephone}</td>
                   <td>{etudiant.ecole}</td>
                   <td>{etudiant.niveau} / {etudiant.specialite}</td>
-                  {/* Correction: On passe l'étudiant à actionMenuForTable */}
                   {actionMenuForTable(etudiant)} 
                 </tr>
               ))}
@@ -209,9 +194,8 @@ export default function MainAdminEtudiant() {
             <EtudiantCard
               key={etudiant.id}
               etudiant={etudiant}
-              // Correction: actionMenu() est appelé sans événement
               actionMenu={() => actionMenu(etudiant)} 
-              navigate={navigate} // Correction: Passage de navigate en prop
+              navigate={navigate} 
             />
           ))}
         </div>
