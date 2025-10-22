@@ -20,6 +20,7 @@ import MainAdminCandidatures from "./components/admin/candidature/mainCandidatur
 import MainAdminEtudiant from "./components/admin/etudiant/mainEtudiant";
 import FicheEtudiant from "./components/admin/etudiant/ficheEtudiant";
 import MainAdminProfil from "./components/admin/profil/mainAdminProfil";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -88,6 +89,7 @@ function App() {
           {/* Profils */}
           <Route path="profils" element={<MainAdminProfil />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
