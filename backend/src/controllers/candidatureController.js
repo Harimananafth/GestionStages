@@ -355,6 +355,7 @@ class CandidatureController {
 
     }
 
+    // Récupérer une candidature pour une offre spécifique
     static async getCandidatureCard(req, res) {
         try {
             const id = req.params.id;
@@ -455,6 +456,62 @@ class CandidatureController {
         } catch (error) {
             console.error(error);
             const message = "La candidature n'a pas pu être récupérée. Réessayez plus tard.";
+            return res.status(500).json({ message, data: error.message });
+        }
+    }
+
+    // Récupérer une candidature pour un étudiant spécifique
+    static async getStudentCandidature(req, res) {
+
+        try {
+            const id = req.params.id;
+
+            if (!id) {
+                return res.status(400).json({ message: "ID de l'utilisateur manquant." });
+            }
+
+            const utilisateur = await Utilisateur.findByPk(id, {
+                include : [
+                    {
+                        model : Etudiant, 
+                        attributes : ["id"]
+                    }   
+                ],
+            });
+
+            if (!utilisateur) {
+                return res.status(404).json({ message: "Utilisateur non trouvé." });
+            }
+
+            const etudiantProfiles = utilisateur.Etudiants; 
+            
+            if (!etudiantProfiles || etudiantProfiles.length === 0 || !etudiantProfiles[0].id) {
+                return res.status(404).json({ message: "Profil étudiant non complété pour cet utilisateur." });
+            }
+
+            const etudiantId = etudiantProfiles[0].id; 
+
+            const candidatures = await Candidature.findAll({
+                where: { EtudiantId: etudiantId }, 
+                include: [
+                    {
+                        model: Profil,
+                        attributes: ['nomProfil']
+                    },
+                    {
+                        model: Offre, 
+                        attributes: ['titre'] 
+                    }
+                ],
+                order: [['date_candidature', 'DESC']]
+            });
+
+            const message = "Les candidatures ont été récupérées avec succès.";
+            return res.json({ message, candidatures });
+
+        } catch (error) {
+            console.error("Erreur du contrôleur getStudentCandidature :", error);
+            const message = "Les candidatures n'ont pas pu être récupérées. Réessayez plus tard.";
             return res.status(500).json({ message, data: error.message });
         }
     }

@@ -106,7 +106,7 @@ export default function UserHeader() {
         </div>
 
         {/*Utilisateur */}
-        <div className=" dropdown dropdown-start mr-3">
+        <div className=" dropdown dropdown-end mr-6">
           <div
             tabIndex={0}
             role="button"
