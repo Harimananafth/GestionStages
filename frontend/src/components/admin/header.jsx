@@ -112,7 +112,7 @@ export default function UserHeader(){
                                     onError={(e) => { e.currentTarget.src = "/images/default-img-profil.png"; }} />
                             </div>
                         </div>
-                        <h1 className='font-semibold lg-light'>{ user.email }</h1>
+                        <h1 className='font-semibold lg-light'>Administrateur</h1>
                     </div>
                     <ul
                         tabIndex={0}

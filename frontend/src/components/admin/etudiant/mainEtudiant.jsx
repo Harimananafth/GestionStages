@@ -159,7 +159,7 @@ export default function MainAdminEtudiant() {
     return (
       <>
         {/* Vue Tableau (grands écrans) */}
-        <div className="hidden lg:block overflow-x-auto">
+        <div className="hidden lg:block ">
           <table className="table table-zebra w-full">
             <thead className='text-black'>
               <tr>
