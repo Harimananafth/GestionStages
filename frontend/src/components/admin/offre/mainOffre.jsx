@@ -225,7 +225,7 @@ export default function MainAdminOffre(){
         
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" className="px-4 py-2 sm:px-6 flex justify-center items-center gap-2 hover:bg-sky-700 
-              bg-sky-600 text-white rounded-lg text-sm font-medium shadow-md duration-300 hover:shadow-lg hover:cursor-pointer">
+              bg-sky-600 text-white rounded-lg text-sm font-medium shadow-md duration-300 hover:shadow-lg cursor-pointer">
             <CirclePlus color="white" absoluteStrokeWidth size={16}/>
             Ajouter
           </div>

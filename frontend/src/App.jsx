@@ -19,6 +19,7 @@ import ActionOnCandidature from "./components/admin/candidature/actionOnCandidat
 import MainAdminCandidatures from "./components/admin/candidature/mainCandidature";
 import MainAdminEtudiant from "./components/admin/etudiant/mainEtudiant";
 import FicheEtudiant from "./components/admin/etudiant/ficheEtudiant";
+import MainAdminProfil from "./components/admin/profil/mainAdminProfil";
 
 function App() {
   return (
@@ -69,13 +70,23 @@ function App() {
             </ProtectedRoute>
           }
         >
+          {/* Dashboard */}
           <Route index element={<AdminDashboard />} />
+
+          {/* Offres */}
           <Route path="offres" element={<MainAdminOffre />} />
           <Route path="offres/:id" element={<OffreCandidature />} />
+
+          {/* Candidatures */}
           <Route path="candidatures/:id" element={<ActionOnCandidature />} />
           <Route path="candidatures" element={<MainAdminCandidatures />} />
+
+          {/* Etudiants */}
           <Route path="etudiants" element={<MainAdminEtudiant />} />
           <Route path="etudiants/:id" element={<FicheEtudiant />} />
+
+          {/* Profils */}
+          <Route path="profils" element={<MainAdminProfil />} />
         </Route>
       </Routes>
     </Router>

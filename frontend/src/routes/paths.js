@@ -27,5 +27,6 @@ export const ROUTES = {
     CANDIDATURE_ACTION: (id) => `/a/candidatures/${id}`,
     ETUDIANT : "/a/etudiants",
     ETUDIANT_FICHE: (id) => `/a/etudiants/${id}`,
+    PROFIL : "/a/profils",
   },
 };
