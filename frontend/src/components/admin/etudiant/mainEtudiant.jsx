@@ -2,21 +2,28 @@ import { EllipsisVertical, Search, Trash } from 'lucide-react'
 import { useEffect, useState } from "react"
 import useSWR from 'swr'
 import DeleteEtudiantModal from './deleteEtudiantModal' 
+// Correction: Ajout de useNavigate pour la navigation
+import { useNavigate } from "react-router-dom"; 
+import { ROUTES } from '../../../routes/paths'
 
 
 const fetcher = (...args) => fetch(...args, { credentials: 'include' }).then(res => res.json())
 
 // Carte pour le responsive (mobile)
-const EtudiantCard = ({ etudiant, actionMenu }) => (
+// Correction: La fonction navigate doit être passée en prop ou définie dans le scope
+// Ici, on la retire des props car elle sera passée dans actionMenu
+const EtudiantCard = ({ etudiant, actionMenu, navigate }) => ( 
   <div
     key={etudiant.id}
     className="card bg-base-100 shadow-md mb-4 p-4 border border-gray-100 
                animate-[text-appear-bottom_0.3s_ease-in] hover:bg-gray-50"
-  >
+    // Correction: Utilisation de la prop navigate
+    onClick={() => navigate(ROUTES.ADMIN.ETUDIANT_FICHE(etudiant.id))}> 
     <div className="flex justify-between items-start">
       <h2 className="text-lg font-bold text-sky-600">{etudiant.nomComplet}</h2>
       <div className="flex-shrink-0">
-        {actionMenu()}
+        {/* Correction: actionMenu est une fonction qui prend un événement */}
+        {actionMenu()} 
       </div>
     </div>
     <div className="divider my-1"></div>
@@ -46,11 +53,16 @@ export default function MainAdminEtudiant() {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+  // Correction: Initialisation de la fonction de navigation
+  const navigate = useNavigate(); 
 
   // Effet de debounce pour la recherche
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
+      // Correction: Ne recherche qu'à partir de 3 caractères minimum
+      if (searchTerm.length === 0 || searchTerm.length >= 3) {
+        setDebouncedSearchTerm(searchTerm);
+      }
     }, 300); 
 
     return () => {
@@ -59,10 +71,12 @@ export default function MainAdminEtudiant() {
   }, [searchTerm]);
 
   // Définition de l'URL pour SWR
-  const apiUrl = (debouncedSearchTerm.length >= 1)
+  // Correction: La recherche s'applique si debouncedSearchTerm a au moins 3 caractères, ou 0 s'il est vide.
+  const apiUrl = (debouncedSearchTerm.length >= 3)
     ? `${ApiUrl}/etudiant/?search=${debouncedSearchTerm}`
-    : `${ApiUrl}/etudiant/`; 
+    : (debouncedSearchTerm.length === 0 ? `${ApiUrl}/etudiant/` : null); // Le null empêche la requête si < 3 et pas vide
 
+  // Correction: Si apiUrl est null, SWR ne lancera pas la requête
   const { data, error, isLoading, mutate } = useSWR(apiUrl, fetcher);
 
   useEffect(() => {
@@ -70,11 +84,13 @@ export default function MainAdminEtudiant() {
   }, []);
 
   // Menu d'action (Supprimer)
-  const actionMenu = (etudiant) => {
+  // Correction: actionMenu ne reçoit plus 'e' en argument pour le rendre utilisable dans EtudiantCard
+  const actionMenu = (etudiant) => { 
     return (
       <div
         className="dropdown dropdown-end"
-        onClick={(e) => e.stopPropagation()} // Important pour éviter de fermer le modal/naviguer
+        // Correction: Gestion du clic directement sur le div parent
+        onClick={(e) => e.stopPropagation()} 
       >
         <EllipsisVertical
           tabIndex={0}
@@ -89,7 +105,8 @@ export default function MainAdminEtudiant() {
           <li>
             <a
               className="flex text-error justify-start items-center gap-2"
-              onClick={() => {
+              onClick={(e) => { // Correction: StopPropagation ici pour l'item de menu
+                e.stopPropagation(); 
                 setSelectedEtudiantId(etudiant.id);
                 document.getElementById('deleteEtudiant').showModal();
               }}
@@ -104,9 +121,11 @@ export default function MainAdminEtudiant() {
   }
 
   // Wrapper pour le menu d'action dans le tableau
-  const actionMenuForTable = (etudiant) => (
-    <td className="w-px">
-      {actionMenu(etudiant)}
+  // Correction: On retire 'e' de l'argument car actionMenu ne le reçoit plus
+  const actionMenuForTable = (etudiant) => ( 
+    <td className="w-px" onClick={(e) => e.stopPropagation()}>
+      {/* Correction: On passe l'étudiant à actionMenu */}
+      {actionMenu(etudiant)} 
     </td>
   )
 
@@ -140,12 +159,15 @@ export default function MainAdminEtudiant() {
         </div>
       );
     
+    // Correction: Si debouncedSearchTerm est actif, on affiche "Aucun étudiant ne correspond..."
     if (etudiants.length === 0)
       return (
         <div className="text-center text-gray-500 font-medium p-10">
-          <p>{debouncedSearchTerm.length >= 3 ? "Aucun étudiant ne correspond à votre recherche." : "Aucun étudiant trouvé."}</p>
+          <p>{debouncedSearchTerm.length >= 3 || searchTerm.length > 0 ? "Aucun étudiant ne correspond à votre recherche." : "Aucun étudiant trouvé."}</p>
         </div>
       );
+
+    
 
     // Rendu du tableau et des cartes
     return (
@@ -164,15 +186,17 @@ export default function MainAdminEtudiant() {
             </thead>
             <tbody>
               {etudiants.map((etudiant) => (
+
                 <tr
                   key={etudiant.id}
                   className="hover:bg-gray-100 cursor-pointer"
-                >
+                  onClick={()=>navigate(ROUTES.ADMIN.ETUDIANT_FICHE(etudiant.id))}>
                   <td className="font-semibold text-sky-800">{etudiant.nomComplet}</td>
                   <td>{etudiant.telephone}</td>
                   <td>{etudiant.ecole}</td>
                   <td>{etudiant.niveau} / {etudiant.specialite}</td>
-                  {actionMenuForTable(etudiant)}
+                  {/* Correction: On passe l'étudiant à actionMenuForTable */}
+                  {actionMenuForTable(etudiant)} 
                 </tr>
               ))}
             </tbody>
@@ -185,7 +209,9 @@ export default function MainAdminEtudiant() {
             <EtudiantCard
               key={etudiant.id}
               etudiant={etudiant}
-              actionMenu={() => actionMenu(etudiant)}
+              // Correction: actionMenu() est appelé sans événement
+              actionMenu={() => actionMenu(etudiant)} 
+              navigate={navigate} // Correction: Passage de navigate en prop
             />
           ))}
         </div>
@@ -196,7 +222,7 @@ export default function MainAdminEtudiant() {
   // Rendu principal
   return (
     <div className="h-full w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 
-                    animate-[text-appear-bottom_0.5s_ease-in] flex flex-col gap-4">
+                     animate-[text-appear-bottom_0.5s_ease-in] flex flex-col gap-4">
 
       <div className='flex justify-between items-center flex-wrap gap-4'>
         <h1 className="montserrat-hero font-bold text-xl text-sky-400">
@@ -217,7 +243,7 @@ export default function MainAdminEtudiant() {
       </div>
 
       {/* Conteneur de la liste */}
-      <div className="flex-1">
+      <div className="flex-1 overflow-auto">
         {EtudiantsList()}
       </div>
 

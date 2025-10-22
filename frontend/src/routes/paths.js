@@ -25,6 +25,7 @@ export const ROUTES = {
     OFFRE_CANDIDATURE: (id) => `/a/offres/${id}`,
     CANDIDATURE : "/a/candidatures",
     CANDIDATURE_ACTION: (id) => `/a/candidatures/${id}`,
-    ETUDIANT : "/a/etudiants"
+    ETUDIANT : "/a/etudiants",
+    ETUDIANT_FICHE: (id) => `/a/etudiants/${id}`,
   },
 };

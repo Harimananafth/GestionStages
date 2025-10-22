@@ -18,6 +18,7 @@ import OffreCandidature from "./components/admin/offre/offreCandidature";
 import ActionOnCandidature from "./components/admin/candidature/actionOnCandidature";
 import MainAdminCandidatures from "./components/admin/candidature/mainCandidature";
 import MainAdminEtudiant from "./components/admin/etudiant/mainEtudiant";
+import FicheEtudiant from "./components/admin/etudiant/ficheEtudiant";
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
           <Route path="candidatures/:id" element={<ActionOnCandidature />} />
           <Route path="candidatures" element={<MainAdminCandidatures />} />
           <Route path="etudiants" element={<MainAdminEtudiant />} />
+          <Route path="etudiants/:id" element={<FicheEtudiant />} />
         </Route>
       </Routes>
     </Router>

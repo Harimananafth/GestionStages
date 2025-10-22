@@ -39,7 +39,7 @@ module.exports = {
       // 5: Offre Ancienne (Indisponible)
       {
         titre: 'Stage de fin d\'études (anciens projets)',
-        is_disponible: false, // Ancienne offre
+        is_disponible: true, // Ancienne offre
         PeriodeId: 1, // Été 2025 (on fait semblant qu'elle est passée)
         date_publication: new Date(now.getTime() - 90 * 86400000), // Publiée il y a 90j
         updatedAt: new Date(now.getTime() - 30 * 86400000) // Modifiée il y a 30j

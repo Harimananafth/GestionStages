@@ -1,4 +1,4 @@
-const { Etudiant } = require('../Models');
+const { Etudiant, Candidature, Utilisateur, Offre, Profil } = require('../Models');
 const { ValidationError, Op } = require('sequelize');
 
 class EtudiantController {
@@ -120,6 +120,52 @@ class EtudiantController {
             return res.status(500).json({ message, data: error });
         }
     }
+
+    // Récupérer un étudiant à partir de son id
+
+    static async getFicheEtudiant (req, res){
+        const id = req.params.id
+        try{
+
+            const etudiant = await Etudiant.findByPk(id, 
+                {
+                    include: [
+                        {
+                            model: Candidature,
+                            attributes: ['id', 'date_candidature'],
+                            include: [
+                                {
+                                model: Offre,
+                                attributes: ['titre'],
+                                },
+                                {
+                                    model : Profil,
+                                    attributes: ['nomProfil'],
+                                }
+                            ],
+                        },
+                        {
+                            model : Utilisateur,
+                            attributes : ["photo", "email"]
+                        }
+                    ]
+                }
+            )
+
+            if (!etudiant) {
+                return res.status(404).json({ message: "Aucun étudiant trouvé pour cet utilisateur." });
+            }
+
+            const message = `L'étudiant a été récupéré avec succès.`;
+            return res.json({ message, data: etudiant });
+
+        }catch(error){
+            const message = `L'étudiant n'a pas pu être récupérée. Réessayez dans quelques instants.`;
+            console.log(error)
+            return res.status(500).json({ message, data: error });
+        }
+    }
+
 }
 
 module.exports = EtudiantController;
