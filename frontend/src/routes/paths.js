@@ -17,6 +17,7 @@ export const ROUTES = {
     ROOT: "/t",
     DASHBOARD: "/t",
     CANDIDATURE : "/t/candidatures",
+    OFFRE : "/t/offres",
   },
 
   ADMIN: {

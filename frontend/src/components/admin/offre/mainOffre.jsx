@@ -215,7 +215,7 @@ export default function MainAdminOffre(){
 
   //  Rendu principal 
   return(
-    <div className="min-h-full w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 
+    <div className="h-full w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 
                     animate-[text-appear-bottom_0.5s_ease-in] flex flex-col gap-4" >
       
       <div className='flex justify-between items-center flex-wrap gap-2'>
@@ -238,7 +238,7 @@ export default function MainAdminOffre(){
         </div>
       </div>
 
-      <div className="flex-1">
+      <div className="flex-1 overflow-auto">
         {OffresList()}
       </div>
 

@@ -6,7 +6,7 @@ import { ROUTES } from "../../routes/paths";
 const menuItems = [
   { id: 1, to: ROUTES.USER.DASHBOARD, icon: Home, name: 'Tableau de bord' },
   { id: 2, to: '/t/profile', icon: MessageSquareDot, name: 'Messages' },
-  { id: 3, to: '/t/analytics', icon: BriefcaseBusiness, name: 'Offres de stage' },
+  { id: 3, to: ROUTES.USER.OFFRE, icon: BriefcaseBusiness, name: 'Offres de stage' },
   { id: 4, to: ROUTES.USER.CANDIDATURE, icon: FileUser, name: 'Candidatures' },
 ];
 

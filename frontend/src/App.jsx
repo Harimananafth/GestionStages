@@ -22,6 +22,7 @@ import FicheEtudiant from "./components/admin/etudiant/ficheEtudiant";
 import MainAdminProfil from "./components/admin/profil/mainAdminProfil";
 import NotFound from "./pages/NotFound";
 import MesCandidatures from "./components/client/candidature/mesCandidatures";
+import ListeOffresStage from "./components/client/offre/listeOffreStage";
 
 function App() {
   return (
@@ -66,6 +67,9 @@ function App() {
 
           {/* Candidature */}
           <Route path="candidatures" element={<MesCandidatures />} />
+
+          {/* Offres */}
+          <Route path="offres" element={<ListeOffresStage />} />
 
         </Route>
 

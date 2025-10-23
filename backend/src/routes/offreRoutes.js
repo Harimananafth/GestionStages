@@ -6,6 +6,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
 router.post("/", authMiddleware, OffreController.createOffre)
 router.delete("/:id", authMiddleware, OffreController.deleteOffre)
 router.get("/", OffreController.getAllOffres)
+router.get("/st/:id", OffreController.getStudentOffre)
 router.put("/:id", authMiddleware, OffreController.updateOffre)
 router.get("/:id", OffreController.getOffreById)
 
