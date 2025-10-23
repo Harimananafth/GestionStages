@@ -7,7 +7,7 @@ import {
   FileUser, 
   FolderCog 
 } from 'lucide-react';
-import { NavLink, useLocation } from "react-router-dom"; // NavLink utile mais on utilise useLocation aussi
+import { NavLink, useLocation } from "react-router-dom"; 
 import { ROUTES } from "../../routes/paths";
 
 // Données pour les éléments de menu (TOUTES les routes en absolu)
@@ -17,13 +17,13 @@ const menuItems = [
   { id:3, to: ROUTES.ADMIN.OFFRE, icon: BriefcaseBusiness, name: 'Offres de stage' },
   { id:4, to: ROUTES.ADMIN.ETUDIANT, icon: GraduationCap, name: 'Etudiants' },
   { id:5, to: ROUTES.ADMIN.CANDIDATURE, icon: FileUser, name: 'Candidatures' },
-  { id:6, to: '/a/profils', icon: FolderCog, name: 'Profils' },
+  { id:6, to: ROUTES.ADMIN.PROFIL, icon: FolderCog, name: 'Profils' },
 ];
 
 function normalizePath(p) {
   if (!p) return p;
   if (p === '/') return '/';
-  return p.replace(/\/+$/, ''); // supprime slash final s'il y en a
+  return p.replace(/\/+$/, ''); 
 }
 
 export default function AdNavbar() {
