@@ -112,8 +112,19 @@ class CandidatureController {
   // Méthode pour ajouter une candidature
   static async createCandidature(req, res) {
     try {
+      //Récupération des url pour le cv et la lm
+      const cv_path = req.files["cv"][0].path || null;
+      const lm_path = req.files["lm"][0].path || null;
+
+      if (!cv_path || !lm_path) {
+        return res
+          .status(400)
+          .json({ message: "CV et lettre de motivation requis." });
+      }
+
       // Récupération des ID pour validation
       const { OffreId, ProfilId } = req.body;
+      const body = req.body
 
       const candidature = await sequelize.transaction(async (t) => {
         // vérification : L'offre existe et est disponible
@@ -129,7 +140,7 @@ class CandidatureController {
         if (!offreProfil) throw new Error("profil_not_in_offre");
 
         // Création de la candidature
-        const newCandidature = await Candidature.create(req.body, {
+        const newCandidature = await Candidature.create({cv_path, lm_path, ...body}, {
           transaction: t,
         });
 
@@ -152,11 +163,9 @@ class CandidatureController {
       }
       // AJOUT: Gestion des nouvelles erreurs
       if (error.message === "offre_not_disponible") {
-        return res
-          .status(403)
-          .json({
-            message: "Cette offre n'est plus disponible pour les candidatures.",
-          });
+        return res.status(403).json({
+          message: "Cette offre n'est plus disponible pour les candidatures.",
+        });
       }
       if (error.message === "profil_not_in_offre") {
         return res
@@ -301,20 +310,16 @@ class CandidatureController {
     } catch (error) {
       // Gestion des nouvelles erreurs
       if (error.message === "offre_not_disponible") {
-        return res
-          .status(403)
-          .json({
-            message:
-              "Impossible d'accepter la candidature : l'offre n'est plus disponible.",
-          });
+        return res.status(403).json({
+          message:
+            "Impossible d'accepter la candidature : l'offre n'est plus disponible.",
+        });
       }
       if (error.message === "profil_plein") {
-        return res
-          .status(409)
-          .json({
-            message:
-              "Ce profil est déjà complet pour cette offre. Impossible d'accepter la candidature.",
-          });
+        return res.status(409).json({
+          message:
+            "Ce profil est déjà complet pour cette offre. Impossible d'accepter la candidature.",
+        });
       }
       // ...
       const message = `Le statut de la candidature n'a pas pu être mis à jour. Réessayez dans quelques instants.`;

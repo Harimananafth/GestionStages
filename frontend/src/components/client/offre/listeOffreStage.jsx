@@ -11,6 +11,7 @@ import {
   Briefcase,
   ChevronRight,
 } from "lucide-react";
+import PostulerModal from "./postulerModal";
 
 // --- Configuration et Helpers SWR/API ---
 
@@ -54,7 +55,6 @@ const formatPeriode = (periode) => {
 };
 
 // Helper pour formater la liste des profils
-
 const formatProfils = (profils) => {
   if (!profils || profils.length === 0) {
     return "Non spécifié";
@@ -62,8 +62,8 @@ const formatProfils = (profils) => {
 
   // Mappe chaque profil pour obtenir la chaîne "nomProfil(nbStagiaires)"
   const formattedArray = profils.map((p) => {
-    // S'assure que nbStagiaires est disponible (avec une valeur par défaut de 1 si non)
-    const nb = p.nbStagiaires || 1;
+    // Utilise p.OffreProfil.nbProfil qui est le champ de liaison
+    const nb = p.OffreProfil?.nbProfil || 1;
     return `${p.nomProfil} (${nb})`;
   });
 
@@ -73,7 +73,7 @@ const formatProfils = (profils) => {
 
 // --- Composant Carte d'Offre ---
 
-const OffreCard = ({ offre }) => {
+const OffreCard = ({ offre, onApplyClick }) => {
   const profils = offre.Profils || [];
   const formattedProfils = formatProfils(profils);
   const formattedPeriode = formatPeriode(offre.Periode);
@@ -130,6 +130,7 @@ const OffreCard = ({ offre }) => {
               bg-sky-600 text-white rounded-lg text-sm font-medium shadow-md
               duration-300 hover:bg-sky-700 hover:shadow-lg transition-colors cursor-pointer"
               aria-label={`Postuler pour l'offre ${offre.titre}`}
+              onClick={() => onApplyClick(offre)} 
             >
               Postuler <ChevronRight size={18} />
             </button>
@@ -140,16 +141,19 @@ const OffreCard = ({ offre }) => {
   );
 };
 
-// --- Composant Principal ---
+// --- Composant Principal (ListeOffresStage) ---
 
 export default function ListeOffresStage() {
   const ApiUrl =
     import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL || "";
   const [userId, setUserId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  // État pour gérer l'offre sélectionnée pour la candidature
+  const [selectedOffre, setSelectedOffre] = useState(null);
 
   // 1. Récupérer l'ID de l'utilisateur depuis le localStorage au montage
   useEffect(() => {
+    document.title =  "Offres de stage"
     try {
       const userData = JSON.parse(localStorage.getItem("utilisateur"));
       if (userData && userData.id) {
@@ -164,7 +168,7 @@ export default function ListeOffresStage() {
 
   // 2. Construire l'URL de l'API et fetcher avec SWR
   const apiUrl = userId ? `${ApiUrl}/offre/st/${userId}` : null;
-  const { data, error, isLoading } = useSWR(apiUrl, fetcher);
+  const { data, error, isLoading, mutate } = useSWR(apiUrl, fetcher);
 
   // 3. Logique de recherche (Filtrage)
   const filteredOffres = useMemo(() => {
@@ -185,7 +189,36 @@ export default function ListeOffresStage() {
     );
   }, [data, searchTerm]);
 
-  // 4. Gestion du clic Postuler (à implémenter)
+  // 4. Gestion de la modal et de la candidature
+
+  // Ouvre la modal en sélectionnant l'offre
+  const handleApplyClick = (offre) => {
+    setSelectedOffre(offre);
+  };
+
+  // Ferme la modal
+  const handleCloseModal = () => {
+    setSelectedOffre(null);
+  };
+
+  // Marque l'offre comme "déjà postulée" dans les données locales
+  const handleCandidatureSuccess = (offreId) => {
+    // Mise à jour du cache SWR pour éviter un re-fetch complet et marquer l'offre comme postulée
+    const updatedData = { ...data };
+    if (Array.isArray(updatedData.data)) {
+      const offreIndex = updatedData.data.findIndex((o) => o.id === offreId);
+      if (offreIndex > -1) {
+        updatedData.data[offreIndex] = {
+          ...updatedData.data[offreIndex],
+          dejaPostule: true,
+        };
+      }
+    }
+    // Mise à jour de l'UI et prévention du refetch (revalidate: false)
+    mutate(updatedData, { revalidate: false });
+
+    handleCloseModal();
+  };
 
   // 5. Rendu du contenu (États de chargement, erreur, vide)
   const renderContent = () => {
@@ -243,7 +276,11 @@ export default function ListeOffresStage() {
       <div className="space-y-4 pr-1">
         {" "}
         {filteredOffres.map((offre) => (
-          <OffreCard key={offre.id} offre={offre} />
+          <OffreCard
+            key={offre.id}
+            offre={offre}
+            onApplyClick={handleApplyClick} // Passage du handler d'ouverture
+          />
         ))}
       </div>
     );
@@ -283,6 +320,16 @@ export default function ListeOffresStage() {
 
       {/* Liste des Offres */}
       <div className="flex-1 h-full overflow-y-auto">{renderContent()}</div>
+
+      {/* MODAL DE CANDIDATURE */}
+      {selectedOffre && (
+        <PostulerModal
+          offre={selectedOffre}
+          userId={userId}
+          onClose={handleCloseModal}
+          onCandidatureSuccess={handleCandidatureSuccess}
+        />
+      )}
     </div>
   );
 }

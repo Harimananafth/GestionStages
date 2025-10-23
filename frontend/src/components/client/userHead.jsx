@@ -19,6 +19,7 @@ export default function UserHeader() {
     `${ApiUrl}/notification/user`,
     fetcher
   );
+
   const {
     data: EtudiantInfo,
     error: getInfoError,

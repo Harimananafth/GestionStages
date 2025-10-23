@@ -113,6 +113,7 @@ export default function MesCandidatures() {
 
     // 1. Récupérer l'ID de l'utilisateur depuis le localStorage au montage
     useEffect(() => {
+        document.title = "Mes candidatures"
         try {
             const userData = JSON.parse(localStorage.getItem('utilisateur'));
             if (userData && userData.id) {

@@ -151,7 +151,7 @@ class OffreController {
                 include: [
                     {
                         model: Profil,
-                        attributes: ['nomProfil'],
+                        attributes: ['nomProfil', 'id'],
                         through: { attributes: ['nbProfil'] }
                     },
                     {

@@ -1,22 +1,36 @@
 const express = require("express");
 const router = express.Router();
-const CandidatureController = require('../controllers/candidatureController')
+const CandidatureController = require("../controllers/candidatureController");
 const authMiddleware = require("../middlewares/authMiddleware");
+const upload = require("../middlewares/upload");
 
-router.get("/", authMiddleware,  CandidatureController.getAllcandidature)
-router.post("/", authMiddleware, CandidatureController.createCandidature)
-router.get("/t/:id", authMiddleware, CandidatureController.getCandidatureById)
-router.get("/st/:id", authMiddleware, CandidatureController.getStudentCandidature)
-router.get("/:id", authMiddleware, CandidatureController.getCandidatureCard)
-router.put("/:id", authMiddleware, CandidatureController.updateCandidature)
-router.put("/status/:id", authMiddleware, CandidatureController.updateCandidatureStatus)
-router.delete("/:id", authMiddleware, CandidatureController.deleteCandidature)
+router.get("/", authMiddleware, CandidatureController.getAllcandidature);
+router.post(
+  "/",
+  authMiddleware,
+  upload.fields([
+    { name: "cv", maxCount: 1 },
+    { name: "lm", maxCount: 1 },
+  ]),
+  CandidatureController.createCandidature
+);
 
-
-
-
+router.get("/t/:id", authMiddleware, CandidatureController.getCandidatureById);
+router.get(
+  "/st/:id",
+  authMiddleware,
+  CandidatureController.getStudentCandidature
+);
+router.get("/:id", authMiddleware, CandidatureController.getCandidatureCard);
+router.put("/:id", authMiddleware, CandidatureController.updateCandidature);
+router.put(
+  "/status/:id",
+  authMiddleware,
+  CandidatureController.updateCandidatureStatus
+);
+router.delete("/:id", authMiddleware, CandidatureController.deleteCandidature);
 
 module.exports = {
   prefix: "/candidature",
-  router
+  router,
 };
