@@ -218,7 +218,8 @@ const PostulerModal = ({ offre, userId, onClose, onCandidatureSuccess }) => {
             {/* Input CV (cv_path) */}
             <fieldset className="fieldset gap-0 w-full">
               <legend className="fieldset-legend font-medium text-[0.85rem] text-[#4F5D75]">
-                Télécharger votre CV (PDF uniquement){" "}
+                Télécharger votre CV{" "}
+                <span className="text-xs">(PDF, 5 Mo max)</span>{" "}
                 <span className="text-red-500">*</span>
               </legend>
               <input
@@ -238,7 +239,8 @@ const PostulerModal = ({ offre, userId, onClose, onCandidatureSuccess }) => {
             {/* Input Lettre de Motivation (lm_path) */}
             <fieldset className="fieldset gap-0 w-full">
               <legend className="fieldset-legend font-medium text-[0.85rem] text-[#4F5D75]">
-                Télécharger votre Lettre de Motivation (PDF uniquement){" "}
+                Télécharger votre Lettre de Motivation{" "}
+                <span className="text-xs">(PDF, 5 Mo max)</span>{" "}
                 <span className="text-red-500">*</span>
               </legend>
               <input
