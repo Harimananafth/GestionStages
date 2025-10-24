@@ -9,8 +9,10 @@ const {
 } = require("../Models");
 const { ValidationError, Op, where } = require("sequelize");
 const notificationController = require("./notificationController");
+const { cloudinary } = require("../config/cloudinary.config");
+const fs = require("fs");
 
-// Fonction Helper pour vérifier et fermer une offre
+// Fonction Helper pour vérifier et fermer une offre 
 async function checkAndCloseOffre(offreId, transaction) {
   const offre = await Offre.findByPk(offreId, {
     include: [
@@ -61,7 +63,7 @@ async function checkAndCloseOffre(offreId, transaction) {
 }
 
 class CandidatureController {
-  // Méthode pour lister toutes les candidatures
+  // Méthode pour lister toutes les candidatures 
 
   static async getAllcandidature(req, res) {
     try {
@@ -109,42 +111,70 @@ class CandidatureController {
     }
   }
 
-  // Méthode pour ajouter une candidature
+  // Méthode pour créer une candidature 
   static async createCandidature(req, res) {
-    try {
-      //Récupération des url pour le cv et la lm
-      const cv_path = req.files["cv"][0].path || null;
-      const lm_path = req.files["lm"][0].path || null;
+    const cvFile = req.files["cv"]?.[0] || null;
+    const lmFile = req.files["lm"]?.[0] || null;
+    let cvResult, lmResult; // stocker les résultats d'upload
 
-      if (!cv_path || !lm_path) {
-        return res
-          .status(400)
-          .json({ message: "CV et lettre de motivation requis." });
-      }
+    if (!cvFile || !lmFile) {
+      return res
+        .status(400)
+        .json({ message: "CV et lettre de motivation requis." });
+    }
+
+    try {
+      // 1. Uploader le CV sur Cloudinary
+      cvResult = await cloudinary.uploader.upload(cvFile.path, {
+        folder: "candidatures/cv", // Dossier de destination
+        resource_type: "auto", // Gère les PDF, images, etc.
+        use_filename: true,
+        unique_filename: false,
+        overwrite: false,
+      });
+
+      // 2. Uploader la LM sur Cloudinary
+      lmResult = await cloudinary.uploader.upload(lmFile.path, {
+        folder: "candidatures/lm",
+        resource_type: "auto",
+        use_filename: true,
+        unique_filename: false,
+        overwrite: false,
+      });
+
+      // 3. Récupérer les données de Cloudinary
+      const cv_path = cvResult.secure_url;
+      const lm_path = lmResult.secure_url;
+      const cv_public_id = cvResult.public_id;
+      const lm_public_id = lmResult.public_id;
 
       // Récupération des ID pour validation
       const { OffreId, ProfilId } = req.body;
-      const body = req.body
+      const body = req.body;
 
+      // 4. Exécuter la transaction (DB)
       const candidature = await sequelize.transaction(async (t) => {
-        // vérification : L'offre existe et est disponible
         const offre = await Offre.findByPk(OffreId, { transaction: t });
         if (!offre) throw new Error("offre_not_found");
         if (!offre.is_disponible) throw new Error("offre_not_disponible");
 
-        // Vérification : Le profil est bien lié à l'offre
         const offreProfil = await OffreProfil.findOne({
           where: { OffreId, ProfilId },
           transaction: t,
         });
         if (!offreProfil) throw new Error("profil_not_in_offre");
 
-        // Création de la candidature
-        const newCandidature = await Candidature.create({cv_path, lm_path, ...body}, {
-          transaction: t,
-        });
+        const newCandidature = await Candidature.create(
+          {
+            ...body,
+            cv_path, // L'URL sécurisée de Cloudinary
+            lm_path, // L'URL sécurisée de Cloudinary
+            cv_public_id, // L'ID pour la suppression future
+            lm_public_id, // L'ID pour la suppression future
+          },
+          { transaction: t }
+        );
 
-        // Création d'une notification associée (l'offre est déjà chargée)
         await notificationController.addNotification({
           UtilisateurId: null,
           message: `Une candidature a été postée pour l'offre ${offre.titre}`,
@@ -155,13 +185,36 @@ class CandidatureController {
         return newCandidature;
       });
 
+      // 5. (Nettoyage) Supprimer les fichiers temporaires APRES le succès de la transaction
+      fs.unlinkSync(cvFile.path);
+      fs.unlinkSync(lmFile.path);
+
       const message = `La candidature a été postée avec succès.`;
       return res.status(201).json({ message, data: candidature });
     } catch (error) {
+      console.error(error);
+      // Nettoyage : si l'upload Cloudinary a réussi mais la transaction a échoué
+      if (cvResult && cvResult.public_id) {
+        // Tente de supprimer le CV si l'upload a réussi
+        await cloudinary.uploader.destroy(cvResult.public_id, {
+          resource_type: "auto",
+        });
+      }
+      if (lmResult && lmResult.public_id) {
+        // Tente de supprimer la LM si l'upload a réussi
+        await cloudinary.uploader.destroy(lmResult.public_id, {
+          resource_type: "auto",
+        });
+      }
+
+      // Nettoyage : Suppression des fichiers temporaires (quel que soit le résultat)
+      if (cvFile && cvFile.path) fs.unlinkSync(cvFile.path);
+      if (lmFile && lmFile.path) fs.unlinkSync(lmFile.path);
+
+      // Gestion des erreurs
       if (error.message === "offre_not_found") {
         return res.status(404).json({ message: "Offre introuvable." });
       }
-      // AJOUT: Gestion des nouvelles erreurs
       if (error.message === "offre_not_disponible") {
         return res.status(403).json({
           message: "Cette offre n'est plus disponible pour les candidatures.",
@@ -176,12 +229,14 @@ class CandidatureController {
         return res.status(400).json({ message: error.message, data: error });
       }
       console.error(error);
-      const message = `La candidature n'a pas pu être créée. Réessayez dans quelques instants.`;
-      return res.status(500).json({ message, data: error });
+      return res.status(500).json({
+        message: `La candidature n'a pas pu être créée. Réessayez dans quelques instants.`,
+        data: error,
+      });
     }
   }
 
-  // Méthode pour modifier une candidature
+  // Méthode pour modifier une candidature 
 
   static async updateCandidature(req, res) {
     const id = parseInt(req.params.id);
@@ -216,7 +271,7 @@ class CandidatureController {
     }
   }
 
-  // Méthode pour modifier uniquement le statut d'une candidature
+  // Méthode pour modifier uniquement le statut d'une candidature 
   static async updateCandidatureStatus(req, res) {
     const id = parseInt(req.params.id);
     const { statut } = req.body;
@@ -327,8 +382,7 @@ class CandidatureController {
     }
   }
 
-  // Méthode pour supprimer une candidature
-
+  // Méthode pour supprimer une candidature 
   static async deleteCandidature(req, res) {
     const id = parseInt(req.params.id);
 
@@ -338,26 +392,77 @@ class CandidatureController {
 
         if (!candidature) throw new Error("not_found");
 
+        // Helper pour tenter la suppression avec plusieurs types
+        const robustDestroy = async (publicId, path) => {
+          if (!publicId || !path) return;
+
+          // On détermine le type le plus probable
+          const primaryType = path.endsWith(".pdf") ? "raw" : "image";
+          // L'autre type possible
+          const fallbackType = primaryType === "raw" ? "image" : "raw";
+
+          try {
+            // 1. On tente avec le type le plus probable
+            const result = await cloudinary.uploader.destroy(publicId, {
+              resource_type: primaryType,
+            });
+
+            // Si "not found", on tente l'autre type
+            if (result.result === "not found") {
+              console.warn(
+                `Type ${primaryType} non trouvé pour ${publicId}. Tentative avec ${fallbackType}...`
+              );
+              const fallbackResult = await cloudinary.uploader.destroy(
+                publicId,
+                {
+                  resource_type: fallbackType,
+                }
+              );
+              console.log(
+                `Suppression (fallback type: ${fallbackType}) pour ${publicId}:`,
+                fallbackResult
+              );
+            } else {
+              console.log(
+                `Suppression (type: ${primaryType}) pour ${publicId}:`,
+                result
+              );
+            }
+          } catch (error) {
+            // Gérer les erreurs 
+            console.error(
+              `Erreur lors de la suppression de ${publicId} de Cloudinary:`,
+              error.message
+            );
+          }
+        };
+
+        // 1. Supprimer le CV sur Cloudinary
+        await robustDestroy(candidature.cv_public_id, candidature.cv_path);
+
+        // 2. Supprimer la LM sur Cloudinary
+        await robustDestroy(candidature.lm_public_id, candidature.lm_path);
+
+        // 3. Supprimer l'entrée dans la base de données
         await Candidature.destroy({ where: { id }, transaction: t });
 
         return candidature;
       });
 
       const message = `La candidature a été supprimée avec succès.`;
-
       return res.json({ message, data: deletedCandidature });
     } catch (error) {
+      console.error(error);
       if (error.message === "not_found") {
         return res.status(404).json({ message: "Candidature introuvable." });
       }
 
       const message = `La candidature n'a pas pu être supprimée. Réessayez dans quelques instants.`;
-
       return res.status(500).json({ message, data: error });
     }
   }
 
-  // Récupérer une candidature pour une offre spécifique
+  // Récupérer une candidature pour une offre spécifique 
   static async getCandidatureCard(req, res) {
     try {
       const id = req.params.id;
@@ -408,7 +513,7 @@ class CandidatureController {
     }
   }
 
-  // récupérer une candidature spécifique
+  // récupérer une candidature spécifique 
   static async getCandidatureById(req, res) {
     try {
       const id = req.params.id;
@@ -448,11 +553,11 @@ class CandidatureController {
         nom: `${candidature.Etudiant.nom} ${candidature.Etudiant.prenom}`,
         profilPostule: candidature.Profil
           ? candidature.Profil.nomProfil
-          : "N/A", // AJOUT
+          : "N/A",
         statut: candidature.statut,
         photo: candidature.Etudiant?.Utilisateur?.photo || null,
-        cv_path: candidature.cv_path,
-        lm_path: candidature.lm_path,
+        cv_public_id: candidature.cv_public_id,
+        lm_public_id: candidature.lm_public_id,
       };
 
       const message = "La candidature a été récupérée avec succès.";
@@ -465,7 +570,7 @@ class CandidatureController {
     }
   }
 
-  // Récupérer une candidature pour un étudiant spécifique
+  // Récupérer une candidature pour un étudiant spécifique 
   static async getStudentCandidature(req, res) {
     try {
       const id = req.params.id;

@@ -18,20 +18,20 @@ const fetcher = (...args) => fetch(args[0], { credentials: 'include' }).then(res
 
 // Helper pour déterminer les classes de statut
 const getStatusDetails = (statut) => {
-    let statusClass = "badge-outline text-gray-600 bg-gray-100";
+    let statusClass = "badge-outline  truncate text-gray-600 bg-gray-100";
     let Icon = Clock;
 
     switch (statut) {
         case 'Acceptée':
-            statusClass = "badge-success badge-soft";
+            statusClass = "badge-success badge-soft truncate ";
             Icon = Check;
             break;
         case 'Refusée':
-            statusClass = "badge-error badge-soft";
+            statusClass = "badge-error badge-soft truncate ";
             Icon = X;
             break;
         case 'En attente':
-            statusClass = "badge-warning badge-soft";
+            statusClass = "badge-warning badge-soft truncate ";
             Icon = Clock;
             break;
     }

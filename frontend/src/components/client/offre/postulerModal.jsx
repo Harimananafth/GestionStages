@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { X, CheckCircle, UploadCloud, Loader2 } from "lucide-react";
 import useSWR from "swr";
 
-// URL de l'API fournie dans le composant parent
 const API_URL =
   import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL || "";
 
@@ -19,13 +18,13 @@ const fetcher = (...args) =>
     return res.json();
   });
 
-// Classes de style communes pour les inputs (mimant le style du composant Login)
+// Classes de style communes pour les inputs
 const customInputClass =
   "w-full text-[0.85rem] text-[#4F5D75] border border-gray-200 focus:border-sky-400 focus:ring-1 focus:ring-sky-400 rounded-lg focus:outline-none duration-300 h-10 px-3 py-2";
 
 // Composant de la Modal de Candidature
 const PostulerModal = ({ offre, userId, onClose, onCandidatureSuccess }) => {
-  // Les profils de l'offre (pour le sélecteur)
+  // Les profils de l'offre (pour le select input)
   const profils = offre?.Profils || [];
 
   // État du formulaire
@@ -91,19 +90,15 @@ const PostulerModal = ({ offre, userId, onClose, onCandidatureSuccess }) => {
     try {
       const response = await fetch(`${API_URL}/candidature`, {
         method: "POST",
-        // Pas besoin de headers 'Content-Type': 'multipart/form-data', le navigateur le gère automatiquement avec FormData
         body: formData,
-        credentials: "include", // Important pour la session/authentification
+        credentials: "include",
       });
 
-      // Modification : Analyser le corps de la réponse différemment
       let data = {};
       try {
-        // Tente d'analyser la réponse en JSON
         data = await response.json();
+        console.log(data);
       } catch (jsonError) {
-        // Si response.json() échoue (parce que c'est du HTML/texte),
-        // on lève une erreur générique pour le 500.
         if (!response.ok) {
           throw new Error(
             "Le serveur a renvoyé une erreur inattendue. (Statut: " +
@@ -111,15 +106,11 @@ const PostulerModal = ({ offre, userId, onClose, onCandidatureSuccess }) => {
               ")"
           );
         }
-        // Si l'analyse JSON échoue mais le statut est OK (ce qui est bizarre), on continue
       }
 
       if (!response.ok) {
         // Gérer les erreurs de validation ou serveur (400, 404, 500)
-        // data.message est maintenant plus fiable si le serveur a bien renvoyé du JSON
-        throw new Error(
-          data.message || "Erreur lors de l'envoi de la candidature."
-        );
+        throw new Error("Erreur lors de l'envoi de la candidature.");
       }
 
       setSuccess(true);

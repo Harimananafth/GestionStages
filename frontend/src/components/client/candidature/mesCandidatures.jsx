@@ -60,8 +60,8 @@ const getStatusIcon = (statut) => {
 /**
  * Carte individuelle pour une candidature
  */
-const CandidatureCard = ({ candidature, onCancel }) => {
-  // Ajout de onDocumentView
+const CandidatureCard = ({ candidature, onCancel, ApiUrl }) => {
+
   const formattedDate = candidature.date_candidature
     ? format(new Date(candidature.date_candidature), "d MMMM yyyy", {
         locale: fr,
@@ -70,9 +70,15 @@ const CandidatureCard = ({ candidature, onCancel }) => {
 
   const profilNom = candidature.Profil?.nomProfil || "Profil non spécifié";
 
-  // Récupération des chemins des documents (basé sur le modèle fourni)
-  const cvPath = candidature.cv_path;
-  const lmPath = candidature.lm_path;
+  // Construire l'URL sécurisée pointant vers le PROXY Express
+  const candidatureId = candidature.id;
+  const cvLinkSecure = `${ApiUrl}/file/${candidatureId}/view?type=cv`;
+  const lmLinkSecure = `${ApiUrl}/file/${candidatureId}/view?type=lm`;
+
+  // On vérifie toujours l'existence des IDs pour activer/désactiver le lien
+  const cvId = candidature.cv_public_id;
+  const lmId = candidature.lm_public_id;
+
 
   return (
     <div
@@ -95,7 +101,7 @@ const CandidatureCard = ({ candidature, onCancel }) => {
           </p>
         </div>
 
-        {/* Statut et Actions  */}
+        {/* Statut et Actions */}
         <div className="flex md:flex-col items-center justify-between md:items-end gap-2 w-full md:w-auto flex-shrink-0">
           {/* Affichage du Statut */}
           <div className="flex items-center gap-1">
@@ -130,11 +136,16 @@ const CandidatureCard = ({ candidature, onCancel }) => {
               <li>
                 <a
                   className={`flex justify-start items-center gap-2 ${
-                    !cvPath
+                    !cvId
                       ? "text-gray-400 cursor-not-allowed"
                       : "text-sky-600 cursor-pointer"
                   }`}
-                  onClick={() => window.open(cvPath, "_blank")}
+                  // Le lien href pointe maintenant vers la route Express sécurisée
+                  href={cvId ? cvLinkSecure : "#"}
+                  target="_blank"
+                  // S'assurer que le clic n'a pas d'effet si pas de CV 
+                  onClick={(e) => !cvId && e.preventDefault()}
+                  rel="noopener noreferrer"
                 >
                   <File size={16} />
                   Voir le CV
@@ -145,21 +156,26 @@ const CandidatureCard = ({ candidature, onCancel }) => {
               <li>
                 <a
                   className={`flex justify-start items-center gap-2 ${
-                    !lmPath
+                    !lmId
                       ? "text-gray-400 cursor-not-allowed"
                       : "text-sky-600 cursor-pointer"
                   }`}
-                  onClick={() => window.open(lmPath, "_blank")}
+                  // Le lien href pointe maintenant vers la route Express sécurisée
+                  href={lmId ? lmLinkSecure : "#"}
+                  target="_blank"
+                  // S'assurer que le clic n'a pas d'effet si pas de LM
+                  onClick={(e) => !lmId && e.preventDefault()}
+                  rel="noopener noreferrer"
                 >
                   <FileText size={16} />
                   Voir la lettre
                 </a>
               </li>
 
-              {/* Option Annuler (conditionnelle) */}
+              {/* Option Annuler (conditionnelle)  */}
               {candidature.statut === "En attente" && (
                 <>
-                  {/* Séparateur pour distinguer l'action destructrice */}
+                  {/* Séparateur pour distinguer l'action de suppression */}
                   <div className="my-1 h-px bg-gray-200" />
                   <li>
                     <a
@@ -187,7 +203,6 @@ const CandidatureCard = ({ candidature, onCancel }) => {
  * Composant principal de la page "Mes Candidatures"
  */
 export default function MesCandidatures() {
-  // Utilisation d'une valeur par défaut vide pour éviter les erreurs d'environnement de build/preview
   const ApiUrl =
     import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL || "";
   const [userId, setUserId] = useState(null);
@@ -252,7 +267,7 @@ export default function MesCandidatures() {
 
     if (candidatures.length === 0) {
       return (
-        <div className="flex flex-col items-center justify-center p-10 h-64 bg-gray-50 border-2 border-dashed rounded-lg">
+        <div className="flex flex-col items-center justify-center p-10 h-full bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg">
           <Inbox size={48} className="text-gray-400" />
           <p className="mt-4 text-lg font-semibold text-gray-700">
             Aucune candidature trouvée.
@@ -271,6 +286,7 @@ export default function MesCandidatures() {
             key={candidature.id}
             candidature={candidature}
             onCancel={handleCancelClick}
+            ApiUrl={ApiUrl}
           />
         ))}
       </div>
@@ -296,7 +312,7 @@ export default function MesCandidatures() {
       <CancelCandidatureModal
         candidature={candidatureToCancel}
         mutate={mutate}
-        apiUrl={`${ApiUrl}/candidature`} // Route de base pour le DELETE
+        apiUrl={`${ApiUrl}/candidature`} 
       />
     </div>
   );

@@ -2,16 +2,25 @@ const express = require("express");
 const router = express.Router();
 const CandidatureController = require("../controllers/candidatureController");
 const authMiddleware = require("../middlewares/authMiddleware");
-const upload = require("../middlewares/upload");
+const { cloudinary } = require("../config/cloudinary.config"); 
+const uploadMiddleware = require("../middlewares/multer.config"); 
+const fs = require("fs"); 
+
+// Fonction utilitaire pour nettoyer les fichiers temporaires
+const deleteTempFiles = (files) => {
+  if (files.cv && files.cv[0] && fs.existsSync(files.cv[0].path)) {
+    fs.unlinkSync(files.cv[0].path);
+  }
+  if (files.lm && files.lm[0] && fs.existsSync(files.lm[0].path)) {
+    fs.unlinkSync(files.lm[0].path);
+  }
+};
 
 router.get("/", authMiddleware, CandidatureController.getAllcandidature);
 router.post(
   "/",
   authMiddleware,
-  upload.fields([
-    { name: "cv", maxCount: 1 },
-    { name: "lm", maxCount: 1 },
-  ]),
+  uploadMiddleware,
   CandidatureController.createCandidature
 );
 

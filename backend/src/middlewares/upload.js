@@ -3,7 +3,7 @@ const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const { cloudinary } = require("../config/cloudinary.config");
 const path = require("path");
-
+const sanitize = (str) => str.replace(/[^\w.-]/g, "_");
 // Configuration du stockage Cloudinary
 const storage = new CloudinaryStorage({
   cloudinary,
@@ -15,7 +15,7 @@ const storage = new CloudinaryStorage({
     return {
       folder,
       resource_type: "auto",
-      public_id: `${Date.now()}_${path.parse(file.originalname).name}`,
+      public_id: `${Date.now()}_${sanitize(file.originalname)}`,
     };
   },
 });
@@ -23,7 +23,7 @@ const storage = new CloudinaryStorage({
 // Configuration de Multer avec filtres et taille max
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, 
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedTypes = ["application/pdf", "image/jpeg", "image/png"];
     if (!allowedTypes.includes(file.mimetype)) {
