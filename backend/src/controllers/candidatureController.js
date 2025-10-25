@@ -404,7 +404,7 @@ class CandidatureController {
         candidature.statut = statut;
         await candidature.save({ transaction: t });
 
-        // Logique de notification
+        // Logique de notification et d'envoi d'email
         const etudiant = await Etudiant.findByPk(candidature.EtudiantId, {
           transaction: t,
         });
@@ -415,12 +415,21 @@ class CandidatureController {
           : null;
 
         if (utilisateur) {
+          // notification
           await notificationController.addNotification({
             UtilisateurId: utilisateur.id,
             message: `Le statut de votre candidature pour l'offre ${candidature.Offre.titre} a été mis à jour : ${statut}`,
             type: "simple",
             date_reception: new Date(),
           });
+          // email
+          await sendStudentStatusUpdate(
+            utilisateur.email,
+            candidature.Offre.titre,
+            statut
+          )
+            .then(() => console.log("Email envoyé !"))
+            .catch(console.error);
         }
 
         // Vérifie automatiquement fermeture ou réouverture
