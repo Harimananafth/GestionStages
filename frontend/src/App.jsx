@@ -23,6 +23,7 @@ import MainAdminProfil from "./components/admin/profil/mainAdminProfil";
 import NotFound from "./pages/NotFound";
 import MesCandidatures from "./components/client/candidature/mesCandidatures";
 import ListeOffresStage from "./components/client/offre/listeOffreStage";
+import ProfilForm from "./components/client/profil/profilForm";
 
 function App() {
   return (
@@ -61,7 +62,6 @@ function App() {
             </ProtectedRoute>
           }
         >
-
           {/* Dashboard */}
           <Route index element={<UserDashboard />} />
 
@@ -71,6 +71,8 @@ function App() {
           {/* Offres */}
           <Route path="offres" element={<ListeOffresStage />} />
 
+          {/* Profil */}
+          <Route path="profil" element={<ProfilForm />} />
         </Route>
 
         {/* Espace admin */}

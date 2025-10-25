@@ -16,8 +16,9 @@ export const ROUTES = {
   USER: {
     ROOT: "/t",
     DASHBOARD: "/t",
-    CANDIDATURE : "/t/candidatures",
-    OFFRE : "/t/offres",
+    CANDIDATURE: "/t/candidatures",
+    OFFRE: "/t/offres",
+    PROFIL: "/t/profil",
   },
 
   ADMIN: {
@@ -25,10 +26,10 @@ export const ROUTES = {
     DASHBOARD: "/a",
     OFFRE: "/a/offres",
     OFFRE_CANDIDATURE: (id) => `/a/offres/${id}`,
-    CANDIDATURE : "/a/candidatures",
+    CANDIDATURE: "/a/candidatures",
     CANDIDATURE_ACTION: (id) => `/a/candidatures/${id}`,
-    ETUDIANT : "/a/etudiants",
+    ETUDIANT: "/a/etudiants",
     ETUDIANT_FICHE: (id) => `/a/etudiants/${id}`,
-    PROFIL : "/a/profils",
+    PROFIL: "/a/profils",
   },
 };

@@ -298,7 +298,7 @@ export default function MesCandidatures() {
       className="h-full w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 
                          animate-[text-appear-bottom_0.5s_ease-in] overflow-auto flex flex-col gap-6"
     >
-      {/* Titre ajusté */}
+      {/* Titre */}
       <h1 className="montserrat-hero font-bold text-xl text-sky-400">
         Mes Candidatures{" "}
         <span className="text-lg font-normal text-gray-500">
