@@ -190,6 +190,12 @@ class CandidatureController {
           type: "simple",
           date_reception: new Date(),
         });
+        await notificationController.addNotification({
+          UtilisateurId: req.user.id, // pour l'étudiant
+          message: `Votre candidature pour l'offre ${offre.titre} a bien été déposée.`,
+          type: "simple",
+          date_reception: new Date(),
+        });
 
         // 1. Trouver le rôle 'admin'
         const adminRoles = await Role.findAll({
