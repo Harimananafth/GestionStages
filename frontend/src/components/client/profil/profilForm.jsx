@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import useSWR from "swr";
 import { useNavigate } from "react-router-dom";
 import { MoveLeft, Loader2, AlertCircle, User } from "lucide-react";
@@ -119,6 +119,7 @@ export default function ProfilForm() {
 
   // 1. Récupérer l'utilisateur du localStorage
   useEffect(() => {
+    document.title = "Profil"
     const storedUser = localStorage.getItem("utilisateur");
     if (storedUser) {
       setUtilisateur(JSON.parse(storedUser));
@@ -541,7 +542,7 @@ export default function ProfilForm() {
           <h3 className="text-xl font-semibold text-sky-400 mb-3">
             Informations académiques
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1">
             <FormField
               label="École"
               name="ecole"

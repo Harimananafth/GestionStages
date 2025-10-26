@@ -24,6 +24,6 @@ const uploadPhoto = multer({
   storage: storage,
   limits: { fileSize: 1024 * 1024 * 5 }, // 5MB max
   fileFilter: fileFilter,
-}).single("photo"); // IMPORTANT : 'photo' doit correspondre au nom dans le FormData du Frontend
+}).single("photo");
 
 module.exports = uploadPhoto;
