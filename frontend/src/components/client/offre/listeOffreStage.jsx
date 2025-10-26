@@ -44,14 +44,26 @@ const formatPeriode = (periode) => {
     return "Dates invalides";
   }
 
-  const formatMonth = (date) => format(date, "MMMM", { locale: fr });
+  // Format mois + année
+  const formatMonthYear = (date) => format(date, "MMMM yyyy", { locale: fr });
 
   const diffDays = differenceInDays(end, start);
-  // Afficher en mois si la différence est > 20 jours
   const months = Math.round(diffDays / 30);
   const duration = months > 0 ? `${months} mois` : `${diffDays} jours`;
 
-  return `De ${formatMonth(start)} à ${formatMonth(end)} (${duration})`;
+  // Si les deux années sont différentes, on les affiche toutes les deux
+  if (start.getFullYear() !== end.getFullYear()) {
+    return `De ${formatMonthYear(start)} à ${formatMonthYear(
+      end
+    )} (${duration})`;
+  }
+
+  // Sinon, si c’est la même année, on peut afficher comme :
+  return `De ${format(start, "MMMM", { locale: fr })} à ${format(
+    end,
+    "MMMM yyyy",
+    { locale: fr }
+  )} (${duration})`;
 };
 
 // Helper pour formater la liste des profils
@@ -130,7 +142,7 @@ const OffreCard = ({ offre, onApplyClick }) => {
               bg-sky-600 text-white rounded-lg text-sm font-medium shadow-md
               duration-300 hover:bg-sky-700 hover:shadow-lg transition-colors cursor-pointer"
               aria-label={`Postuler pour l'offre ${offre.titre}`}
-              onClick={() => onApplyClick(offre)} 
+              onClick={() => onApplyClick(offre)}
             >
               Postuler <ChevronRight size={18} />
             </button>
@@ -153,7 +165,7 @@ export default function ListeOffresStage() {
 
   // 1. Récupérer l'ID de l'utilisateur depuis le localStorage au montage
   useEffect(() => {
-    document.title =  "Offres de stage"
+    document.title = "Offres de stage";
     try {
       const userData = JSON.parse(localStorage.getItem("utilisateur"));
       if (userData && userData.id) {

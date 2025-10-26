@@ -119,7 +119,7 @@ export default function ProfilForm() {
 
   // 1. Récupérer l'utilisateur du localStorage
   useEffect(() => {
-    document.title = "Profil"
+    document.title = "Profil";
     const storedUser = localStorage.getItem("utilisateur");
     if (storedUser) {
       setUtilisateur(JSON.parse(storedUser));
@@ -202,7 +202,6 @@ export default function ProfilForm() {
   };
 
   // --- Fonctions pour le CROP ---
-
 
   function onImageLoad(e) {
     imgRef.current = e.currentTarget;
@@ -291,7 +290,7 @@ export default function ProfilForm() {
           setModalOpen(false);
           setImgSrc("");
 
-          // Mettre à jour le localStorage avec la nouvelle photo 
+          // Mettre à jour le localStorage avec la nouvelle photo
           const updatedUser = { ...utilisateur, photo: result.data.photo };
           localStorage.setItem("utilisateur", JSON.stringify(updatedUser));
           setUtilisateur(updatedUser); // Met à jour l'état local
@@ -342,15 +341,29 @@ export default function ProfilForm() {
 
   // B. Données pour l'affichage
   const fullName = `${formData.nom || ""} ${formData.prenom || ""}`;
-  let photoUrl = utilisateur?.photo;
+  const photoUrlFromState = utilisateur?.photo; 
 
-  // C. Forcer le rechargement de l'image (Cache-Busting)
-  if (photoUrl) {
-    photoUrl = `${photoUrl.split("?")[0]}?v=${new Date().getTime()}`;
+  // C. Logique corrigée pour déterminer l'URL d'affichage finale
+  let displayPhotoUrl;
+
+  const defaultImageUrl = "/images/default-img-profil.png"; 
+
+  if (!photoUrlFromState) {
+    // Cas 1: L'utilisateur n'a pas de photo 
+    displayPhotoUrl = defaultImageUrl;
+  } else if (photoUrlFromState.includes("cloudinary.com")) {
+    // Cas 2: C'est une image Cloudinary -> Appliquer le cache-busting
+    displayPhotoUrl = `${
+      photoUrlFromState.split("?")[0]
+    }?v=${new Date().getTime()}`;
+  } else {
+    // Cas 3: C'est une URL Google (googleusercontent.com) ou
+    // l'URL locale par défaut déjà définie
+    displayPhotoUrl = photoUrlFromState;
   }
 
   return (
-    <div className="min-h-full w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
+    <div className="min-h-full w-full bg-white animate-[text-appear-bottom_0.5s_ease-in] rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8">
       {/* --- Input File Caché --- */}
       <input
         type="file"
@@ -433,9 +446,9 @@ export default function ProfilForm() {
 
       {/* --- Bloc Profil (Photo & Nom) --- */}
       <div className="flex items-center gap-4 mb-5 p-4 border-b border-gray-200">
-        {photoUrl ? (
+        {displayPhotoUrl ? (
           <img
-            src={photoUrl}
+            src={displayPhotoUrl}
             alt={`Photo de ${fullName}`}
             className="w-16 h-16 rounded-full object-cover shadow-sm"
           />
@@ -592,14 +605,14 @@ export default function ProfilForm() {
               type="button"
               onClick={handleCancel}
               disabled={isSubmitting}
-              className="px-5 py-2.5 rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200"
+              className="px-5 py-2.5 cursor-pointer shadow-sm rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2.5 rounded-lg text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 disabled:bg-sky-300 flex items-center gap-2"
+              className="px-5 py-2.5 rounded-lg text-sm shadow-sm font-medium text-white bg-sky-600 hover:bg-sky-700 disabled:bg-sky-300 flex items-center gap-2 cursor-pointer"
             >
               {isSubmitting ? (
                 <>
