@@ -19,6 +19,7 @@ export const ROUTES = {
     CANDIDATURE: "/t/candidatures",
     OFFRE: "/t/offres",
     PROFIL: "/t/profil",
+    CHAT: "/t/chat",
   },
 
   ADMIN: {
@@ -31,5 +32,6 @@ export const ROUTES = {
     ETUDIANT: "/a/etudiants",
     ETUDIANT_FICHE: (id) => `/a/etudiants/${id}`,
     PROFIL: "/a/profils",
+    CHAT: "/a/chat",
   },
 };
