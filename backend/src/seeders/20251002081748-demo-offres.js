@@ -1,53 +1,90 @@
-'use strict';
+"use strict";
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     const now = new Date();
-    await queryInterface.bulkInsert('offres', [
-      // 1: Offre Été - Full-Stack
+
+    const offres = [
       {
-        titre: 'Développeur Full-Stack (Node/React)',
-        is_disponible: false,
-        PeriodeId: 1, // Été 2025
-        date_publication: new Date(now.getTime() - 10 * 86400000), // Publiée il y a 10j
-        updatedAt: now
-      },
-      // 2: Offre Été - Admin Réseau
-      {
-        titre: 'Stage Admin Sys & Réseau',
-        is_disponible: false,
-        PeriodeId: 1, // Été 2025
-        date_publication: new Date(now.getTime() - 8 * 86400000), // Publiée il y a 8j
-        updatedAt: now
-      },
-      // 3: Offre Hiver - Data
-      {
-        titre: 'Data Scientist Junior',
+        PeriodeId: 1, // Janvier - Juin 2025
+        titre:
+          "Stage Développeur Laravel – Création d’un système de gestion RH",
         is_disponible: true,
-        PeriodeId: 2, // Hiver 2026
-        date_publication: new Date(now.getTime() - 5 * 86400000), // Publiée il y a 5j
-        updatedAt: now
+        date_publication: new Date("2024-12-15"),
+        updatedAt: now,
       },
-      // 4: Offre Hiver - Multi-profils
       {
-        titre: 'Stage multi-profils tech Hiver 2026',
+        PeriodeId: 1,
+        titre: "Stage Front-end ReactJS – Application de suivi de projets",
         is_disponible: true,
-        PeriodeId: 2, // Hiver 2026
-        date_publication: new Date(now.getTime() - 2 * 86400000), // Publiée il y a 2j
-        updatedAt: now
+        date_publication: new Date("2024-12-20"),
+        updatedAt: now,
       },
-      // 5: Offre Ancienne (Indisponible)
       {
-        titre: 'Stage de fin d\'études (anciens projets)',
-        is_disponible: true, // Ancienne offre
-        PeriodeId: 1, // Été 2025 (on fait semblant qu'elle est passée)
-        date_publication: new Date(now.getTime() - 90 * 86400000), // Publiée il y a 90j
-        updatedAt: new Date(now.getTime() - 30 * 86400000) // Modifiée il y a 30j
-      }
-    ], {});
+        PeriodeId: 1,
+        titre: "Stage Designer UI/UX – Maquettage d’une plateforme e-learning",
+        is_disponible: true,
+        date_publication: new Date("2024-12-28"),
+        updatedAt: now,
+      },
+      {
+        PeriodeId: 1,
+        titre: "Stage Data Analyst – Analyse de données de trafic web",
+        is_disponible: true,
+        date_publication: new Date("2025-01-05"),
+        updatedAt: now,
+      },
+      {
+        PeriodeId: 2, // Juillet - Novembre 2025
+        titre:
+          "Stage Full Stack – Développement d’un portail intranet en Vue.js et Laravel",
+        is_disponible: true,
+        date_publication: new Date("2025-05-10"),
+        updatedAt: now,
+      },
+      {
+        PeriodeId: 2,
+        titre: "Stage Flutter – Application mobile de commande en ligne",
+        is_disponible: true,
+        date_publication: new Date("2025-05-15"),
+        updatedAt: now,
+      },
+      {
+        PeriodeId: 2,
+        titre:
+          "Stage Intégrateur Web – Intégration de templates pour sites vitrines",
+        is_disponible: true,
+        date_publication: new Date("2025-06-01"),
+        updatedAt: now,
+      },
+      {
+        PeriodeId: 2,
+        titre:
+          "Stage Technicien Réseau – Installation et maintenance d’un LAN d’entreprise",
+        is_disponible: true,
+        date_publication: new Date("2025-06-10"),
+        updatedAt: now,
+      },
+      {
+        PeriodeId: 3, // Janvier - Juin 2024
+        titre: "Stage Symfony – API REST pour gestion de stock",
+        is_disponible: true,
+        date_publication: new Date("2023-12-18"),
+        updatedAt: now,
+      },
+      {
+        PeriodeId: 4, // Juillet - Novembre 2024
+        titre: "Stage Admin Base de Données – Optimisation PostgreSQL",
+        is_disponible: true,
+        date_publication: new Date("2024-06-05"),
+        updatedAt: now,
+      },
+    ];
+
+    await queryInterface.bulkInsert("offres", offres, {});
   },
 
-  async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('offres', null, {});
-  }
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete("offres", null, {});
+  },
 };

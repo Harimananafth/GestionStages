@@ -1,34 +1,52 @@
-'use strict';
+"use strict";
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     const now = new Date();
-    await queryInterface.bulkInsert('periodes', [
-      // 1: Été 2025
+
+    const periodes = [
       {
-        date_debut: '2025-06-01T00:00:00.000Z',
-        date_fin: '2025-08-31T23:59:59.000Z',
+        date_debut: new Date("2025-01-06"),
+        date_fin: new Date("2025-06-27"),
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 2: Hiver 2026
       {
-        date_debut: '2026-01-05T00:00:00.000Z',
-        date_fin: '2026-03-27T23:59:59.000Z',
+        date_debut: new Date("2025-07-07"),
+        date_fin: new Date("2025-11-21"),
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 3: Printemps 2026
       {
-        date_debut: '2026-04-01T00:00:00.000Z',
-        date_fin: '2026-06-30T23:59:59.000Z',
+        date_debut: new Date("2024-01-08"),
+        date_fin: new Date("2024-06-21"),
         createdAt: now,
-        updatedAt: now
-      }
-    ], {});
+        updatedAt: now,
+      },
+      {
+        date_debut: new Date("2024-07-08"),
+        date_fin: new Date("2024-11-22"),
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        date_debut: new Date("2023-01-09"),
+        date_fin: new Date("2023-06-23"),
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        date_debut: new Date("2023-07-10"),
+        date_fin: new Date("2023-11-24"),
+        createdAt: now,
+        updatedAt: now,
+      },
+    ];
+
+    await queryInterface.bulkInsert("periodes", periodes, {});
   },
 
-  async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('periodes', null, {});
-  }
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete("periodes", null, {});
+  },
 };

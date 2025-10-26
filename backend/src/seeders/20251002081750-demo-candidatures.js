@@ -4,145 +4,127 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const now = new Date();
 
-    // Scénario Offre 1 (Full-Stack, 2 places)
-    const cand1_offre1 = {
-      EtudiantId: 1, // Alice (Full-Stack)
-      OffreId: 1,
-      ProfilId: 1, // Profil Full-Stack
-      cv_path: "uploads/cv_alice_dupont.pdf",
-      lm_path: "uploads/lm_alice_dupont.pdf",
-      cv_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      lm_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      statut: "Acceptée", // Prend 1/2 places
-      date_candidature: new Date(now.getTime() - 8 * 86400000), // Candidate il y a 8j
-      updatedAt: new Date(now.getTime() - 2 * 86400000), // Acceptée il y a 2j
-    };
+    const candidatures = [
+      // Étudiant 2 postule pour Offre 1 (Laravel) avec Profil 1
+      {
+        EtudiantId: 2,
+        OffreId: 1,
+        ProfilId: 1,
+        cv_path: "https://res.cloudinary.com/demo/raw/upload/cv_fitahiana.pdf",
+        cv_public_id: "cv_fitahiana",
+        lm_path: "https://res.cloudinary.com/demo/raw/upload/lm_fitahiana.pdf",
+        lm_public_id: "lm_fitahiana",
+        statut: "En attente",
+        date_candidature: new Date("2024-12-18"),
+        updatedAt: now,
+      },
+      // Étudiant 3 postule pour Offre 2 (ReactJS) avec Profil 2
+      {
+        EtudiantId: 3,
+        OffreId: 2,
+        ProfilId: 2,
+        cv_path: "https://res.cloudinary.com/demo/raw/upload/cv_tahina.pdf",
+        cv_public_id: "cv_tahina",
+        lm_path: "https://res.cloudinary.com/demo/raw/upload/lm_tahina.pdf",
+        lm_public_id: "lm_tahina",
+        statut: "Acceptée",
+        date_candidature: new Date("2024-12-22"),
+        updatedAt: now,
+      },
+      // Étudiant 4 postule pour Offre 3 (UI/UX) avec Profil 5
+      {
+        EtudiantId: 4,
+        OffreId: 3,
+        ProfilId: 5,
+        cv_path: "https://res.cloudinary.com/demo/raw/upload/cv_miora.pdf",
+        cv_public_id: "cv_miora",
+        lm_path: "https://res.cloudinary.com/demo/raw/upload/lm_miora.pdf",
+        lm_public_id: "lm_miora",
+        statut: "Refusée",
+        date_candidature: new Date("2024-12-28"),
+        updatedAt: now,
+      },
+      // Étudiant 5 postule pour Offre 5 (Full Stack) avec Profil 3
+      {
+        EtudiantId: 5,
+        OffreId: 5,
+        ProfilId: 3,
+        cv_path: "https://res.cloudinary.com/demo/raw/upload/cv_herizo.pdf",
+        cv_public_id: "cv_herizo",
+        lm_path: "https://res.cloudinary.com/demo/raw/upload/lm_herizo.pdf",
+        lm_public_id: "lm_herizo",
+        statut: "En attente",
+        date_candidature: new Date("2025-05-20"),
+        updatedAt: now,
+      },
+      // Étudiant 6 postule pour Offre 6 (Flutter) avec Profil 8
+      {
+        EtudiantId: 6,
+        OffreId: 6,
+        ProfilId: 8,
+        cv_path: "https://res.cloudinary.com/demo/raw/upload/cv_tiana.pdf",
+        cv_public_id: "cv_tiana",
+        lm_path: "https://res.cloudinary.com/demo/raw/upload/lm_tiana.pdf",
+        lm_public_id: "lm_tiana",
+        statut: "En attente",
+        date_candidature: new Date("2025-05-25"),
+        updatedAt: now,
+      },
+      // Étudiant 7 postule pour Offre 1 (Laravel) avec Profil 1
+      {
+        EtudiantId: 7,
+        OffreId: 1,
+        ProfilId: 1,
+        cv_path: "https://res.cloudinary.com/demo/raw/upload/cv_sanda.pdf",
+        cv_public_id: "cv_sanda",
+        lm_path: "https://res.cloudinary.com/demo/raw/upload/lm_sanda.pdf",
+        lm_public_id: "lm_sanda",
+        statut: "En attente",
+        date_candidature: new Date("2024-12-19"),
+        updatedAt: now,
+      },
+      // Étudiant 8 postule pour Offre 5 (Full Stack) avec Profil 2 (ReactJS)
+      {
+        EtudiantId: 8,
+        OffreId: 5,
+        ProfilId: 2,
+        cv_path: "https://res.cloudinary.com/demo/raw/upload/cv_fanja.pdf",
+        cv_public_id: "cv_fanja",
+        lm_path: "https://res.cloudinary.com/demo/raw/upload/lm_fanja.pdf",
+        lm_public_id: "lm_fanja",
+        statut: "En attente",
+        date_candidature: new Date("2025-05-22"),
+        updatedAt: now,
+      },
+      // Étudiant 9 postule pour Offre 8 (Technicien Réseau) avec Profil 4
+      {
+        EtudiantId: 9,
+        OffreId: 8,
+        ProfilId: 4,
+        cv_path: "https://res.cloudinary.com/demo/raw/upload/cv_soanja.pdf",
+        cv_public_id: "cv_soanja",
+        lm_path: "https://res.cloudinary.com/demo/raw/upload/lm_soanja.pdf",
+        lm_public_id: "lm_soanja",
+        statut: "En attente",
+        date_candidature: new Date("2025-06-10"),
+        updatedAt: now,
+      },
+      // Étudiant 10 postule pour Offre 10 (Admin BDD) avec Profil 10
+      {
+        EtudiantId: 10,
+        OffreId: 10,
+        ProfilId: 10,
+        cv_path: "https://res.cloudinary.com/demo/raw/upload/cv_toky.pdf",
+        cv_public_id: "cv_toky",
+        lm_path: "https://res.cloudinary.com/demo/raw/upload/lm_toky.pdf",
+        lm_public_id: "lm_toky",
+        statut: "En attente",
+        date_candidature: new Date("2025-06-12"),
+        updatedAt: now,
+      },
+    ];
 
-    const cand2_offre1 = {
-      EtudiantId: 4, // David (Full-Stack)
-      OffreId: 1,
-      ProfilId: 1, // Profil Full-Stack
-      cv_path: "uploads/cv_david_petit.pdf",
-      lm_path: "uploads/lm_david_petit.pdf",
-      cv_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      lm_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      statut: "Acceptée", // Prend 2/2 places
-      date_candidature: new Date(now.getTime() - 7 * 86400000),
-      updatedAt: new Date(now.getTime() - 1 * 86400000), // Accepté hier
-    };
-
-    // Cette candidature sera "Refusée" car elle postule au même profil, mais on peut aussi la refuser pour d'autres raisons.
-    const cand3_offre1 = {
-      EtudiantId: 3, // Claire (UX/UI) - Tente sa chance
-      OffreId: 1,
-      ProfilId: 1, // Profil Full-Stack
-      cv_path: "uploads/cv_claire_durand.pdf",
-      lm_path: "uploads/lm_claire_durand.pdf",
-      cv_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      lm_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      statut: "Refusée", // N'occupe pas de place
-      date_candidature: new Date(now.getTime() - 6 * 86400000),
-      updatedAt: new Date(now.getTime() - 3 * 86400000),
-    };
-
-    // Scénario Offre 2 (Admin Réseau, 1 place)
-    const cand1_offre2 = {
-      EtudiantId: 2, // Bob (Admin Réseau)
-      OffreId: 2,
-      ProfilId: 2, // Profil Admin Réseau
-      cv_path: "uploads/cv_bob_martin.pdf",
-      lm_path: "uploads/lm_bob_martin.pdf",
-      cv_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      lm_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      statut: "Acceptée", // Prend 1/1 place
-      date_candidature: new Date(now.getTime() - 7 * 86400000),
-      updatedAt: new Date(now.getTime() - 4 * 86400000),
-    };
-
-    // Fabien postule au même slot. Il reste 'En attente' car la place est prise.
-    const cand2_offre2 = {
-      EtudiantId: 6, // Fabien (Admin Réseau)
-      OffreId: 2,
-      ProfilId: 2, // Profil Admin Réseau
-      cv_path: "uploads/cv_fabien_moreau.pdf",
-      lm_path: "uploads/lm_fabien_moreau.pdf",
-      cv_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      lm_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      statut: "En attente", // Reste en attente
-      date_candidature: new Date(now.getTime() - 3 * 86400000),
-      updatedAt: new Date(now.getTime() - 3 * 86400000),
-    };
-
-    // Scénario Offre 3 (Data, 2 places)
-    const cand1_offre3 = {
-      EtudiantId: 5, // Eva (Data)
-      OffreId: 3,
-      ProfilId: 3, // Profil Data
-      cv_path: "uploads/cv_eva_roy.pdf",
-      lm_path: "uploads/lm_eva_roy.pdf",
-      cv_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      lm_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      statut: "En attente", // 0/2 places prises
-      date_candidature: new Date(now.getTime() - 4 * 86400000),
-      updatedAt: new Date(now.getTime() - 4 * 86400000),
-    };
-
-    // Scénario Offre 4 (Multi, 1 Full-Stack, 2 Mobile)
-    const cand1_offre4 = {
-      EtudiantId: 1, // Alice (Full-Stack)
-      OffreId: 4,
-      ProfilId: 1, // Postule au slot Full-Stack
-      cv_path: "uploads/cv_alice_dupont_bis.pdf",
-      lm_path: "uploads/lm_alice_dupont_bis.pdf",
-      cv_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      lm_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      statut: "En attente",
-      date_candidature: new Date(now.getTime() - 1 * 86400000),
-      updatedAt: new Date(now.getTime() - 1 * 86400000),
-    };
-
-    // Scénario Offre 5 (Ancienne, 1 UX/UI, 1 Chef Projet)
-    const cand1_offre5 = {
-      EtudiantId: 3, // Claire (UX/UI)
-      OffreId: 5,
-      ProfilId: 4, // Profil UX/UI
-      cv_path: "uploads/cv_claire_durand_old.pdf",
-      lm_path: "uploads/lm_claire_durand_old.pdf",
-      cv_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      lm_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      statut: "Acceptée", // Place prise (dans le passé)
-      date_candidature: new Date(now.getTime() - 80 * 86400000),
-      updatedAt: new Date(now.getTime() - 70 * 86400000),
-    };
-
-    const cand2_offre5 = {
-      EtudiantId: 6, // Fabien (Admin Réseau)
-      OffreId: 5,
-      ProfilId: 6, // Postule pour Chef de Projet
-      cv_path: "uploads/cv_fabien_moreau_old.pdf",
-      lm_path: "uploads/lm_fabien_moreau_old.pdf",
-      cv_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      lm_public_id: "aaaaaaaaaaaaaaaaaaaaaa",
-      statut: "Refusée",
-      date_candidature: new Date(now.getTime() - 75 * 86400000),
-      updatedAt: new Date(now.getTime() - 70 * 86400000),
-    };
-
-    await queryInterface.bulkInsert(
-      "candidatures",
-      [
-        cand1_offre1,
-        cand2_offre1,
-        cand3_offre1,
-        cand1_offre2,
-        cand2_offre2,
-        cand1_offre3,
-        cand1_offre4,
-        cand1_offre5,
-        cand2_offre5,
-      ],
-      {}
-    );
+    await queryInterface.bulkInsert("candidatures", candidatures, {});
   },
 
   async down(queryInterface, Sequelize) {

@@ -150,7 +150,7 @@ export default function DiscussionList({
              
       </div>
             {/* Liste */}   
-      <div className="flex-grow overflow-y-auto">
+      <div className="flex-grow overflow-y-auto mr-4 mb-4">
         {/* 4. Utiliser la liste filtrée pour le rendu */} 
         {filteredDiscussions.length === 0 ? (
           <p className="p-4 text-center text-gray-500">
