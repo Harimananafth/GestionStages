@@ -9,25 +9,20 @@ import { IMaskInput } from "react-imask";
 // --- Imports pour le recadrage (Crop) ---
 import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-// Assurez-vous que ce fichier existe et exporte la fonction canvasPreview
 import { canvasPreview } from "../../../utils/canvasPreview";
 
 // URL de l'API
 const ApiUrl =
   import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
 
-// --- Fetcher SWR (standard) ---
-const fetcher = async (url) => {
-  // Vous devez remplacer ce code par votre propre logique de fetching (avec headers/auth si nécessaire)
-  const res = await fetch(url);
-  if (!res.ok) {
-    const error = new Error("An error occurred while fetching the data.");
-    error.info = await res.json();
-    error.status = res.status;
-    throw error;
-  }
-  return res.json();
-};
+// --- Fetcher SWR  ---
+const fetcher = (...args) =>
+  fetch(args[0], { credentials: "include" }).then((res) => {
+    if (!res.ok) {
+      throw new Error("Erreur lors de la récupération des données.");
+    }
+    return res.json();
+  });
 
 // --- API Call pour Mettre à jour ETUDIANT (données textuelles) ---
 const updateEtudiantApi = async (etudiantId, updatedData) => {
@@ -47,7 +42,7 @@ const updateUserPhotoApi = async (userId, formData) => {
   const res = await fetch(`${ApiUrl}/utilisateur/${userId}`, {
     method: "PUT",
     body: formData,
-    credentials: "include", // Si vous utilisez des cookies pour l'authentification
+    credentials: "include", 
   });
   const result = await res.json();
   if (!res.ok) throw new Error(result.message);
@@ -207,7 +202,6 @@ export default function ProfilForm() {
 
   // --- Fonctions pour le CROP ---
 
-  // Dans ProfilForm.jsx (Fonction onImageLoad, en remplaçant la version précédente)
 
   function onImageLoad(e) {
     imgRef.current = e.currentTarget;
@@ -254,13 +248,6 @@ export default function ProfilForm() {
     }
   };
 
-  // ====================================================================
-  // --- CORRECTION : Appeler canvasPreview à chaque mise à jour du CROP ---
-  //
-  // Votre `useCallback(onCropComplete, ...)` n'était jamais appelé.
-  // Ce `useEffect` s'exécute chaque fois que `completedCrop` change,
-  // ce qui met à jour le canvas caché.
-  // ====================================================================
   useEffect(() => {
     if (completedCrop && previewCanvasRef.current && imgRef.current) {
       canvasPreview(imgRef.current, previewCanvasRef.current, completedCrop);
@@ -293,7 +280,6 @@ export default function ProfilForm() {
         }
 
         const formData = new FormData();
-        // IMPORTANT: "photo" doit correspondre au nom de champ dans le middleware Multer côté backend
         formData.append("photo", blob, "profile-photo.jpg");
 
         try {
@@ -304,7 +290,7 @@ export default function ProfilForm() {
           setModalOpen(false);
           setImgSrc("");
 
-          // Mettre à jour le localStorage avec la nouvelle photo (IMPORTANT pour l'affichage)
+          // Mettre à jour le localStorage avec la nouvelle photo 
           const updatedUser = { ...utilisateur, photo: result.data.photo };
           localStorage.setItem("utilisateur", JSON.stringify(updatedUser));
           setUtilisateur(updatedUser); // Met à jour l'état local
@@ -324,7 +310,7 @@ export default function ProfilForm() {
   // --- Rendu du composant ---
   // ----------------------------------------------------------------------
 
-  // A. Gestion des états de chargement/erreur (Corrigé pour retourner du JSX)
+  // A. Gestion des états de chargement/erreur
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-40 bg-gray-50 rounded-lg">
@@ -357,11 +343,8 @@ export default function ProfilForm() {
   const fullName = `${formData.nom || ""} ${formData.prenom || ""}`;
   let photoUrl = utilisateur?.photo;
 
-  // C. CORRECTION: Forcer le rechargement de l'image (Cache-Busting)
+  // C. Forcer le rechargement de l'image (Cache-Busting)
   if (photoUrl) {
-    // Ajoute un timestamp comme paramètre de requête pour bypasser le cache du navigateur
-    // C'est utile UNIQUEMENT si l'URL ne change pas après un upload
-    // Si Cloudinary génère une nouvelle URL, ce n'est pas nécessaire, mais ne fait pas de mal.
     photoUrl = `${photoUrl.split("?")[0]}?v=${new Date().getTime()}`;
   }
 
@@ -376,18 +359,15 @@ export default function ProfilForm() {
         className="hidden"
       />
 
-      {/* --- Modal de Recadrage (Correction des styles pour la taille) --- */}
+      {/* --- Modal de Recadrage --- */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg mx-auto overflow-hidden">
             {" "}
-            {/* max-w-lg pour fixer la taille max */}
             <h3 className="text-lg font-medium leading-6 text-gray-900 mb-4">
               Recadrer votre photo
             </h3>
             {imgSrc && (
-              // Conteneur avec max-height et overflow pour scroll si image trop grande
-              // Ajout de 'w-full' pour s'assurer que le conteneur prend la largeur
               <div className="flex justify-center w-full max-h-[65vh] overflow-y-auto mb-4">
                 <ReactCrop
                   crop={crop}
@@ -534,6 +514,7 @@ export default function ProfilForm() {
               disabled={!isEditing}
               placeholder="lot 123 adresse, ville"
             />
+            {/* Numéro de téléphone avec IMask */}
             <fieldset className="fieldset gap-0 w-full">
               <legend className="fieldset-legend font-medium text-[0.85rem] text-[#4F5D75]">
                 Numéro de téléphone :
