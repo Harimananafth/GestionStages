@@ -118,7 +118,7 @@ export default function ChatPage() {
       );
     if (adminError)
       return (
-        <div className="p-4 text-red-600">
+        <div className="p-4 text-error">
           Erreur: {adminError.info?.message}
         </div>
       );
