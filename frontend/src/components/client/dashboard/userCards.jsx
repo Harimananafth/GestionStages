@@ -24,7 +24,7 @@ export default function UserCards() {
       const nbCandidatures = d.nbCandidatures || 0
       const acceptees = d.acceptees || 0
       const refusees = d.refusees || 0
-      const attentes = d.nbCandidatures || 0
+      const attentes = d.attentes || 0
 
       setStats({ nbCandidatures, acceptees, refusees, attentes });
     }

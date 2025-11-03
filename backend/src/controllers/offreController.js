@@ -1,6 +1,6 @@
 const { Offre, Profil, Periode } = require('../Models');
 const NotificationController = require('./notificationController');
-const { ValidationError } = require('sequelize');
+const { ValidationError, where } = require('sequelize');
 
 class OffreController {
 
@@ -32,6 +32,35 @@ class OffreController {
             return res.status(500).json({ message, data: error });
         }
     }
+
+    //Méthode pour récupérer une offre par son id
+    static async getOffreById(req, res) {
+        try {
+            const id = req.params.id
+
+            const offre = await Offre.findByPk(id, {
+            include: [
+                {
+                model: Profil,
+                attributes: ['id', 'nomProfil'],
+                through: { attributes: ['nbProfil'] }
+                },
+                {
+                model: Periode,
+                attributes: ['id', 'date_debut', 'date_fin']
+                }
+            ]
+            });
+
+            const message = 'L\'offre a été récupérée avec succès.';
+            return res.json({ message, offre });
+        } catch (error) {
+            console.error(error)
+            const message = "L'offre n'a pas pu être récupérée. Réessayez dans quelques instants.";
+            return res.status(500).json({ message, data: error });
+        }
+    }
+
 
     // Méthode pour supprimer une offre de stage
     static async deleteOffre(req, res) {

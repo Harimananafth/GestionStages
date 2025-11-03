@@ -1,18 +1,18 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-     await queryInterface.bulkInsert('roles', [
+    const now = new Date();
+    await queryInterface.bulkInsert('roles', [
       {
-        libelle:'admin',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        libelle: 'admin',
+        createdAt: now,
+        updatedAt: now
       },
       {
-        libelle:'user',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        libelle: 'user',
+        createdAt: now,
+        updatedAt: now
       }
     ], {});
   },

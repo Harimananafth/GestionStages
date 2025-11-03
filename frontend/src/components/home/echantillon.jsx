@@ -3,7 +3,6 @@ import OffresList from './offresList';
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../routes/paths';
 
-const API_URL = "http://localhost:5000";
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 
@@ -30,7 +29,7 @@ export default  function Echantillon(){
                         )
                     }
                     <button className='scale hover:bg-sky-700 bg-sky-600 text-white w-45 h-9 rounded-lg text-sm font-medium shadow-md  duration-300 hover:shadow-lg hover:cursor-pointer'
-                    onClick={() => navigate(ROUTES.USER.DASHBOARD)}>
+                    onClick={() => navigate(ROUTES.AUTH.ROOT)}>
                         Voir toutes les offres
                     </button>
 

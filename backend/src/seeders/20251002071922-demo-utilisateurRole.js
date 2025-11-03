@@ -1,31 +1,22 @@
 'use strict';
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    // Associer les utilisateurs aux rôles
-    return queryInterface.bulkInsert('utilisateurRoles', [
-      {
-        id_utilisateur: 1, // correspond à admin@example.com
-        id_role: 1,        // correspond à 'admin'
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id_utilisateur: 2, // correspond à user@example.com
-        id_role: 2,        // correspond à 'étudiant'
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id_utilisateur: 3, // correspond à moderator@example.com (si tu l'as)
-        id_role: 1,        // par exemple admin ou autre rôle
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-    ]);
+  async up (queryInterface, Sequelize) {
+    const now = new Date();
+    await queryInterface.bulkInsert('utilisateurRoles', [
+      // Admin (UtilisateurId: 1, RoleId: 1)
+      { id_utilisateur: 1, id_role: 1, createdAt: now, updatedAt: now },
+      // Users (UtilisateurId: 2-7, RoleId: 2)
+      { id_utilisateur: 2, id_role: 2, createdAt: now, updatedAt: now },
+      { id_utilisateur: 3, id_role: 2, createdAt: now, updatedAt: now },
+      { id_utilisateur: 4, id_role: 2, createdAt: now, updatedAt: now },
+      { id_utilisateur: 5, id_role: 2, createdAt: now, updatedAt: now },
+      { id_utilisateur: 6, id_role: 2, createdAt: now, updatedAt: now },
+      { id_utilisateur: 7, id_role: 2, createdAt: now, updatedAt: now }
+    ], {});
   },
 
-  async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('utilisateurRoles', null, {});
+  async down (queryInterface, Sequelize) {
+    await queryInterface.bulkDelete('utilisateurRoles', null, {});
   }
 };

@@ -27,6 +27,16 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
+      ProfilId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'profils', 
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      },
       cv_path: {
         type: Sequelize.STRING,
         allowNull: false

@@ -6,7 +6,6 @@ class StatistiqueController {
     try {
       const currentYear = new Date().getFullYear();
 
-      // On exécute tout en parallèle
       const [
         globalCounts,
         candidaturesByProfil,
@@ -89,20 +88,22 @@ class StatistiqueController {
 
   static async userStats(req, res){
     try{
-      const id = req.user.id
 
-      const nbCandidatures = await Candidature.count({where: {EtudiantId: id}})
-      const acceptees = await Candidature.count({where: {EtudiantId: id, statut: "Acceptée"}})
-      const refusees = await Candidature.count({where: {EtudiantId: id, statut: "Refusée"}})
-      const attentes = await Candidature.count({where: {EtudiantId: id, statut: "En attente"}})
+      const etudiant = await Etudiant.findOne({where : { UtilisateurId : req.user.id}})
+      const id = etudiant.id
+
+      const nbCandidaturesList = await Candidature.findAll({where: {EtudiantId: id}})
+      const accepteesList = await Candidature.findAll({where: {EtudiantId: id, statut: "Acceptée"}})
+      const refuseesList = await Candidature.findAll({where: {EtudiantId: id, statut: "Refusée"}})
+      const attentesList = await Candidature.findAll({where: {EtudiantId: id, statut: "En attente"}})
 
       return res.json({
         message: "Statistiques globales récupérées avec succès.",
         data: {
-          nbCandidatures,
-          acceptees,
-          refusees,
-          attentes
+          nbCandidatures : nbCandidaturesList.length,
+          acceptees : accepteesList.length,
+          refusees : refuseesList.length,
+          attentes : attentesList.length,
         }
       });
 

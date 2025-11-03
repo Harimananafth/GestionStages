@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Profil.belongsToMany(models.Offre, { through: models.OffreProfil } );
+      Profil.hasMany(models.Candidature);
     }
   }
   Profil.init({

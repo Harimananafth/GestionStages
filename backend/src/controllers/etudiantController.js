@@ -98,6 +98,28 @@ class EtudiantController {
             return res.status(500).json({ message, data: error });
         }
     }
+
+    // Méthode pour récupérer un étudiant en particluier à partir de son iduser
+
+    static async getEtudiantByUserId (req, res){
+        const UtilisateurId = req.params.id
+        try{
+
+            const etudiant = await Etudiant.findOne({where : { UtilisateurId }})
+
+            if (!etudiant) {
+                return res.status(404).json({ message: "Aucun étudiant trouvé pour cet utilisateur." });
+            }
+
+            const message = `L'étudiant a été récupéré avec succès.`;
+            return res.json({ message, data: etudiant });
+
+        }catch(error){
+            const message = `L'étudiant n'a pas pu être récupérée. Réessayez dans quelques instants.`;
+            console.log(error)
+            return res.status(500).json({ message, data: error });
+        }
+    }
 }
 
 module.exports = EtudiantController;

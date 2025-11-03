@@ -13,20 +13,27 @@ export default function UserHeader() {
 
   const [newNotification, setNewNotification] = useState(false);
   const user = JSON.parse(localStorage.getItem("utilisateur"));
+
   const { data, error, isLoading, mutate } = useSWR(`${ApiUrl}/notification/user`, fetcher);
+  const { data : EtudiantInfo, error : getInfoError, isLoading : getInfoIsLoading} = useSWR(`${ApiUrl}/etudiant/${user.id}`, fetcher)
+
   const navigate = useNavigate();
   const [message, setMessage] = useState(null);
   const [success, setSuccess] = useState(null);
   const photoUrl = `${ApiUrl}/user/photo`
 
+
+
   useEffect(() => {
-    const hasUnread = data?.data?.some(n => !n.lu) || false;
-    setNewNotification(hasUnread);
-  }, [data]);
+        if(getInfoError)  console.log(getInfoError)
+  
+        const hasUnread = data?.data?.some(n => !n.lu) || false;
+        setNewNotification(hasUnread);
+  }, [data, EtudiantInfo]);
 
   const handleAllRead = async () => {
     try {
-      await fetch(`${ApiUrl}/notification/user`, {
+      await fetch(`${ApiUrl}/notification/`, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" }
@@ -58,7 +65,7 @@ export default function UserHeader() {
   };
 
   return (
-    <div className="navbar bg-white shadow-sm flex flex-col justify-between items-center gap-4 md:flex-row">
+    <div className="navbar md:px-5 bg-white shadow-sm flex flex-col justify-between items-center gap-4 md:flex-row">
       {/* Logo */}
       <div className="flex gap-2 items-center hover:cursor-default rounded-xl md:grayscale-100 hover:grayscale-0 hover:-translate-y-1 duration-300">
         <img src="/images/logo.png" alt="Logo" className="h-6" />
@@ -80,11 +87,13 @@ export default function UserHeader() {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 min-w-70 max-h-70 overflow-y-auto p-3 shadow-xl">
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1  mt-3  p-3 shadow-xl flex flex-col">
             {isLoading ? (
               <span className="loading loading-dots loading-xl grow"></span>
             ) : data && data.data ? (
-              <Notification key={data.data.id} data={data} error={error} />
+              <div className='w-86 max-h-100 overflow-y-scroll px-1 box-content'>
+                <Notification key={data.data.id} data={data} error={error} />
+              </div>
             ) : null}
 
             <p
@@ -113,8 +122,13 @@ export default function UserHeader() {
                 />
               </div>
             </div>
-            <h1 className="font-semibold lg-light text-sm md:text-base max-w-[120px] md:max-w-none">
-              {user.email}
+            <h1 className='font-semibold lg-light'>
+                {getInfoIsLoading ? (
+                    <span className="loading loading-dots loading-xs"></span>
+                ) : (
+                  EtudiantInfo ? EtudiantInfo?.data.prenom + " " + EtudiantInfo?.data.nom : ""
+                )
+                }
             </h1>
           </div>
           <ul

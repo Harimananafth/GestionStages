@@ -113,7 +113,7 @@ export default function Login(){
                         </button>
                     </form>
                     <div className="flex flex-col items-start justify-center gap-3">
-                        <p className="text-[0.75rem] text-neutral-600">Vous n'avez pas encore de compte ? <Link to={ROUTES.AUTH.SIGN_UP} className="text-sky-400  underline">S'inscrire</Link></p>
+                        <p className="text-[0.75rem] text-neutral-600">Vous n'avez pas encore de compte ? <Link to={ROUTES.AUTH.SIGN_UP.ROOT} className="text-sky-400  underline">S'inscrire</Link></p>
                         <a href={ApiUrl + "/auth/google"} className="flex justify-center gap-4 items-center border-1 border-gray-200 h-10 rounded-lg w-full text-sm text-[#4F5D75] font-semibold hover:cursor-pointer ">
                                 <img src="/images/google.png" alt="logo de google" className="h-[16px]"/>
                                 Continuer avec Google

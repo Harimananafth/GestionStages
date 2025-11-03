@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) => {
         notNull: { msg: 'Le titre est requis' },
         notEmpty: { msg: 'Le titre ne peut pas être vide' }
       }
+    },
+    is_disponible: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
     }
   }, {
     sequelize,

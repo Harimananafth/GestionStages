@@ -1,36 +1,55 @@
 'use strict';
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('profils', [
+  async up (queryInterface, Sequelize) {
+    const now = new Date();
+    await queryInterface.bulkInsert('profils', [
+      // 1
       {
-        nomProfil: 'Développeur Front-end',
-        descriptionProfil: 'Maîtrise de HTML, CSS, JavaScript et frameworks comme React ou Angular',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        nomProfil: 'Développeur Full-Stack',
+        descriptionProfil: 'Maîtrise de Node.js, React, et des bases de données SQL/NoSQL.',
+        createdAt: now,
+        updatedAt: now
       },
+      // 2
       {
-        nomProfil: 'Développeur Back-end',
-        descriptionProfil: 'Expérience avec Node.js, Express, bases de données SQL et NoSQL',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        nomProfil: 'Administrateur Réseau',
+        descriptionProfil: 'Compétences en gestion de réseaux, sécurité, et maintenance de serveurs Linux/Windows.',
+        createdAt: now,
+        updatedAt: now
       },
+      // 3
       {
         nomProfil: 'Data Scientist',
-        descriptionProfil: 'Analyse de données, machine learning et visualisation avec Python ou R',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        descriptionProfil: 'Expertise en Python (Pandas, Scikit-learn), SQL et visualisation de données.',
+        createdAt: now,
+        updatedAt: now
       },
+      // 4
       {
-        nomProfil: 'Administrateur Réseaux',
-        descriptionProfil: 'Gestion des réseaux, sécurité et serveurs',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        nomProfil: 'Designer UX/UI',
+        descriptionProfil: 'Maîtrise de Figma, Adobe XD. Portfolio requis.',
+        createdAt: now,
+        updatedAt: now
+      },
+      // 5
+      {
+        nomProfil: 'Développeur Mobile (React Native)',
+        descriptionProfil: 'Expérience en développement d\'applications mobiles hybrides.',
+        createdAt: now,
+        updatedAt: now
+      },
+      // 6
+      {
+        nomProfil: 'Chef de Projet Digital',
+        descriptionProfil: 'Connaissance des méthodologies Agiles (Scrum, Kanban) et outils de gestion (Jira).',
+        createdAt: now,
+        updatedAt: now
       }
-    ]);
+    ], {});
   },
 
-  async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('profils', null, {});
+  async down (queryInterface, Sequelize) {
+    await queryInterface.bulkDelete('profils', null, {});
   }
 };
