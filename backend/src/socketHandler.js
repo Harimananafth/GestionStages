@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { Discussion, Message, Utilisateur } = require("./Models");
+const { Discussion, Message, Utilisateur } = require("./models");
 
 // Pour suivre les utilisateurs en ligne (UserId -> SocketId)
 const onlineUsers = new Map();
@@ -22,7 +22,7 @@ const authenticateSocket = (socket, next) => {
       return next(new Error("Authentification échouée : Token manquant."));
     }
 
-    // Vérifie le token 
+    // Vérifie le token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Attache les infos utilisateur au socket pour usage futur
@@ -51,14 +51,14 @@ function initializeSocket(io) {
     const userId = socket.user.id;
     const userRoles = socket.user.roles;
 
-    //  Gestion de la présence (En ligne) 
+    //  Gestion de la présence (En ligne)
     onlineUsers.set(userId, socket.id);
     // Informe tout le monde que cet utilisateur est en ligne
     socket.broadcast.emit("user:online", userId);
     // Envoie la liste des utilisateurs déjà en ligne au nouvel arrivant
     socket.emit("users:online:list", Array.from(onlineUsers.keys()));
 
-    //  Gestion des "Rooms" (Salons) 
+    //  Gestion des "Rooms" (Salons)
     socket.join(userId.toString());
 
     if (userRoles.includes("admin")) {
@@ -84,7 +84,7 @@ function initializeSocket(io) {
       }
     }
 
-    //  Écoute des messages envoyés par le client 
+    //  Écoute des messages envoyés par le client
     socket.on("message:send", async (data) => {
       try {
         const { discussionId, contenu } = data;
@@ -128,17 +128,17 @@ function initializeSocket(io) {
       }
     });
 
-    //  Gestion de "est en train d'écrire" 
+    //  Gestion de "est en train d'écrire"
     socket.on("typing:start", (data) => {
       const { discussionId } = data;
       socket
         .to(`discussion:${discussionId}`)
-        .emit("typing:display", { user: socket.user, discussionId }); 
+        .emit("typing:display", { user: socket.user, discussionId });
 
       // Diffuse à tout le monde SAUF à l'envoyeur DANS LA SALLE ADMINS
       socket
         .to("admins")
-        .emit("typing:display", { user: socket.user, discussionId }); 
+        .emit("typing:display", { user: socket.user, discussionId });
     });
 
     socket.on("typing:stop", (data) => {
@@ -146,12 +146,12 @@ function initializeSocket(io) {
       // Diffuse à tout le monde SAUF à l'envoyeur DANS LA SALLE DE DISCUSSION
       socket
         .to(`discussion:${discussionId}`)
-        .emit("typing:hide", { user: socket.user, discussionId }); 
+        .emit("typing:hide", { user: socket.user, discussionId });
 
       // Diffuse à tout le monde SAUF à l'envoyeur DANS LA SALLE ADMINS
       socket
         .to("admins")
-        .emit("typing:hide", { user: socket.user, discussionId }); 
+        .emit("typing:hide", { user: socket.user, discussionId });
     });
 
     // --- Déconnexion ---

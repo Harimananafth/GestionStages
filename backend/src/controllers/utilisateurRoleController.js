@@ -1,4 +1,4 @@
-const { UtilisateurRole, sequelize } = require('../Models');
+const { UtilisateurRole, sequelize } = require('../models');
 
 class UtilisateurRoleController {
 

@@ -1,4 +1,4 @@
-const { Offre, Profil, Periode, Etudiant, Utilisateur, Candidature } = require('../Models');
+const { Offre, Profil, Periode, Etudiant, Utilisateur, Candidature } = require('../models');
 const NotificationController = require('./notificationController');
 const { ValidationError, where } = require('sequelize');
 

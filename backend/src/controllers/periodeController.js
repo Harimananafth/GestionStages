@@ -1,4 +1,4 @@
-const { Periode } = require('../Models');
+const { Periode } = require('../models');
 const NotificationController = require('./notificationController');
 const { ValidationError } = require('sequelize');
 

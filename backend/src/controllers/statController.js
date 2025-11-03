@@ -1,4 +1,4 @@
-const { Candidature, Offre, Profil, Etudiant, sequelize } = require('../Models');
+const { Candidature, Offre, Profil, Etudiant, sequelize } = require('../models');
 const { fn, col, literal } = require('sequelize');
 
 class StatistiqueController {

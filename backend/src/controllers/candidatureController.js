@@ -8,7 +8,7 @@ const {
   Role,
   UtilisateurRole,
   sequelize,
-} = require("../Models");
+} = require("../models");
 const { ValidationError, Op, where } = require("sequelize");
 const notificationController = require("./notificationController");
 const { cloudinary } = require("../config/cloudinary.config");

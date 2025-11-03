@@ -1,10 +1,10 @@
-    require("../auth/google");
-    const jwt = require("jsonwebtoken");
-    require("dotenv").config();
-    const bcrypt = require('bcrypt');
-    const { v4: uuidv4 } = require('uuid');
-    const { Utilisateur, Role } = require('../Models');
-    const { sendVerificationMail } = require('../utils/mailer');
+require("../auth/google");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const bcrypt = require("bcrypt");
+const { v4: uuidv4 } = require("uuid");
+const { Utilisateur, Role } = require("../models");
+const { sendVerificationMail } = require("../utils/mailer");
 
 class Auth {
   static FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173/";
@@ -314,4 +314,4 @@ class Auth {
   }
 }
 
-    module.exports = Auth;
+module.exports = Auth;

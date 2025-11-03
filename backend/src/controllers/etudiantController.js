@@ -4,7 +4,7 @@ const {
   Utilisateur,
   Offre,
   Profil,
-} = require("../Models");
+} = require("../models");
 const { ValidationError, Op } = require("sequelize");
 const NotificationController = require("./notificationController")
 

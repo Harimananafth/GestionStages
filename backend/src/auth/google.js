@@ -1,6 +1,6 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const {Utilisateur} = require("../Models")
+const { Utilisateur } = require("../models");
 require("dotenv").config();
 
 passport.use(
@@ -12,7 +12,9 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        let user = await Utilisateur.findOne({ where: { email: profile.emails[0].value } });
+        let user = await Utilisateur.findOne({
+          where: { email: profile.emails[0].value },
+        });
 
         if (!user) {
           // nouvel utilisateur
@@ -22,15 +24,12 @@ passport.use(
         // utilisateur existant
         // inclure googleProfile pour mettre à jour infos
         return done(null, { user, isNew: false, googleProfile: profile });
-
       } catch (err) {
         return done(err, null);
       }
     }
   )
 );
-
-
 
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));

@@ -1,4 +1,4 @@
-const { OffreProfil, sequelize } = require('../Models');
+const { OffreProfil, sequelize } = require('../models');
 
 class OffreProfilController {
 

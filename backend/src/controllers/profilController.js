@@ -1,4 +1,4 @@
-const { Profil, sequelize } = require('../Models');
+const { Profil, sequelize } = require('../models');
 const { ValidationError } = require('sequelize');
 
 class ProfilController {

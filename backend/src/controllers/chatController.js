@@ -4,7 +4,7 @@ const {
   Utilisateur,
   Etudiant,
   sequelize,
-} = require("../Models"); 
+} = require("../models"); 
 const { Op } = require("sequelize");
 
 const chatController = {

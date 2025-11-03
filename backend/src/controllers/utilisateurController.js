@@ -3,7 +3,7 @@ const {
   UniqueConstraintError,
   Sequelize,
 } = require("sequelize");
-const { Utilisateur } = require("../Models");
+const { Utilisateur } = require("../models");
 const bcrypt = require("bcrypt");
 const { cloudinary } = require("../config/cloudinary.config");
 

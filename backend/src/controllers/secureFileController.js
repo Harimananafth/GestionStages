@@ -1,7 +1,7 @@
 // src/controllers/FileController.js
 
 const { cloudinary } = require("../config/cloudinary.config");
-const { Etudiant, Offre, Candidature } = require("../Models");
+const { Etudiant, Offre, Candidature } = require("../models");
 
 class FileController {
   // Méthode pour obtenir l'URL sécurisée d'un document
