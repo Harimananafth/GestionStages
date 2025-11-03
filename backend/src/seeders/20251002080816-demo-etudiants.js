@@ -1,97 +1,146 @@
-'use strict';
+"use strict";
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     const now = new Date();
-    await queryInterface.bulkInsert('etudiants', [
-      // 1: Alice (UtilisateurId: 2) - Full-Stack
+
+    const etudiants = [
       {
         UtilisateurId: 2,
-        nom: 'Dupont',
-        prenom: 'Alice',
-        telephone: '0611223344',
-        adresse: '10 Rue de la Paix, Paris',
-        ecole: 'Epitech',
-        niveau: 'M2',
-        specialite: 'Développement Web',
-        diplome: 'Master Informatique',
+        nom: "RABEHARISON",
+        prenom: "Fitahiana",
+        telephone: "038 48 742 97",
+        adresse: "Lot IB361/3611 Tanambao, Fianarantsoa",
+        ecole: "École Nationale d’Informatique (ENI)",
+        niveau: "Licence 2",
+        specialite: "Développement Web",
+        diplome: "Baccalauréat Scientifique",
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 2: Bob (UtilisateurId: 3) - Admin Réseau
       {
         UtilisateurId: 3,
-        nom: 'Martin',
-        prenom: 'Bob',
-        telephone: '0622334455',
-        adresse: '25 Avenue des Champs, Lyon',
-        ecole: '42',
-        niveau: 'L3',
-        specialite: 'Administration Système et Réseau',
-        diplome: 'Bachelor Informatique',
+        nom: "RANDRIANASOLO",
+        prenom: "Tahina",
+        telephone: "034 56 789 10",
+        adresse: "Ambalavao, Fianarantsoa",
+        ecole: "ENI Fianarantsoa",
+        niveau: "Licence 3",
+        specialite: "Systèmes d’Information",
+        diplome: "Baccalauréat Scientifique",
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 3: Claire (UtilisateurId: 4) - UX/UI
       {
         UtilisateurId: 4,
-        nom: 'Durand',
-        prenom: 'Claire',
-        telephone: '0633445566',
-        adresse: '5 Boulevard Jean Jaurès, Marseille',
-        ecole: 'HETIC',
-        niveau: 'M1',
-        specialite: 'Design Numérique',
-        diplome: 'Licence Design',
+        nom: "RANAIVO",
+        prenom: "Miora",
+        telephone: "034 22 200 11",
+        adresse: "Tsianolondroa, Antsirabe",
+        ecole: "ESI Antsirabe",
+        niveau: "Licence 2",
+        specialite: "Génie Logiciel",
+        diplome: "Baccalauréat Scientifique",
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 4: David (UtilisateurId: 5) - Full-Stack
       {
         UtilisateurId: 5,
-        nom: 'Petit',
-        prenom: 'David',
-        telephone: '0644556677',
-        adresse: '8 Rue du Code, Lille',
-        ecole: 'Epitech',
-        niveau: 'M2',
-        specialite: 'Développement Web',
-        diplome: 'Master Informatique',
+        nom: "RAKOTOMALALA",
+        prenom: "Herizo",
+        telephone: "034 11 110 08",
+        adresse: "Ambohimanarina, Antananarivo",
+        ecole: "SUPTECH Antananarivo",
+        niveau: "Master 1",
+        specialite: "Développement Full Stack",
+        diplome: "Licence Informatique",
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 5: Eva (UtilisateurId: 6) - Data Science
       {
         UtilisateurId: 6,
-        nom: 'Roy',
-        prenom: 'Eva',
-        telephone: '0655667788',
-        adresse: '30 Place du Capitole, Toulouse',
-        ecole: 'ENSIMAG',
-        niveau: 'M2',
-        specialite: 'Data Science',
-        diplome: 'Master Data Science',
+        nom: "RATSIMBA",
+        prenom: "Tiana Fetra",
+        telephone: "034 22 338 77",
+        adresse: "67Ha, Antananarivo",
+        ecole: "ISTECH Antananarivo",
+        niveau: "Licence 3",
+        specialite: "Réseaux & Télécoms",
+        diplome: "Baccalauréat Technique",
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 6: Fabien (UtilisateurId: 7) - Admin Réseau
       {
         UtilisateurId: 7,
-        nom: 'Moreau',
-        prenom: 'Fabien',
-        telephone: '0666778899',
-        adresse: '12 Quai de la Garonne, Bordeaux',
-        ecole: '42',
-        niveau: 'L3',
-        specialite: 'Administration Système et Réseau',
-        diplome: 'Bachelor Informatique',
+        nom: "RABENJAMINA",
+        prenom: "Sanda Rivo",
+        telephone: "034 55 009 93",
+        adresse: "Ampitatafika, Antananarivo",
+        ecole: "ENI Fianarantsoa",
+        niveau: "Licence 2",
+        specialite: "Développement Web",
+        diplome: "Baccalauréat Scientifique",
         createdAt: now,
-        updatedAt: now
-      }
-    ], {});
+        updatedAt: now,
+      },
+      {
+        UtilisateurId: 8,
+        nom: "ANDRIAMAHENINA",
+        prenom: "Fanja",
+        telephone: "038 10 022 44",
+        adresse: "Ambanidia, Antananarivo",
+        ecole: "POLYTECH Madagascar",
+        niveau: "Master 1",
+        specialite: "Base de Données & BI",
+        diplome: "Licence Informatique",
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        UtilisateurId: 9,
+        nom: "RAHELOSON",
+        prenom: "Soanja",
+        telephone: "034 22 099 88",
+        adresse: "Mahamasina, Antananarivo",
+        ecole: "SUPINFO Madagascar",
+        niveau: "Licence 2",
+        specialite: "UI/UX Design",
+        diplome: "Baccalauréat Artistique",
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        UtilisateurId: 10,
+        nom: "RANAIVOMANANA",
+        prenom: "Toky",
+        telephone: "034 77 001 23",
+        adresse: "Ankadifotsy, Antananarivo",
+        ecole: "Université d’Antananarivo",
+        niveau: "Licence 3",
+        specialite: "Intelligence Artificielle (initiation)",
+        diplome: "Baccalauréat Scientifique",
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        UtilisateurId: 11,
+        nom: "Dernier",
+        prenom: "etudiant",
+        telephone: "034 77 001 23",
+        adresse: "Ankadifotsy, Antananarivo",
+        ecole: "Université d’Antananarivo",
+        niveau: "Licence 3",
+        specialite: "Intelligence Artificielle (initiation)",
+        diplome: "Baccalauréat Scientifique",
+        createdAt: now,
+        updatedAt: now,
+      },
+    ];
+
+    await queryInterface.bulkInsert("etudiants", etudiants, {});
   },
 
-  async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('etudiants', null, {});
-  }
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete("etudiants", null, {});
+  },
 };

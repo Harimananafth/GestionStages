@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
 import Home from "./pages/home";
 import Login from "./components/auth/log-in";
 import SignUp from "./components/auth/sign-up";
@@ -24,6 +29,7 @@ import NotFound from "./pages/NotFound";
 import MesCandidatures from "./components/client/candidature/mesCandidatures";
 import ListeOffresStage from "./components/client/offre/listeOffreStage";
 import ProfilForm from "./components/client/profil/profilForm";
+import ChatPage from "./pages/chatPage";
 
 function App() {
   return (
@@ -73,6 +79,9 @@ function App() {
 
           {/* Profil */}
           <Route path="profil" element={<ProfilForm />} />
+
+          {/* Chat */}
+          <Route path="chat" element={<ChatPage />} />
         </Route>
 
         {/* Espace admin */}
@@ -101,6 +110,9 @@ function App() {
 
           {/* Profils */}
           <Route path="profils" element={<MainAdminProfil />} />
+
+          {/* Chat */}
+          <Route path="chat" element={<ChatPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

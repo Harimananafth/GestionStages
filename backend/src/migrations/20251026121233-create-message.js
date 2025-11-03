@@ -1,38 +1,39 @@
+"use...javascript";
 "use strict";
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("offreProfils", {
+    await queryInterface.createTable("messages", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      OffreId: {
+      DiscussionId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "offres",
+          model: "discussions",
           key: "id",
         },
-        onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      ProfilId: {
+      UtilisateurId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "profils",
+          model: "utilisateurs",
           key: "id",
         },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        onDelete: "SET NULL", 
       },
-      nbProfil: {
-        type: Sequelize.INTEGER,
+      contenu: {
+        type: Sequelize.TEXT,
         allowNull: false,
-        defaultValue: 1,
+      },
+      estLu: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
@@ -43,15 +44,8 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
-
-    await queryInterface.addConstraint("offreProfils", {
-      fields: ["OffreId", "ProfilId"],
-      type: "unique",
-      name: "unique_offre_profil",
-    });
   },
-
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("offreProfils");
+    await queryInterface.dropTable("messages");
   },
 };

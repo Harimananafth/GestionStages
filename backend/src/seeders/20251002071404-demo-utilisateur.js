@@ -1,95 +1,135 @@
-'use strict';
-const bcrypt = require('bcrypt');
+"use strict";
+const bcrypt = require("bcrypt");
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     const now = new Date();
-    const saltRounds = 10;
-    
-    // Mots de passe
-    const adminPassword = await bcrypt.hash('123456', saltRounds);
-    const userPassword1 = await bcrypt.hash('123456', saltRounds);
-    const userPassword2 = await bcrypt.hash('123456', saltRounds);
-    const userPassword3 = await bcrypt.hash('123456', saltRounds);
-    const userPassword4 = await bcrypt.hash('123456', saltRounds);
-    const userPassword5 = await bcrypt.hash('123456', saltRounds);
-    const userPassword6 = await bcrypt.hash('123456', saltRounds);
+    const passwordHash = await bcrypt.hash("123456", 10);
 
-    await queryInterface.bulkInsert('utilisateurs', [
-      // 1: Admin
+    const utilisateurs = [
+      // --- ADMIN ---
       {
-        email: 'test251025@outlook.com',
-        name: 'Admin Principal',
-        password: adminPassword,
-        photo: '/images/default-img-profil.png',
+        googleId: null,
+        email: "test251025@outlook.com",
+        name: "RABE Harivelo Andry",
+        password: passwordHash,
+        photo: "/images/default-img-profil.png",
         isVerified: true,
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 2: Etudiant 1 (Alice)
+
+      // --- ÉTUDIANTS ---
       {
-        email: 'alice.dupont@edu.com',
-        name: 'Alice Dupont',
-        password: userPassword1,
-        photo: 'https://i.pravatar.cc/150?img=1',
+        googleId: null,
+        email: "fitahiana.rabeh@eni.mg",
+        name: "RABEHARISON Fitahiana",
+        password: passwordHash,
+        photo:
+          "https://ui-avatars.com/api/?name=RABEHARISON+Fitahiana&background=0D8ABC&color=fff&size=128",
         isVerified: true,
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 3: Etudiant 2 (Bob)
       {
-        email: 'bob.martin@edu.com',
-        name: 'Bob Martin',
-        password: userPassword2,
-        photo: 'https://i.pravatar.cc/150?img=7',
+        googleId: null,
+        email: "tahina.randria@eni.mg",
+        name: "RANDRIANASOLO Tahina",
+        password: passwordHash,
+        photo: "https://randomuser.me/api/portraits/men/12.jpg",
         isVerified: true,
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 4: Etudiant 3 (Claire)
       {
-        email: 'claire.durand@edu.com',
-        name: 'Claire Durand',
-        password: userPassword3,
-        photo: 'https://i.pravatar.cc/150?img=5',
+        googleId: null,
+        email: "miora.ranaivo@esi.mg",
+        name: "RANAIVO Miora",
+        password: passwordHash,
+        photo: "https://api.dicebear.com/9.x/adventurer/svg?seed=Aidan",
         isVerified: true,
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 5: Etudiant 4 (David)
       {
-        email: 'david.petit@edu.com',
-        name: 'David Petit',
-        password: userPassword4,
-        photo: 'https://i.pravatar.cc/150?img=12',
-        isVerified: true,
+        googleId: null,
+        email: "anto.herizo@suptech.mg",
+        name: "RAKOTOMALALA Herizo",
+        password: passwordHash,
+        photo:
+          "https://ui-avatars.com/api/?name=RAKOTOMALALA+Herizo&background=FF5733&color=fff&size=128",
+        isVerified: false,
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 6: Etudiant 5 (Eva)
       {
-        email: 'eva.roy@edu.com',
-        name: 'Eva Roy',
-        password: userPassword5,
-        photo: 'https://i.pravatar.cc/150?img=32',
+        googleId: null,
+        email: "tiana.fetra@istech.mg",
+        name: "RATSIMBA Tiana Fetra",
+        password: passwordHash,
+        photo: "https://randomuser.me/api/portraits/women/21.jpg",
         isVerified: true,
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
       },
-      // 7: Etudiant 6 (Fabien)
       {
-        email: 'fabien.moreau@edu.com',
-        name: 'Fabien Moreau',
-        password: userPassword6,
-        photo: 'https://i.pravatar.cc/150?img=14',
+        googleId: null,
+        email: "sanda.rivo@eni.mg",
+        name: "RABENJAMINA Sanda Rivo",
+        password: passwordHash,
+        photo: "https://api.dicebear.com/9.x/adventurer/svg?seed=Leo",
+        isVerified: false,
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        googleId: null,
+        email: "fanja.andri@polytech.mg",
+        name: "ANDRIAMAHENINA Fanja",
+        password: passwordHash,
+        photo:
+          "https://ui-avatars.com/api/?name=ANDRIAMAHENINA+Fanja&background=1ABC9C&color=fff&size=128",
         isVerified: true,
         createdAt: now,
-        updatedAt: now
-      }
-    ], {});
+        updatedAt: now,
+      },
+      {
+        googleId: null,
+        email: "soanja.rahel@supinfo.mg",
+        name: "RAHELOSON Soanja",
+        password: passwordHash,
+        photo: "https://randomuser.me/api/portraits/women/33.jpg",
+        isVerified: true,
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        googleId: null,
+        email: "toky.ranaiv@univ.mg",
+        name: "RANAIVOMANANA Toky",
+        password: passwordHash,
+        photo: "https://api.dicebear.com/9.x/adventurer/svg?seed=Brian",
+        isVerified: false,
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        googleId: null,
+        email: "abcdefgf@gmail.com",
+        name: "Dernier etudiant",
+        password: passwordHash,
+        photo:
+          "https://ui-avatars.com/api/?name=Dernier+Etudiant&background=FF33A8&color=fff&size=128",
+        isVerified: false,
+        createdAt: now,
+        updatedAt: now,
+      },
+    ];
+
+    await queryInterface.bulkInsert("utilisateurs", utilisateurs, {});
   },
 
-  async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('utilisateurs', null, {});
-  }
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete("utilisateurs", null, {});
+  },
 };

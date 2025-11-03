@@ -72,7 +72,7 @@ export default function UserHeader() {
   };
 
   return (
-    <div className="navbar md:px-5 bg-white shadow-sm flex flex-col justify-between items-center gap-4 md:flex-row">
+    <div className="navbar md:px-5 min-h-fit bg-white shadow-sm flex flex-col justify-between items-center gap-4 md:flex-row">
       <div className="flex gap-2 items-center hover:cursor-default rounded-xl md:grayscale-100 hover:grayscale-0 hover:-translate-y-1 duration-300">
         <img src="/images/logo.png" alt="" className="h-6" />
         <p className="font-semibold text-lg lg-light">Neovate App</p>

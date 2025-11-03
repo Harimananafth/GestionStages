@@ -4,6 +4,9 @@ const path = require("path")
 const db = require('./Models')
 const cors = require('cors')
 const cookieParser = require("cookie-parser");
+const http = require('http');
+const { Server } = require('socket.io'); 
+const { initializeSocket } = require('./socketHandler'); 
 const {Utilisateur} = require("./Models");
 const authMiddleware = require("./middlewares/authMiddleware");
 
@@ -53,6 +56,20 @@ app.get("/api/user/photo", authMiddleware, async (req, res) => {
   res.send(Buffer.from(buffer));
 });
 
+// --- Configuration Socket.IO ---
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173', 
+    credentials: true,
+  },
+  cookie: true,
+});
+
+initializeSocket(io);
+
 
 //Vérification connexion BD
 db.sequelize.authenticate()
@@ -63,8 +80,7 @@ db.sequelize.authenticate()
     console.error('Impossible de se connecter à la base de données :', err);
   });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
-
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Serveur (HTTP + Socket.IO) démarré sur le port ${PORT}`);
 });
