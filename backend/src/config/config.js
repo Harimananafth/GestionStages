@@ -7,13 +7,17 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT
+    dialect: process.env.DB_DIALECT,
   },
   production: {
     username: process.env.DB_USER_PROD,
     password: process.env.DB_PASSWORD_PROD,
     database: process.env.DB_NAME_PROD,
     host: process.env.DB_HOST_PROD,
-    dialect: process.env.DB_DIALECT_PROD || 'postgres'
-  }
+    dialect: process.env.DB_DIALECT_PROD || "postgres",
+    port: 5432, //Render
+    dialectOptions: {
+      ssl: { rejectUnauthorized: false }, //Render
+    },
+  },
 };
