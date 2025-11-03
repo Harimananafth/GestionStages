@@ -13,8 +13,6 @@ Une application web complète (monorepo) pour simplifier la gestion des candidat
 - [Stack Technique](#-stack-technique)
 - [Installation & Démarrage](#-installation--démarrage)
 - [Configuration (Variables d'environnement)](#-configuration)
-- [Aspects de Sécurité](#-aspects-de-sécurité)
-- [Licence](#-licence)
 
 ---
 
