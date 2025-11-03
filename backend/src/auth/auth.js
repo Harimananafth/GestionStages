@@ -51,7 +51,7 @@ class Auth {
         }),
         { httpOnly: true, maxAge: 10 * 60 * 1000 }
       );
-      return res.redirect(`${this.FRONTEND_URL}auth/sign-up/set-password`);
+      return res.redirect(`${Auth.FRONTEND_URL}auth/sign-up/set-password`);
     }
 
     const updates = {};
@@ -74,7 +74,7 @@ class Auth {
 
     res.cookie("token", token, Auth.cookieOptions());
     res.redirect(
-      `${this.FRONTEND_URL}auth/login-success?id=${
+      `${Auth.FRONTEND_URL}auth/login-success?id=${
         user.id
       }&email=${encodeURIComponent(user.email)}&roles=${encodeURIComponent(
         JSON.stringify(roleNames)
