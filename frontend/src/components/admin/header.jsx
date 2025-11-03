@@ -79,12 +79,12 @@ export default function UserHeader(){
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                         <div className="indicator">
                             <Bell color="#4F5D75" strokeWidth={1.5} size={20}/>
-                            <span className={`indicator-item status status-error shadow-none bg-red-500 ${ newNotification ? "block" : "hidden"}`}></span>
+                            <span className={`indicator-item status shadow-none bg-none status-error ${ newNotification ? "block" : "hidden"}`}></span>
                         </div>
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 p-3 shadow-xl">
+                        className="menu z-50 menu-sm dropdown-content bg-base-100 rounded-box mt-3 p-3 shadow-xl">
                         {isLoading ? (
                             <span className="loading loading-dots loading-xl grow"></span>
                         ) : data && data.data ? (
@@ -112,7 +112,7 @@ export default function UserHeader(){
                                     onError={(e) => { e.currentTarget.src = "/images/default-img-profil.png"; }} />
                             </div>
                         </div>
-                        <h1 className='font-semibold lg-light'>{ user.email }</h1>
+                        <h1 className='font-semibold lg-light'>Administrateur</h1>
                     </div>
                     <ul
                         tabIndex={0}

@@ -24,6 +24,7 @@ export default function UserHeader() {
 
 
 
+
   useEffect(() => {
         if(getInfoError)  console.log(getInfoError)
   
@@ -80,9 +81,7 @@ export default function UserHeader() {
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
             <div className="indicator">
               <Bell color="#4F5D75" strokeWidth={1.5} size={20} />
-              <span
-                className={`indicator-item status status-error shadow-none bg-red-500 ${newNotification ? "block" : "hidden"}`}
-              ></span>
+              <span className={`indicator-item status shadow-none bg-none status-error ${ newNotification ? "block" : "hidden"}`}></span>
             </div>
           </div>
           <ul
@@ -126,7 +125,7 @@ export default function UserHeader() {
                 {getInfoIsLoading ? (
                     <span className="loading loading-dots loading-xs"></span>
                 ) : (
-                  EtudiantInfo ? EtudiantInfo?.data.prenom + " " + EtudiantInfo?.data.nom : ""
+                  EtudiantInfo ? EtudiantInfo?.data.prenom.split(" ")[0] + " " + EtudiantInfo?.data.nom : ""
                 )
                 }
             </h1>
