@@ -15,7 +15,9 @@ const formatDateRange = (start, end) => {
 // Le composant principal du formulaire
 export default function CreateOfferModal({ mutate }) {
 
-    const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+    const ApiUrl = import.meta.env.PROD
+      ? import.meta.env.VITE_PROD_API_URL
+      : import.meta.env.VITE_API_URL;
     
     const [loading, setLoading] = useState(false)
 

@@ -59,7 +59,9 @@ export default function Verification() {
     const code = otp.join('');
 
     try {
-      const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+      const ApiUrl = import.meta.env.PROD
+        ? import.meta.env.VITE_PROD_API_URL
+        : import.meta.env.VITE_API_URL;
       const response = await fetch(`${ApiUrl}/auth/verify-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -94,7 +96,9 @@ export default function Verification() {
     setIsLoading(true);
 
     try {
-      const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+      const ApiUrl = import.meta.env.PROD
+        ? import.meta.env.VITE_PROD_API_URL
+        : import.meta.env.VITE_API_URL;
       const response = await fetch(`${ApiUrl}/auth/resend-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

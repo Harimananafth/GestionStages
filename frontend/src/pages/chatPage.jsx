@@ -5,8 +5,9 @@ import ChatWindow from "../components/chat/chatWindow";
 import { useSocket } from "../context/socketContext";
 import { Loader2 } from "lucide-react";
 
-const ApiUrl =
-  import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+const ApiUrl = import.meta.env.PROD
+  ? import.meta.env.VITE_PROD_API_URL
+  : import.meta.env.VITE_API_URL;
 
 const fetcher = (url) =>
   fetch(url, { credentials: "include" }).then(async (res) => {
@@ -118,9 +119,7 @@ export default function ChatPage() {
       );
     if (adminError)
       return (
-        <div className="p-4 text-error">
-          Erreur: {adminError.info?.message}
-        </div>
+        <div className="p-4 text-error">Erreur: {adminError.info?.message}</div>
       );
 
     const discussions = adminData?.data || [];

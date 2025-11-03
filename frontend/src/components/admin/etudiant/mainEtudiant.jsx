@@ -45,8 +45,9 @@ export default function MainAdminEtudiant() {
   const [selectedEtudiantId, setSelectedEtudiantId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-  const ApiUrl =
-    import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+  const ApiUrl = import.meta.env.PROD
+    ? import.meta.env.VITE_PROD_API_URL
+    : import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   // Effet de debounce pour la recherche

@@ -93,7 +93,9 @@ const fetcher = async (url) =>
 
 // Composant principal
 export default function OffreCandidature(){
-    const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+    const ApiUrl = import.meta.env.PROD
+      ? import.meta.env.VITE_PROD_API_URL
+      : import.meta.env.VITE_API_URL;
 
     const { id } = useParams();
     const navigate = useNavigate();

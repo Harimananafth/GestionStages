@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { X, CheckCircle, UploadCloud, Loader2 } from "lucide-react";
 import useSWR from "swr";
 
-const API_URL =
-  import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL || "";
+const API_URL = import.meta.env.PROD
+  ? import.meta.env.VITE_PROD_API_URL
+  : import.meta.env.VITE_API_URL;
 
 const fetcher = (...args) =>
   fetch(...args, { credentials: "include" }).then(async (res) => {

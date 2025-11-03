@@ -1,7 +1,9 @@
 import { useState } from "react";
 
 export default function CreatePeriodeModal() {
-  const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+  const ApiUrl = import.meta.env.PROD
+    ? import.meta.env.VITE_PROD_API_URL
+    : import.meta.env.VITE_API_URL;
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

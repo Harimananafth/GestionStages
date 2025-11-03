@@ -8,8 +8,9 @@ export default function PublicRoute({ children }) {
   const user = localStorage.getItem("utilisateur");
   const roles = user ? JSON.parse(user).roles : [];
 
-  const ApiUrl =
-    import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+const ApiUrl = import.meta.env.PROD
+  ? import.meta.env.VITE_PROD_API_URL
+  : import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const checkAuth = async () => {

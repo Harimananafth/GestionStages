@@ -47,7 +47,9 @@ const OffreCard = ({ offre, buttonEdit, openCandidature }) => (
 //  Composant principal 
 export default function MainAdminOffre(){
   const [selectedOffreId, setSelectedOffreId] = useState(null);
-  const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+  const ApiUrl = import.meta.env.PROD
+    ? import.meta.env.VITE_PROD_API_URL
+    : import.meta.env.VITE_API_URL;
 
   const { data, error, isLoading, mutate } = useSWR(`${ApiUrl}/offre/`, fetcher);
   const navigate = useNavigate()

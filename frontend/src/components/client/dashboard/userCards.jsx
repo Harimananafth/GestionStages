@@ -7,7 +7,9 @@ const fetcher = (url) => fetch(url, { credentials: 'include' }).then((res) => re
 export default function UserCards() {
     
 
-  const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+const ApiUrl = import.meta.env.PROD
+  ? import.meta.env.VITE_PROD_API_URL
+  : import.meta.env.VITE_API_URL;
   const { data, error, isLoading } = useSWR(`${ApiUrl}/stats/user`, fetcher);
 
   const [stats, setStats] = useState({

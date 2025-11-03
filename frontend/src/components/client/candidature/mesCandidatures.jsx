@@ -203,8 +203,9 @@ const CandidatureCard = ({ candidature, onCancel, ApiUrl }) => {
  * Composant principal de la page "Mes Candidatures"
  */
 export default function MesCandidatures() {
-  const ApiUrl =
-    import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL || "";
+const ApiUrl = import.meta.env.PROD
+  ? import.meta.env.VITE_PROD_API_URL
+  : import.meta.env.VITE_API_URL;
   const [userId, setUserId] = useState(null);
   const [candidatureToCancel, setCandidatureToCancel] = useState(null);
 

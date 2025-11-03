@@ -8,7 +8,9 @@ import DeleteProfilModal from './deleteProfilModal'
 const fetcher = (...args) => fetch(...args, { credentials: 'include' }).then(res => res.json())
 
 // Simuler ApiUrl pour l'environnement de démo (À adapter à votre configuration)
-  const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+  const ApiUrl = import.meta.env.PROD
+    ? import.meta.env.VITE_PROD_API_URL
+    : import.meta.env.VITE_API_URL;
   const PROFIL_API_URL = `${ApiUrl}/profil`;
 
 // Composant pour afficher une carte de profil

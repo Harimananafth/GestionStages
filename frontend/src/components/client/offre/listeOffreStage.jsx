@@ -156,8 +156,9 @@ const OffreCard = ({ offre, onApplyClick }) => {
 // --- Composant Principal (ListeOffresStage) ---
 
 export default function ListeOffresStage() {
-  const ApiUrl =
-    import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL || "";
+const ApiUrl = import.meta.env.PROD
+  ? import.meta.env.VITE_PROD_API_URL
+  : import.meta.env.VITE_API_URL;
   const [userId, setUserId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   // État pour gérer l'offre sélectionnée pour la candidature

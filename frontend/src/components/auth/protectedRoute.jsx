@@ -5,8 +5,9 @@ import { ROUTES } from "../../routes/paths";
 export default function ProtectedRoute({ children, allowedRoles }) {
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
-  const ApiUrl =
-    import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+const ApiUrl = import.meta.env.PROD
+  ? import.meta.env.VITE_PROD_API_URL
+  : import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const checkAuth = async () => {

@@ -9,8 +9,9 @@ const fetcher = (url) =>
   fetch(url, { credentials: "include" }).then((res) => res.json());
 
 export default function UserHeader() {
-  const ApiUrl =
-    import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+  const ApiUrl = import.meta.env.PROD
+    ? import.meta.env.VITE_PROD_API_URL
+    : import.meta.env.VITE_API_URL;
 
   const [newNotification, setNewNotification] = useState(false);
   const user = JSON.parse(localStorage.getItem("utilisateur"));

@@ -7,7 +7,9 @@ const fetcher = (...args) => fetch(...args, { credentials: 'include' }).then(res
 
 export default function DeleteEtudiantModal({ etudiantId, mutate }) {
   const [isLoading, setIsLoading] = useState(false);
-  const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+  const ApiUrl = import.meta.env.PROD
+    ? import.meta.env.VITE_PROD_API_URL
+    : import.meta.env.VITE_API_URL;
 
   const closeModal = () => {
     // Utilisez la référence directe au modal (id) pour le fermer

@@ -8,7 +8,9 @@ const SetPassword = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+const ApiUrl = import.meta.env.PROD
+  ? import.meta.env.VITE_PROD_API_URL
+  : import.meta.env.VITE_API_URL;
 
   useEffect(()=>{
         document.title = "Mot de passe"

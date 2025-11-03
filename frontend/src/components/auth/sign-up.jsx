@@ -8,7 +8,9 @@ export default function SignUp() {
   const [success, setSuccess] = useState(null);
   const [emailValue, setEmailValue] = useState('');
 
-  const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+const ApiUrl = import.meta.env.PROD
+  ? import.meta.env.VITE_PROD_API_URL
+  : import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const location = useLocation();
 

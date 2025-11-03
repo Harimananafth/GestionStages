@@ -8,7 +8,9 @@ import toast from 'react-hot-toast';
  * @param {function} props.mutate - Fonction SWR pour rafraîchir les données dans le composant parent.
  */
 export default function DeleteOffreModal({ offreId, mutate }) {
-    const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+    const ApiUrl = import.meta.env.PROD
+      ? import.meta.env.VITE_PROD_API_URL
+      : import.meta.env.VITE_API_URL;
     const [loading, setLoading] = useState(false)
 
     const closeModal = () => {

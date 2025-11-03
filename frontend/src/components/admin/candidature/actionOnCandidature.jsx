@@ -16,8 +16,9 @@ const fetcher = async (url) =>
     });
 
 export default function ActionOnCandidature() {
-  const ApiUrl =
-    import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+  const ApiUrl = import.meta.env.PROD
+    ? import.meta.env.VITE_PROD_API_URL
+    : import.meta.env.VITE_API_URL;
 
   const [loading, setLoading] = useState(false);
   // AJOUT: État pour gérer les messages de succès ou d'erreur suite à une action
