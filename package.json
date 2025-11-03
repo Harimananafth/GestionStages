@@ -1,20 +1,16 @@
 {
   "name": "gestion_stages-_etudiants",
   "version": "1.0.0",
-  "private": true,
+ "private": true,
   "workspaces": [
-    "frontend",
-    "backend"
+    "backend",
+    "frontend"
   ],
   "scripts": {
-    "dev:frontend": "npm run start --workspace frontend",
-    "dev:backend": "npm run dev --workspace backend",
-    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\""
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
   },
-  "description": "",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.2"
   }

@@ -1,6 +1,7 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { AtSign } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../routes/paths';
 
 export default function Verification() {
   const [otp, setOtp] = useState(['', '', '', '', '']);
@@ -11,6 +12,10 @@ export default function Verification() {
   const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.email || '';
+
+  useEffect(()=>{
+        document.title = "Code de vérification"
+    }, [])
 
   const handleChange = useCallback((e, index) => {
     const value = e.target.value;
@@ -69,10 +74,10 @@ export default function Verification() {
         setMessage({ text: 'Vérification réussie ! Redirection en cours...', type: 'success' });
 
         // Récupération des infos utilisateur
-        const { id, email: userEmail, roles } = data.user;
-        localStorage.setItem("utilisateur", JSON.stringify({ id, email: userEmail, roles }));
+        const { id, email: userEmail, roles, photo } = data.user;
+        localStorage.setItem("utilisateur", JSON.stringify({ id, email: userEmail, roles, photo }));
 
-        setTimeout(() => navigate('/auth/sign-up/more-info', { state: { user } }), 1000);
+        setTimeout(() => navigate(ROUTES.AUTH.SIGN_UP.MORE_INFO, { state: { user } }), 1000);
       } else {
         setMessage({ text: data.message || 'Code incorrect. Veuillez réessayer.', type: 'error' });
       }
@@ -176,7 +181,7 @@ export default function Verification() {
         </div>
 
         <p className="text-[0.75rem] text-neutral-600 mt-2 text-center">
-          Si vous voulez modifier l'adresse e-mail, <Link to="/auth/sign-up" className="text-sky-400 underline">cliquez ici</Link>.
+          Si vous voulez modifier l'adresse e-mail, <Link to={ROUTES.AUTH.SIGN_UP} className="text-sky-400 underline">cliquez ici</Link>.
         </p>
       </div>
     </div>

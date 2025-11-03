@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { ROUTES } from "../../routes/paths";
 
 const SetPassword = () => {
   const navigate = useNavigate()
@@ -8,6 +9,10 @@ const SetPassword = () => {
   const [success, setSuccess] = useState(false);
 
   const ApiUrl = import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+
+  useEffect(()=>{
+        document.title = "Mot de passe"
+    }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,11 +54,11 @@ const SetPassword = () => {
         setError(null);
 
         // Récupération des infos utilisateur
-        const { id, email: userEmail, roles } = data.user;
+        const { id, email: userEmail, roles, photo } = data.user;
         const user = data.user
-        localStorage.setItem("utilisateur", JSON.stringify({ id, email: userEmail, roles }));
+        localStorage.setItem("utilisateur", JSON.stringify({ id, email: userEmail, roles, photo }));
 
-        setTimeout(() => navigate('/auth/sign-up/more-info', { state: { user } }), 1000);
+        setTimeout(() => navigate(ROUTES.AUTH.SIGN_UP.MORE_INFO, { state: { user } }), 1000);
 
       } else {
         setError(data.error || "Erreur lors de l'inscription.");

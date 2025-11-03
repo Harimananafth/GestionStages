@@ -62,7 +62,7 @@ class NotificationController {
 
     // Méthode pour récupérer toutes les notifications d'un utilisateur
     static async getUserNotifications(req, res) {
-        const UtilisateurId = req.params.UtilisateurId;
+        const UtilisateurId = req.user.id;
         try {
             const notifications = await Notification.findAll({
                 where: { UtilisateurId },
@@ -78,7 +78,7 @@ class NotificationController {
 
     // Méthode pour vérifier si un utilisateur a au moins une notification non lue
     static async avoirNotificationNonLu(req, res) {
-        const UtilisateurId = req.params.UtilisateurId;
+        const UtilisateurId = req.params.id;
         try {
             const exists = await Notification.findOne({
                 where: { UtilisateurId, lu: false }
@@ -92,7 +92,7 @@ class NotificationController {
 
     // Méthode pour mettre toutes les notifications d'un utilisateur en lu
     static async toutMarquerLu(req, res) {
-        const UtilisateurId = req.params.UtilisateurId;
+        const UtilisateurId = req.user.id;
         try {
             const [updated] = await Notification.sequelize.transaction(async (t) => {
                 return await Notification.update(
@@ -104,6 +104,7 @@ class NotificationController {
             const message = `Toutes les notifications de l'utilisateur ${UtilisateurId} ont été marquées comme lues.`;
             res.json({ message, updated });
         } catch (error) {
+            console.log(error)
             const message = `Impossible de mettre toutes les notifications en lu. Réessayez dans quelques instants.`;
             res.status(500).json({ message, data: error });
         }

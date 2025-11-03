@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { ROUTES } from "../../routes/paths";
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
@@ -13,6 +14,8 @@ export default function SignUp() {
 
   // Si on vient de la page verification avec un email
   useEffect(() => {
+
+    document.title = "S'inscrire"
     if (location.state?.email) {
       setEmailValue(location.state.email);
       // Supprimer le cookie temporaire si on veut recommencer
@@ -55,7 +58,7 @@ export default function SignUp() {
 
       if (response.ok) {
         setSuccess(data.message);
-        navigate("/auth/sign-up/verification", { state: { email } });
+        navigate(ROUTES.AUTH.SIGN_UP.VERIFICATION, { state: { email } });
       } else {
         setError(data.message || "Erreur lors de l'inscription.");
       }
@@ -127,7 +130,7 @@ export default function SignUp() {
 
           <div className="flex flex-col items-start justify-center gap-3">
             <p className="text-[0.75rem] text-neutral-600">
-              Vous avez déjà un compte ? <Link to="/auth/" className="text-sky-400 underline">Se connecter</Link>
+              Vous avez déjà un compte ? <Link to={ROUTES.AUTH.LOGIN} className="text-sky-400 underline">Se connecter</Link>
             </p>
             <a href={ApiUrl + "/auth/google"} className="flex justify-center gap-4 items-center border-1 border-gray-200 h-10 rounded-lg w-full text-sm text-[#4F5D75] font-semibold hover:cursor-pointer">
               <img src="/images/google.png" alt="logo de google" className="h-[16px]"/>

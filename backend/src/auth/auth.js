@@ -67,7 +67,7 @@
             const roleNames = roles.map(r => r.libelle);
 
             res.cookie("token", token, Auth.cookieOptions());
-            res.redirect(`http://localhost:5173/auth/login-success?id=${user.id}&email=${encodeURIComponent(user.email)}&roles=${encodeURIComponent(JSON.stringify(roleNames))}`);
+            res.redirect(`http://localhost:5173/auth/login-success?id=${user.id}&email=${encodeURIComponent(user.email)}&roles=${encodeURIComponent(JSON.stringify(roleNames))}&photo=${encodeURIComponent(user.photo)}`);
         }
 
 
@@ -96,7 +96,7 @@
 
                 return res.status(200).json({
                     message: "Inscription validée !",
-                    user: { id: newUser.id, name: newUser.name, email: newUser.email, roles: roleNames }
+                    user: { id: newUser.id, name: newUser.name, email: newUser.email, roles: roleNames, photo : newUser.photo}
                 });
             } catch (err) {
                 console.error(err);
@@ -120,7 +120,7 @@
                 const roles = await utilisateur.getRoles({ attributes: ['libelle'] });
                 const roleNames = roles.map(r => r.libelle);
 
-                const user = { id: utilisateur.id, name: utilisateur.name, email: utilisateur.email, roles: roleNames }
+                const user = { id: utilisateur.id, name: utilisateur.name, email: utilisateur.email, roles: roleNames, photo : utilisateur.photo }
                 return res.status(200).json({
                     message: "Connexion réussie !",
                     user
@@ -168,7 +168,7 @@
                 if (tempData.verificationCode !== code || new Date(tempData.verificationExpires) < new Date())
                     return res.status(400).json({ message: 'Code invalide ou expiré.' });
 
-                const newUser = await Utilisateur.create({ email: tempData.email, password: tempData.passwordHash, isVerified: true });
+                const newUser = await Utilisateur.create({ email: tempData.email, password: tempData.passwordHash, isVerified: true, photo : "/images/default-img-profil.png" });
                 res.clearCookie('signup_temp');
 
                 // Assignation rôle par défaut
@@ -183,7 +183,7 @@
 
                 return res.status(200).json({
                     message: "Inscription validée !",
-                    user: { id: newUser.id, name: newUser.name, email: newUser.email, roles: roleNames }
+                    user: { id: newUser.id, name: newUser.name, email: newUser.email, roles: roleNames, photo : newUser.photo }
                 });
             } catch (err) {
                 console.error(err);
@@ -229,6 +229,11 @@
             }
         }
 
+        // LOGOUT
+        static async logout(req, res) {
+            res.clearCookie("token");
+            res.json({ message: "Déconnecté avec succès." });
+        }
     }
 
     module.exports = Auth;

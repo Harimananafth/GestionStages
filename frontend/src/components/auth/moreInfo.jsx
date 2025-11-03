@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IMaskInput } from "react-imask";
+import { ROUTES } from "../../routes/paths";
 
 export default function MoreInfo() {
   const [loading, setLoading] = useState(false);
@@ -19,6 +20,10 @@ export default function MoreInfo() {
     prenomGoogle = parts.slice(0, -1).join(" ") || parts[0];
     nomGoogle = parts.slice(-1).join(" ");
   }
+
+  useEffect(()=>{
+        document.title = "Plus d'infos"
+    }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,13 +51,14 @@ export default function MoreInfo() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
+        credentials : "include"
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setMessage({ type: "success", text: "Votre profil étudiant a été créé avec succès !" });
-        setTimeout(() => navigate("/t"), 1500);
+        setTimeout(() => navigate(ROUTES.USER.DASHBOARD), 1500);
       } else {
         setMessage({ type: "error", text: data.message || "Une erreur est survenue." });
       }

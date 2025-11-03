@@ -4,7 +4,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert('notifications', [
       {
-        UtilisateurId: 1, // correspond à admin@example.com
+        UtilisateurId: null, // correspond à admin@example.com
         message: 'Bienvenue sur la plateforme !',
         type: 'simple',
         lu: false,
@@ -12,15 +12,15 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        UtilisateurId: 2, // correspond à user@example.com
-        message: 'Une nouvelle offre de stage est disponible.',
+        UtilisateurId: null, // correspond à user@example.com
+        message: 'Une nouvelle offre de stage est disponible. Consultez la section offres pour plus de détails',
         type: 'actualité',
         lu: false,
         date_reception: new Date(),
         updatedAt: new Date()
       },
       {
-        UtilisateurId: 1,
+        UtilisateurId: null,
         message: 'Votre profil a été mis à jour.',
         type: 'simple',
         lu: true,

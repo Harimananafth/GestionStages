@@ -1,29 +1,33 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { ROUTES } from "../../routes/paths";
 
 export default function Success() {
     const location = useLocation();
-    const navigate = useNavigate(); // ✅ parenthèses manquantes
+    const navigate = useNavigate(); 
 
     useEffect(() => {
+        document.title = "Connexion réussie"
+
         const queryParams = new URLSearchParams(location.search);
         const id = queryParams.get("id");
         const email = queryParams.get("email");
         const roles = queryParams.get("roles");
+        const photo = queryParams.get("photo");
 
 
         const parsedRoles = JSON.parse(roles);
         if (id && email && roles) {
-            localStorage.setItem("user", JSON.stringify({ id, email, roles: parsedRoles }));
+            localStorage.setItem("utilisateur", JSON.stringify({ id, email, roles: parsedRoles, photo }));
         }
         
         const timer = setTimeout(() => {
             if (parsedRoles.includes("admin")) {
-                navigate("/a/");
+                navigate(ROUTES.ADMIN.DASHBOARD);
             } else if (parsedRoles.includes("user")) {
-                navigate("/t/");
+                navigate(ROUTES.USER.DASHBOARD);
             } else {
-                navigate("/"); // fallback
+                navigate(ROUTES.HOME); // fallback
             }
         }, 1000);
 

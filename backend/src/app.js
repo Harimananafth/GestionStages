@@ -4,6 +4,9 @@ const path = require("path")
 const db = require('./Models')
 const cors = require('cors')
 const cookieParser = require("cookie-parser");
+const {Utilisateur} = require("./Models");
+const authMiddleware = require("./middlewares/authMiddleware");
+
 require("dotenv").config();
 
 const app = express();
@@ -38,6 +41,16 @@ fs.readdirSync(routesPath).forEach(file => {
       console.log(`Route loaded: /api${routeModule.prefix}`);
     }
   }
+});
+
+app.get("/api/user/photo", authMiddleware, async (req, res) => {
+  const user = await Utilisateur.findByPk(req.user.id);
+  if (!user.photo) return res.status(404).send("No photo");
+
+  const response = await fetch(user.photo); 
+  const buffer = await response.arrayBuffer();
+  res.set("Content-Type", "image/jpeg"); 
+  res.send(Buffer.from(buffer));
 });
 
 

@@ -8,6 +8,9 @@ export default function Home(){
 
     //Effect au scroll
     useEffect(() => {
+
+        document.title = "Acceuil"
+        
         const observer = new IntersectionObserver(
         (entries) => {
             entries.forEach((entry) => {

@@ -1,0 +1,26 @@
+export const ROUTES = {
+  HOME: "/",
+
+  AUTH: {
+    ROOT: "/auth",
+    LOGIN: "/auth",
+    SIGN_UP: {
+      ROOT: "/auth/sign-up",
+      SET_PASSWORD: "/auth/sign-up/set-password",
+      VERIFICATION: "/auth/sign-up/verification",
+      MORE_INFO: "/auth/sign-up/more-info",
+    },
+    SUCCESS: "/auth/login-success",
+  },
+
+  USER: {
+    ROOT: "/t",
+    DASHBOARD: "/t",
+  },
+
+  ADMIN: {
+    ROOT: "/a",
+    DASHBOARD: "/a",
+    OFFRE: "/a/offres",
+  },
+};
