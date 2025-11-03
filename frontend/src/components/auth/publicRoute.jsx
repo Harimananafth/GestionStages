@@ -8,10 +8,13 @@ export default function PublicRoute({ children }) {
   const user = localStorage.getItem("utilisateur");
   const roles = user ? JSON.parse(user).roles : [];
 
+  const ApiUrl =
+    import.meta.env.VITE_PROD_API_URL || import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/check`, {
+        const res = await fetch(`${ApiUrl}/auth/check`, {
           credentials: "include",
         });
         if (!res.ok) throw new Error("Unauthorized");
@@ -37,7 +40,11 @@ export default function PublicRoute({ children }) {
     );
 
   return isAuthenticated ? (
-    roles.includes("admin") ? <Navigate to={ROUTES.ADMIN.DASHBOARD} replace /> : <Navigate to={ROUTES.USER.DASHBOARD} replace />
+    roles.includes("admin") ? (
+      <Navigate to={ROUTES.ADMIN.DASHBOARD} replace />
+    ) : (
+      <Navigate to={ROUTES.USER.DASHBOARD} replace />
+    )
   ) : (
     children
   );
