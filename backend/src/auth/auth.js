@@ -308,12 +308,13 @@ class Auth {
     }
   }
 
-  // LOGOUT
+  // logout
   static async logout(req, res) {
+    console.log(req.cookies); // Affiche tous les cookies
     res.clearCookie("token", {
       httpOnly: true,
-      secure: this.isProd,
-      sameSite: this.isProd ? "None" : "Lax",
+      secure: Auth.isProd,
+      sameSite: Auth.isProd ? "None" : "Lax",
     });
     res.json({ message: "Déconnecté avec succès." });
   }
