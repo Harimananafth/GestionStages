@@ -5,14 +5,20 @@ const {
   Etudiant,
   Profil,
   OffreProfil,
+  Role,
+  UtilisateurRole,
   sequelize,
 } = require("../Models");
 const { ValidationError, Op, where } = require("sequelize");
 const notificationController = require("./notificationController");
 const { cloudinary } = require("../config/cloudinary.config");
 const fs = require("fs");
+const {
+  sendAdminCandidatureNotification,
+  sendStudentStatusUpdate,
+} = require("../utils/mailer");
 
-// Fonction Helper pour vérifier et fermer une offre 
+// Fonction Helper pour vérifier et fermer une offre
 async function checkAndCloseOffre(offreId, transaction) {
   const offre = await Offre.findByPk(offreId, {
     include: [
@@ -63,7 +69,7 @@ async function checkAndCloseOffre(offreId, transaction) {
 }
 
 class CandidatureController {
-  // Méthode pour lister toutes les candidatures 
+  // Méthode pour lister toutes les candidatures
 
   static async getAllcandidature(req, res) {
     try {
@@ -111,7 +117,7 @@ class CandidatureController {
     }
   }
 
-  // Méthode pour créer une candidature 
+  // Méthode pour créer une candidature
   static async createCandidature(req, res) {
     const cvFile = req.files["cv"]?.[0] || null;
     const lmFile = req.files["lm"]?.[0] || null;
@@ -124,22 +130,23 @@ class CandidatureController {
     }
 
     try {
-      // 1. Uploader le CV sur Cloudinary
+      // --- 1 & 2. Uploader le CV et la LM sur Cloudinary ---
       cvResult = await cloudinary.uploader.upload(cvFile.path, {
-        folder: "candidatures/cv", // Dossier de destination
-        resource_type: "auto", // Gère les PDF, images, etc.
+        folder: "candidatures/cv",
+        resource_type: "auto",
         use_filename: true,
         unique_filename: false,
         overwrite: false,
+        type: "private",
       });
 
-      // 2. Uploader la LM sur Cloudinary
       lmResult = await cloudinary.uploader.upload(lmFile.path, {
         folder: "candidatures/lm",
         resource_type: "auto",
         use_filename: true,
         unique_filename: false,
         overwrite: false,
+        type: "private",
       });
 
       // 3. Récupérer les données de Cloudinary
@@ -167,20 +174,81 @@ class CandidatureController {
         const newCandidature = await Candidature.create(
           {
             ...body,
-            cv_path, // L'URL sécurisée de Cloudinary
-            lm_path, // L'URL sécurisée de Cloudinary
-            cv_public_id, // L'ID pour la suppression future
-            lm_public_id, // L'ID pour la suppression future
+            cv_path, // L'URL privée
+            lm_path, // L'URL privée
+            cv_public_id,
+            lm_public_id,
           },
           { transaction: t }
         );
 
+        // --- DEBUT : Logique d'envoi d'email  ---
+
         await notificationController.addNotification({
-          UtilisateurId: null,
+          UtilisateurId: null, // pour l'admin
           message: `Une candidature a été postée pour l'offre ${offre.titre}`,
           type: "simple",
           date_reception: new Date(),
         });
+        await notificationController.addNotification({
+          UtilisateurId: req.user.id, // pour l'étudiant
+          message: `Votre candidature pour l'offre ${offre.titre} a bien été déposée.`,
+          type: "simple",
+          date_reception: new Date(),
+        });
+
+        // 1. Trouver le rôle 'admin'
+        const adminRoles = await Role.findAll({
+          where: { libelle: "admin" },
+          transaction: t,
+        });
+        const adminRole = adminRoles[0]; // Prend le premier résultat
+
+        if (adminRole) {
+          // 2. Trouver tous les utilisateurs ayant ce rôle
+          const utilisateursRoles = await UtilisateurRole.findAll({
+            where: { id_role: adminRole.id },
+            include: [{ model: Utilisateur }],
+            transaction: t,
+          });
+
+          // 3. Récupérer l'étudiant
+          const etudiant = await Etudiant.findOne({
+            where: { UtilisateurId: req.user.id },
+            transaction: t,
+          });
+          const nomComplet = etudiant
+            ? `${etudiant.nom} ${etudiant.prenom}`
+            : "Étudiant inconnu";
+
+          // 4. Envoyer les emails aux admins
+          const emailPromises = utilisateursRoles
+            .map((ur) => ur.Utilisateur?.email) // Extrait l'email (si l'inclusion a réussi)
+            .filter((email) => email) // Filtre les emails nulls/vides
+            .map((email) =>
+              sendAdminCandidatureNotification(email, nomComplet, offre.titre)
+            );
+
+          // Utilisation de Promise.all pour s'assurer que tous les envois sont lancés avant de continuer
+          await Promise.all(emailPromises)
+            .then(() =>
+              console.log(
+                `Emails de notification envoyés à ${emailPromises.length} administrateurs.`
+              )
+            )
+            .catch((e) =>
+              console.error(
+                "Erreur lors de l'envoi des emails administrateur:",
+                e
+              )
+            );
+        } else {
+          console.warn(
+            "Rôle 'admin' non trouvé. Notification par email non envoyée."
+          );
+        }
+
+        // --- FIN : Logique d'envoi d'email corrigée ---
 
         return newCandidature;
       });
@@ -193,42 +261,54 @@ class CandidatureController {
       return res.status(201).json({ message, data: candidature });
     } catch (error) {
       console.error(error);
+
       // Nettoyage : si l'upload Cloudinary a réussi mais la transaction a échoué
+
       if (cvResult && cvResult.public_id) {
         // Tente de supprimer le CV si l'upload a réussi
+
         await cloudinary.uploader.destroy(cvResult.public_id, {
           resource_type: "auto",
         });
       }
+
       if (lmResult && lmResult.public_id) {
         // Tente de supprimer la LM si l'upload a réussi
+
         await cloudinary.uploader.destroy(lmResult.public_id, {
           resource_type: "auto",
         });
       }
 
       // Nettoyage : Suppression des fichiers temporaires (quel que soit le résultat)
+
       if (cvFile && cvFile.path) fs.unlinkSync(cvFile.path);
       if (lmFile && lmFile.path) fs.unlinkSync(lmFile.path);
 
       // Gestion des erreurs
+
       if (error.message === "offre_not_found") {
         return res.status(404).json({ message: "Offre introuvable." });
       }
+
       if (error.message === "offre_not_disponible") {
         return res.status(403).json({
           message: "Cette offre n'est plus disponible pour les candidatures.",
         });
       }
+
       if (error.message === "profil_not_in_offre") {
         return res
           .status(400)
           .json({ message: "Ce profil n'est pas requis pour cette offre." });
       }
+
       if (error instanceof ValidationError) {
         return res.status(400).json({ message: error.message, data: error });
       }
+
       console.error(error);
+
       return res.status(500).json({
         message: `La candidature n'a pas pu être créée. Réessayez dans quelques instants.`,
         data: error,
@@ -236,7 +316,7 @@ class CandidatureController {
     }
   }
 
-  // Méthode pour modifier une candidature 
+  // Méthode pour modifier une candidature
 
   static async updateCandidature(req, res) {
     const id = parseInt(req.params.id);
@@ -271,7 +351,7 @@ class CandidatureController {
     }
   }
 
-  // Méthode pour modifier uniquement le statut d'une candidature 
+  // Méthode pour modifier uniquement le statut d'une candidature
   static async updateCandidatureStatus(req, res) {
     const id = parseInt(req.params.id);
     const { statut } = req.body;
@@ -330,7 +410,7 @@ class CandidatureController {
         candidature.statut = statut;
         await candidature.save({ transaction: t });
 
-        // Logique de notification
+        // Logique de notification et d'envoi d'email
         const etudiant = await Etudiant.findByPk(candidature.EtudiantId, {
           transaction: t,
         });
@@ -341,12 +421,21 @@ class CandidatureController {
           : null;
 
         if (utilisateur) {
+          // notification
           await notificationController.addNotification({
             UtilisateurId: utilisateur.id,
             message: `Le statut de votre candidature pour l'offre ${candidature.Offre.titre} a été mis à jour : ${statut}`,
             type: "simple",
             date_reception: new Date(),
           });
+          // email
+          await sendStudentStatusUpdate(
+            utilisateur.email,
+            candidature.Offre.titre,
+            statut
+          )
+            .then(() => console.log("Email envoyé !"))
+            .catch(console.error);
         }
 
         // Vérifie automatiquement fermeture ou réouverture
@@ -382,7 +471,7 @@ class CandidatureController {
     }
   }
 
-  // Méthode pour supprimer une candidature 
+  // Méthode pour supprimer une candidature
   static async deleteCandidature(req, res) {
     const id = parseInt(req.params.id);
 
@@ -429,7 +518,7 @@ class CandidatureController {
               );
             }
           } catch (error) {
-            // Gérer les erreurs 
+            // Gérer les erreurs
             console.error(
               `Erreur lors de la suppression de ${publicId} de Cloudinary:`,
               error.message
@@ -462,7 +551,7 @@ class CandidatureController {
     }
   }
 
-  // Récupérer une candidature pour une offre spécifique 
+  // Récupérer une candidature pour une offre spécifique
   static async getCandidatureCard(req, res) {
     try {
       const id = req.params.id;
@@ -513,7 +602,7 @@ class CandidatureController {
     }
   }
 
-  // récupérer une candidature spécifique 
+  // récupérer une candidature spécifique
   static async getCandidatureById(req, res) {
     try {
       const id = req.params.id;
@@ -570,7 +659,7 @@ class CandidatureController {
     }
   }
 
-  // Récupérer une candidature pour un étudiant spécifique 
+  // Récupérer une candidature pour un étudiant spécifique
   static async getStudentCandidature(req, res) {
     try {
       const id = req.params.id;

@@ -7,7 +7,7 @@ module.exports = {
       // 1: Offre Été - Full-Stack
       {
         titre: 'Développeur Full-Stack (Node/React)',
-        is_disponible: true,
+        is_disponible: false,
         PeriodeId: 1, // Été 2025
         date_publication: new Date(now.getTime() - 10 * 86400000), // Publiée il y a 10j
         updatedAt: now
@@ -15,7 +15,7 @@ module.exports = {
       // 2: Offre Été - Admin Réseau
       {
         titre: 'Stage Admin Sys & Réseau',
-        is_disponible: true,
+        is_disponible: false,
         PeriodeId: 1, // Été 2025
         date_publication: new Date(now.getTime() - 8 * 86400000), // Publiée il y a 8j
         updatedAt: now

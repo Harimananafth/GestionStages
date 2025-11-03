@@ -7,18 +7,18 @@ module.exports = {
     const saltRounds = 10;
     
     // Mots de passe
-    const adminPassword = await bcrypt.hash('adminpassword', saltRounds);
-    const userPassword1 = await bcrypt.hash('password123', saltRounds);
-    const userPassword2 = await bcrypt.hash('password456', saltRounds);
-    const userPassword3 = await bcrypt.hash('password789', saltRounds);
-    const userPassword4 = await bcrypt.hash('password101', saltRounds);
-    const userPassword5 = await bcrypt.hash('password112', saltRounds);
-    const userPassword6 = await bcrypt.hash('password131', saltRounds);
+    const adminPassword = await bcrypt.hash('123456', saltRounds);
+    const userPassword1 = await bcrypt.hash('123456', saltRounds);
+    const userPassword2 = await bcrypt.hash('123456', saltRounds);
+    const userPassword3 = await bcrypt.hash('123456', saltRounds);
+    const userPassword4 = await bcrypt.hash('123456', saltRounds);
+    const userPassword5 = await bcrypt.hash('123456', saltRounds);
+    const userPassword6 = await bcrypt.hash('123456', saltRounds);
 
     await queryInterface.bulkInsert('utilisateurs', [
       // 1: Admin
       {
-        email: 'admin@stage.com',
+        email: 'test251025@outlook.com',
         name: 'Admin Principal',
         password: adminPassword,
         photo: 'https://i.pravatar.cc/150?img=68',
