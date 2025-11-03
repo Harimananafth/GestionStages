@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const CandidatureController = require('../controllers/candidatureController')
+const authMiddleware = require("../middlewares/authMiddleware");
 
-router.get("/", CandidatureController.getAllcandidature)
-router.post("/", CandidatureController.createCandidature)
-router.put("/:id", CandidatureController.updateCandidature)
-router.put("/status/:id", CandidatureController.updateCandidatureStatus)
-router.delete("/:id", CandidatureController.deleteCandidature)
+router.get("/", authMiddleware,  CandidatureController.getAllcandidature)
+router.post("/", authMiddleware, CandidatureController.createCandidature)
+router.put("/:id", authMiddleware, CandidatureController.updateCandidature)
+router.put("/status/:id", authMiddleware, CandidatureController.updateCandidatureStatus)
+router.delete("/:id", authMiddleware, CandidatureController.deleteCandidature)
 
 
 

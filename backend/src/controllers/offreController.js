@@ -1,4 +1,4 @@
-const { Offre } = require('../Models');
+const { Offre, Profil, Periode } = require('../Models');
 const NotificationController = require('./notificationController');
 const { ValidationError } = require('sequelize');
 
@@ -59,14 +59,34 @@ class OffreController {
     // Méthode pour récupérer toutes les offres de stage
     static async getAllOffres(req, res) {
         try {
-            const offres = await Offre.findAll();
-            const message = `La liste des offres a été récupérée avec succès.`;
+            const limit = req.query.limit ? parseInt(req.query.limit) : null;
+
+            const offres = await Offre.findAll({
+            include: [
+                {
+                model: Profil,
+                attributes: ['nomProfil'],
+                through: { attributes: ['nbProfil'] }
+                },
+                {
+                model: Periode,
+                attributes: ['date_debut', 'date_fin']
+                }
+            ],
+            order: [['date_publication', 'DESC']],
+            ...(limit && { limit })
+            });
+
+            const message = 'La liste des offres a été récupérée avec succès.';
             return res.json({ message, data: offres });
         } catch (error) {
-            const message = `La liste des offres n'a pas pu être récupérée. Réessayez dans quelques instants.`;
+            const message = "La liste des offres n'a pas pu être récupérée. Réessayez dans quelques instants.";
             return res.status(500).json({ message, data: error });
         }
     }
+
+
+
 
     // Méthode pour mettre à jour une offre de stage
     static async updateOffre(req, res) {

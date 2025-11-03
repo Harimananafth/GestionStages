@@ -18,7 +18,7 @@ module.exports = {
       {
         PeriodeId: 2, // correspond à la deuxième période
         titre: 'Stage Réseaux et Télécom',
-        date_publication: new Date('2025-07-05'),
+        date_publication: new Date('2025-10-01'),
         updatedAt: new Date()
       }
     ]);

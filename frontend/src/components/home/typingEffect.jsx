@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function TypingEffect ({ text, typingSpeed = 50, deletingSpeed = 50, pause = 1000 }){
+export default function TypingEffect ({ text, typingSpeed = 35, deletingSpeed = 35, pause = 2000 }){
   const [displayedText, setDisplayedText] = useState("");
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);

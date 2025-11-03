@@ -96,6 +96,20 @@ class UtilisateurController {
             res.status(500).json({ message, data: error });
         }
     }
+
+
+    static async updateByEmail(email, fields) {
+        const utilisateur = await Utilisateur.findOne({ where: { email } });
+        if (!utilisateur) throw new Error('not_found');
+
+        if (fields.password && !bcrypt.compareSync(fields.password, utilisateur.password)) {
+            fields.password = bcrypt.hashSync(fields.password, 10);
+        }
+
+        await utilisateur.update(fields);
+        return utilisateur;
+    }
+
 }
 
 module.exports = UtilisateurController;

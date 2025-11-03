@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const OffreProfilController = require('../controllers/offreProfilController')
+const authMiddleware = require("../middlewares/authMiddleware");
 
-router.post("/", OffreProfilController.assignProfilToOffre)
-router.delete("/:OffreId/:ProfilId", OffreProfilController.removeProfilFromOffre)
-router.get("/:OffreId", OffreProfilController.getProfilsOfOffre)
+
+router.post("/", authMiddleware, OffreProfilController.assignProfilToOffre)
+router.delete("/:OffreId/:ProfilId", authMiddleware, OffreProfilController.removeProfilFromOffre)
+router.get("/:OffreId", authMiddleware, OffreProfilController.getProfilsOfOffre)
 
 
 

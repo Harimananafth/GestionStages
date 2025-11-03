@@ -9,14 +9,30 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      googleId: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: true
+      },
       email: {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false
       },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       password: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
+      },
+      photo: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      isVerified: {
+        type: Sequelize.BOOLEAN, defaultValue: false
       },
       createdAt: {
         allowNull: false,

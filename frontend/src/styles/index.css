@@ -1,6 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 @plugin "daisyui" {
   themes: light --default, dark;
+}
+
+#root{
+    background-color: #F2F4F7;
+}
+
+.montserrat-hero {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+}
+
+body{
+    overflow-x: hidden;
 }
 .bg-HS{
     background-color: #E9F3FF;
@@ -47,44 +61,108 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+
+/* Scroll */
+
+.leftEntry{
+    animation: text-appear-left;
+    animation-timeline: view();
+    animation-range: entry 0 cover 30vh;
+}
+.rightEntry{
+    animation: text-appear-right both;
+    animation-timeline: view();
+    animation-range: entry 0 cover 30vh;
+}
+.upEntry{
+    animation: text-appear-bottom both;
+    animation-timeline: view();
+    animation-range: entry 20% cover 100vh;
+}
 .scale{
+    animation: text-appear-scale both;
+    animation-timeline: view();
+    animation-range: entry 0 cover 30vh;
+}
+
+@keyframes text-appear-left{
+    from{
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes text-appear-right{
+    from{
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes text-appear-bottom{
+    from{
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes text-appear-scale{
+    from{
+        opacity: 0;
+        scale: 0.5;
+    }
+    to{
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+.scaling{
     opacity: 0;
     scale: 0.5;
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
 }
-.scale.in-view{
+.scaling.in-view{
     opacity: 1;
     scale: 1;
 }
-.upEntry{
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
-}
-.upEntry.in-view{
-    opacity: 1;
-        transform: translateY(-10px);
 
-}
-.leftEntry{
-    opacity: 0;
-    transform: translateX(-100%);
-    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+/*carrousel animation*/
 
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-208px * 9));
+    }
 }
-.leftEntry.in-view{
-    opacity: 1;
-    transform: translateX(0);
-}
-.rightEntry{
-    opacity: 0;
-    transform: translateX(100%);
-    transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
 
+.animate-scroll {
+animation: scroll 30s linear infinite;
 }
-.rightEntry.in-view{
-    opacity: 1;
-    transform: translateX(0);
+
+.group:hover .animate-scroll {
+animation-play-state: paused;
+}
+
+/* OTP */
+
+.otp-input:focus {
+    border-color: #3b82f6; /* blue-500 */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
 }

@@ -1,6 +1,8 @@
 import { useEffect } from "react"
 import Hero from "../components/home/hero";
 import Echantillon from "../components/home/echantillon";
+import Carrousel from "../components/home/carrousel";
+import Footer from "../components/home/footer";
 
 export default function Home(){
 
@@ -16,12 +18,12 @@ export default function Home(){
             }
             });
         },
-        { threshold: 0.3 }
+        { threshold: 0.2 }
         );
 
         // Sélectionne tous les éléments avec ces classes
         const targets = document.querySelectorAll(
-        ".scale, .upEntry, .leftEntry, .rightEntry"
+        ".scaling"
         );
 
         targets.forEach((el) => observer.observe(el));
@@ -36,6 +38,8 @@ export default function Home(){
         <>
             <Hero />
             <Echantillon />
+            <Carrousel />
+            <Footer />
         </>
     )
 }

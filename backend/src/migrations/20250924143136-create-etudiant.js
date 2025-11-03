@@ -29,7 +29,7 @@ module.exports = {
         allowNull: false,
       },
       telephone: {
-        type: Sequelize.STRING(10),
+        type: Sequelize.STRING,
         allowNull: false
       },
       adresse: {
