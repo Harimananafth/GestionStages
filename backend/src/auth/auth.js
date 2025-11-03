@@ -13,8 +13,8 @@ class Auth {
   static cookieOptions(maxAge = 24 * 60 * 60 * 1000) {
     return {
       httpOnly: true,
-      secure: process.env.PROD_COOKIE_SECURE === "production",
-      sameSite: process.env.PROD_SAME_SITE || "lax",
+      secure: process.env.PROD_COOKIE_SECURE,
+      sameSite: process.env.PROD_COOKIE_SECURE ? "None" : "Lax",
       maxAge,
     };
   }
