@@ -1,6 +1,6 @@
 import { Bell, LogOut, User } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useSWR from "swr";
 import Notification from "../common/notificationList";
 import { ROUTES } from "../../routes/paths";
@@ -150,10 +150,10 @@ export default function UserHeader() {
             className="menu z-50 menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a className="text-[#4F5D75] font-semibold text-sm mb-2.5">
+              <Link to={ROUTES.USER.PROFIL} className="text-[#4F5D75] font-semibold text-sm mb-2.5">
                 <User color="#4F5D75" strokeWidth={2.25} size={18} />
-                Profile
-              </a>
+                Profil
+              </Link>
             </li>
             <li>
               <a className="text-error font-semibold text-sm" onClick={Logout}>

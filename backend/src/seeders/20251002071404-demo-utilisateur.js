@@ -21,7 +21,7 @@ module.exports = {
         email: 'test251025@outlook.com',
         name: 'Admin Principal',
         password: adminPassword,
-        photo: 'https://i.pravatar.cc/150?img=68',
+        photo: '/images/default-img-profil.png',
         isVerified: true,
         createdAt: now,
         updatedAt: now
