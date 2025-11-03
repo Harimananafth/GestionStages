@@ -8,13 +8,14 @@ const { sendVerificationMail } = require("../utils/mailer");
 
 class Auth {
   static FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173/";
+  static isProd = process.env.PROD_COOKIE_SECURE === "true";
 
   // Options des cookies centralisées
   static cookieOptions(maxAge = 24 * 60 * 60 * 1000) {
     return {
       httpOnly: true,
-      secure: process.env.PROD_COOKIE_SECURE,
-      sameSite: process.env.PROD_COOKIE_SECURE ? "None" : "Lax",
+      secure: this.isProd,
+      sameSite: this.isProd ? "None" : "Lax",
       maxAge,
     };
   }
@@ -309,7 +310,11 @@ class Auth {
 
   // LOGOUT
   static async logout(req, res) {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: this.isProd,
+      sameSite: this.isProd ? "None" : "Lax",
+    });
     res.json({ message: "Déconnecté avec succès." });
   }
 }
