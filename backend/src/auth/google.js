@@ -3,7 +3,7 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const { Utilisateur } = require("../models");
 require("dotenv").config();
 
-const isProd = process.env.NODE_ENV === "production";
+const isProd = process.env.PROD_COOKIE_SECURE === "true";
 const apiBaseUrl = process.env.API_BASE_URL || "http://localhost:5000";
 
 passport.use(
