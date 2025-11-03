@@ -49,7 +49,7 @@ class Auth {
           googleId,
           photo: googleProfile.photos[0].value,
         }),
-        { httpOnly: true, maxAge: 10 * 60 * 1000 }
+        Auth.cookieOptions()
       );
       return res.redirect(`${Auth.FRONTEND_URL}/auth/sign-up/set-password`);
     }
