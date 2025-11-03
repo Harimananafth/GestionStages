@@ -1,6 +1,31 @@
-const { Offre, Profil, Periode } = require('../Models');
+const { Offre, Profil, Periode, Etudiant, Utilisateur, Candidature } = require('../Models');
 const NotificationController = require('./notificationController');
 const { ValidationError, where } = require('sequelize');
+
+async function alreadyPosted(idUtilisateur, idOffre) {
+    try {
+        // Récupérer l'id de l'étudiant avec l'id de l'utilisateur
+        const etudiant = await Etudiant.findOne({
+            where: { UtilisateurId: idUtilisateur }
+        });
+        
+        if (!etudiant) return false;
+
+        // Vérifier si il existe une candidature
+        const candidature = await Candidature.findOne({
+            where: {
+                EtudiantId: etudiant.id,
+                OffreId: idOffre
+            }
+        });
+
+        return candidature !== null;
+
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
 
 class OffreController {
 
@@ -114,6 +139,46 @@ class OffreController {
         }
     }
 
+    // Méthode pour récupérer la listes des offres disponible pour front-office
+    static async getStudentOffre(req, res){
+        try {
+            const userId = req.params.id;
+
+            const offres = await Offre.findAll({
+                where: {
+                    is_disponible: true
+                },
+                include: [
+                    {
+                        model: Profil,
+                        attributes: ['nomProfil', 'id'],
+                        through: { attributes: ['nbProfil'] }
+                    },
+                    {
+                        model: Periode,
+                        attributes: ['date_debut', 'date_fin']
+                    }
+                ],
+                order: [['date_publication', 'DESC']]
+            });
+
+            // Ajouter dejaPostule dans chaque offre
+            const offresWithStatus = await Promise.all(offres.map(async (offre) => {
+                const dejaPostule = await alreadyPosted(userId, offre.id);
+                return {
+                    ...offre.toJSON(),
+                    dejaPostule
+                };
+            }));
+
+            const message = 'La liste des offres disponibles a été récupérée avec succès.';
+            return res.json({ message, data: offresWithStatus });
+
+        } catch (error) {
+            const message = "La liste des offres n'a pas pu être récupérée. Réessayez dans quelques instants.";
+            return res.status(500).json({ message, data: error });
+        }
+    }
 
 
 

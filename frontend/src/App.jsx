@@ -21,6 +21,8 @@ import MainAdminEtudiant from "./components/admin/etudiant/mainEtudiant";
 import FicheEtudiant from "./components/admin/etudiant/ficheEtudiant";
 import MainAdminProfil from "./components/admin/profil/mainAdminProfil";
 import NotFound from "./pages/NotFound";
+import MesCandidatures from "./components/client/candidature/mesCandidatures";
+import ListeOffresStage from "./components/client/offre/listeOffreStage";
 
 function App() {
   return (
@@ -59,7 +61,16 @@ function App() {
             </ProtectedRoute>
           }
         >
+
+          {/* Dashboard */}
           <Route index element={<UserDashboard />} />
+
+          {/* Candidature */}
+          <Route path="candidatures" element={<MesCandidatures />} />
+
+          {/* Offres */}
+          <Route path="offres" element={<ListeOffresStage />} />
+
         </Route>
 
         {/* Espace admin */}

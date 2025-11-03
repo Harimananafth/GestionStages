@@ -16,6 +16,8 @@ export const ROUTES = {
   USER: {
     ROOT: "/t",
     DASHBOARD: "/t",
+    CANDIDATURE : "/t/candidatures",
+    OFFRE : "/t/offres",
   },
 
   ADMIN: {

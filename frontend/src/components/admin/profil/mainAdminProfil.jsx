@@ -98,7 +98,7 @@ export default function MainAdminProfil() {
 
   return (
     <div className="h-full w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 
-                    animate-[text-appear-bottom_0.5s_ease-in] overflow-auto flex flex-col gap-6">
+                    animate-[text-appear-bottom_0.5s_ease-in] flex flex-col gap-6">
 
       <div className='flex justify-between items-center flex-wrap gap-4'>
         <h1 className="montserrat-hero font-bold text-xl text-sky-400">
@@ -116,7 +116,7 @@ export default function MainAdminProfil() {
         </button>
       </div>
 
-      <div className="flex-1 space-y-3">
+      <div className="flex-1 space-y-3 h-full overflow-auto">
         {profils.length === 0 ? (
           <div className="text-center text-gray-500 font-medium p-10 border-2 border-dashed rounded-xl bg-gray-50/50">
             <p>Aucun profil n'a été créé pour le moment.</p>
