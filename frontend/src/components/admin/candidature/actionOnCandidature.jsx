@@ -154,7 +154,7 @@ export default function ActionOnCandidature() {
                 {/* Boutons de fichiers */}
                 <div className="flex flex-col sm:flex-row gap-3">
                     <button
-                        // AJOUT: Lien vers le fichier
+                        // Lien vers le fichier
                         onClick={() => data?.data.cv_path && window.open(data.data.cv_path, '_blank')}
                         className="flex-1 px-4 py-3 flex justify-center items-center gap-2 bg-sky-500 text-white rounded-lg text-base font-semibold shadow-md transition duration-300 hover:bg-sky-600 hover:shadow-lg disabled:opacity-50"
                         disabled={!data?.data.cv_path || loading}
@@ -163,7 +163,7 @@ export default function ActionOnCandidature() {
                         Voir le CV
                     </button>
                     <button
-                        // AJOUT: Lien vers le fichier
+                        // Lien vers le fichier
                         onClick={() => data?.data.lm_path && window.open(data.data.lm_path, '_blank')}
                         className="flex-1 px-4 py-3 flex justify-center items-center gap-2 bg-sky-500 text-white rounded-lg text-base font-semibold shadow-md transition duration-300 hover:bg-sky-600 hover:shadow-lg disabled:opacity-50"
                         disabled={!data?.data.lm_path || loading}
@@ -202,7 +202,7 @@ export default function ActionOnCandidature() {
                 </div>
 
                 {/*Statut */}
-                <div className="mt-4 text-center">
+                <div className=" text-center">
                     <p className={`text-md ${statusClass}`}>
                         {statusText}
                     </p>
