@@ -3,11 +3,14 @@ require("dotenv").config();
 
 // Configuration du transporteur
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_PASS,
   },
+  timeout: 30000
 });
 
 // Fonction générique pour envoyer un mail
