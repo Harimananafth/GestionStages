@@ -1,8 +1,6 @@
 # 🚀 Gestion Stages - Application de Gestion de Stages Étudiants
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
 Une application web complète (monorepo) pour simplifier la gestion des candidatures de stages, connectant les administrateurs d'entreprise et les étudiants à la recherche d'opportunités.
 
