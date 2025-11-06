@@ -12,7 +12,6 @@ yarn-error.log
 # Env files
 /backend/.env
 /frontend/.env
-backend/uploads/
 
 # IDE / OS
 .vscode/
