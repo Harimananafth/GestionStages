@@ -15,7 +15,6 @@ export default function UserHeader() {
 
   const [newNotification, setNewNotification] = useState(false);
   const user = JSON.parse(localStorage.getItem("utilisateur"));
-  console.log(user)
 
   const { data, error, isLoading, mutate } = useSWR(
     `${ApiUrl}/notification/user`,

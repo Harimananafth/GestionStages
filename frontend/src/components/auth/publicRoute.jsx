@@ -8,9 +8,9 @@ export default function PublicRoute({ children }) {
   const user = localStorage.getItem("utilisateur");
   const roles = user ? JSON.parse(user).roles : [];
 
-const ApiUrl = import.meta.env.PROD
-  ? import.meta.env.VITE_PROD_API_URL
-  : import.meta.env.VITE_API_URL;
+  const ApiUrl = import.meta.env.PROD
+    ? import.meta.env.VITE_PROD_API_URL
+    : import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -19,19 +19,19 @@ const ApiUrl = import.meta.env.PROD
           credentials: "include",
         });
         if (!res.ok) throw new Error("Unauthorized");
-
-        // Si la requête réussit, l'utilisateur est connecté
         setIsAuthenticated(true);
       } catch {
-        // Si erreur ou pas de token
         setIsAuthenticated(false);
       } finally {
         setLoading(false);
       }
     };
-
     checkAuth();
   }, []);
+
+  if (window.location.pathname.startsWith("/auth/login-success")) {
+    return children;
+  }
 
   if (loading)
     return (
@@ -50,3 +50,4 @@ const ApiUrl = import.meta.env.PROD
     children
   );
 }
+

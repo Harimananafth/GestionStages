@@ -15,8 +15,6 @@ export default function Success() {
     const roles = queryParams.get("roles");
     const photo = queryParams.get("photo");
 
-    console.log(id, email, roles, photo);
-
     try {
       const parsedRoles = roles ? JSON.parse(decodeURIComponent(roles)) : [];
       if (id && email && parsedRoles.length > 0) {
@@ -30,17 +28,17 @@ export default function Success() {
         return;
       }
 
-    //   const timer = setTimeout(() => {
-    //     if (parsedRoles.includes("admin")) {
-    //       navigate(ROUTES.ADMIN.DASHBOARD);
-    //     } else if (parsedRoles.includes("user")) {
-    //       navigate(ROUTES.USER.DASHBOARD);
-    //     } else {
-    //       navigate(ROUTES.HOME);
-    //     }
-    //   }, 1000);
+      const timer = setTimeout(() => {
+        if (parsedRoles.includes("admin")) {
+          navigate(ROUTES.ADMIN.DASHBOARD);
+        } else if (parsedRoles.includes("user")) {
+          navigate(ROUTES.USER.DASHBOARD);
+        } else {
+          navigate(ROUTES.HOME);
+        }
+      }, 1000);
 
-    //   return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
     } catch (err) {
       console.error("Erreur de parsing des rôles :", err);
       navigate(ROUTES.AUTH.LOGIN);
