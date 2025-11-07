@@ -76,6 +76,7 @@ class EtudiantController {
           const etudiant = await Etudiant.findByPk(id, { transaction: t });
           if (!etudiant) throw new Error("not_found");
           await Etudiant.destroy({ where: { id }, transaction: t });
+          await Utilisateur.destroy({ where: { id: etudiant.UtilisateurId }, transaction: t });
           return etudiant;
         }
       );
