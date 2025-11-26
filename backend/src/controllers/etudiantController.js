@@ -84,6 +84,7 @@ class EtudiantController {
       const message = `L'étudiant avec l'identifiant ${id} a été supprimé avec succès.`;
       return res.json({ message, data: deletedEtudiant });
     } catch (error) {
+      console.log(error);
       if (error.message === "not_found") {
         return res
           .status(404)

@@ -25,7 +25,7 @@ module.exports = {
           model: "utilisateurs",
           key: "id",
         },
-        onDelete: "SET NULL", 
+        onDelete: "CASCADE", 
       },
       contenu: {
         type: Sequelize.TEXT,

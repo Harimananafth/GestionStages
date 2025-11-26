@@ -121,7 +121,7 @@ class CandidatureController {
   static async createCandidature(req, res) {
     const cvFile = req.files["cv"]?.[0] || null;
     const lmFile = req.files["lm"]?.[0] || null;
-    let cvResult, lmResult; // stocker les résultats d'upload
+    let cvResult, lmResult; 
 
     if (!cvFile || !lmFile) {
       return res
@@ -130,7 +130,7 @@ class CandidatureController {
     }
 
     try {
-      // --- 1 & 2. Uploader le CV et la LM sur Cloudinary ---
+      // Uploader le CV et la LM sur Cloudinary 
       cvResult = await cloudinary.uploader.upload(cvFile.path, {
         folder: "candidatures/cv",
         resource_type: "auto",
@@ -149,7 +149,7 @@ class CandidatureController {
         type: "private",
       });
 
-      // 3. Récupérer les données de Cloudinary
+      // Récupérer les données de Cloudinary
       const cv_path = cvResult.secure_url;
       const lm_path = lmResult.secure_url;
       const cv_public_id = cvResult.public_id;
@@ -159,7 +159,7 @@ class CandidatureController {
       const { OffreId, ProfilId } = req.body;
       const body = req.body;
 
-      // 4. Exécuter la transaction (DB)
+      // Exécuter la transaction
       const candidature = await sequelize.transaction(async (t) => {
         const offre = await Offre.findByPk(OffreId, { transaction: t });
         if (!offre) throw new Error("offre_not_found");
@@ -174,30 +174,30 @@ class CandidatureController {
         const newCandidature = await Candidature.create(
           {
             ...body,
-            cv_path, // L'URL privée
-            lm_path, // L'URL privée
+            cv_path, 
+            lm_path, 
             cv_public_id,
             lm_public_id,
           },
           { transaction: t }
         );
 
-        // --- DEBUT : Logique d'envoi d'email  ---
+        // Logique d'envoi d'email et de notification
 
         await notificationController.addNotification({
-          UtilisateurId: null, // pour l'admin
+          UtilisateurId: null,
           message: `Une candidature a été postée pour l'offre ${offre.titre}`,
           type: "simple",
           date_reception: new Date(),
         });
         await notificationController.addNotification({
-          UtilisateurId: req.user.id, // pour l'étudiant
+          UtilisateurId: req.user.id,
           message: `Votre candidature pour l'offre ${offre.titre} a bien été déposée.`,
           type: "simple",
           date_reception: new Date(),
         });
 
-        // 1. Trouver le rôle 'admin'
+        // Trouver le rôle 'admin'
         const adminRoles = await Role.findAll({
           where: { libelle: "admin" },
           transaction: t,
@@ -205,14 +205,14 @@ class CandidatureController {
         const adminRole = adminRoles[0]; // Prend le premier résultat
 
         if (adminRole) {
-          // 2. Trouver tous les utilisateurs ayant ce rôle
+          // Trouver tous les utilisateurs ayant ce rôle
           const utilisateursRoles = await UtilisateurRole.findAll({
             where: { id_role: adminRole.id },
             include: [{ model: Utilisateur }],
             transaction: t,
           });
 
-          // 3. Récupérer l'étudiant
+          // Récupérer l'étudiant
           const etudiant = await Etudiant.findOne({
             where: { UtilisateurId: req.user.id },
             transaction: t,
@@ -221,15 +221,14 @@ class CandidatureController {
             ? `${etudiant.nom} ${etudiant.prenom}`
             : "Étudiant inconnu";
 
-          // 4. Envoyer les emails aux admins
+          // Envoyer les emails aux admins
           const emailPromises = utilisateursRoles
-            .map((ur) => ur.Utilisateur?.email) // Extrait l'email (si l'inclusion a réussi)
-            .filter((email) => email) // Filtre les emails nulls/vides
+            .map((ur) => ur.Utilisateur?.email) 
+            .filter((email) => email) 
             .map((email) =>
               sendAdminCandidatureNotification(email, nomComplet, offre.titre)
             );
 
-          // Utilisation de Promise.all pour s'assurer que tous les envois sont lancés avant de continuer
           await Promise.all(emailPromises)
             .then(() =>
               console.log(
@@ -248,12 +247,12 @@ class CandidatureController {
           );
         }
 
-        // --- FIN : Logique d'envoi d'email corrigée ---
+        // Logique d'envoi d'email corrigée
 
         return newCandidature;
       });
 
-      // 5. (Nettoyage) Supprimer les fichiers temporaires APRES le succès de la transaction
+      // Supprimer les fichiers temporaires APRES le succès de la transaction
       fs.unlinkSync(cvFile.path);
       fs.unlinkSync(lmFile.path);
 
@@ -265,8 +264,6 @@ class CandidatureController {
       // Nettoyage : si l'upload Cloudinary a réussi mais la transaction a échoué
 
       if (cvResult && cvResult.public_id) {
-        // Tente de supprimer le CV si l'upload a réussi
-
         await cloudinary.uploader.destroy(cvResult.public_id, {
           resource_type: "auto",
         });
@@ -280,7 +277,7 @@ class CandidatureController {
         });
       }
 
-      // Nettoyage : Suppression des fichiers temporaires (quel que soit le résultat)
+      // Suppression des fichiers temporaires (quel que soit le résultat)
 
       if (cvFile && cvFile.path) fs.unlinkSync(cvFile.path);
       if (lmFile && lmFile.path) fs.unlinkSync(lmFile.path);

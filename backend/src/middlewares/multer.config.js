@@ -7,7 +7,6 @@ const storage = multer.diskStorage({
     cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-    // Nom de fichier unique basé sur le timestamp
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });

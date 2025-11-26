@@ -15,19 +15,19 @@ export default function AdminCharts() {
 
   const stats = data?.data || {};
 
-  // Données : Candidatures par profil
+  // Candidatures par profil
   const profilsData = stats.candidaturesByProfil?.map((item) => ({
     name: item.profil || "Non défini",
     total: parseInt(item.total),
   }));
 
-  // Données : Candidatures par statut
+  // Candidatures par statut
   const statutData = stats.candidaturesByStatut?.map((item) => ({
     name: item.statut,
     value: parseInt(item.count),
   }));
 
-  // Données : Candidatures par mois
+  // Candidatures par mois
   const monthLabels = [
     "Jan", "Fév", "Mar", "Avr", "Mai", "Juin",
     "Juil", "Août", "Sep", "Oct", "Nov", "Déc"
@@ -47,7 +47,7 @@ export default function AdminCharts() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-7  bg-white rounded-xl shadow-md grow hover:scale-1.8 hover:cursor-default hover:shadow-lg duration-300">
 
-      {/* ---- BAR CHART ---- */}
+      {/* BAR CHART */}
       <div className="md:col-span-2 h-80">
         <h2 className="text-center font-semibold mb-3">Candidature par profil</h2>
         <ResponsiveContainer width="100%" height="100%">
@@ -62,7 +62,7 @@ export default function AdminCharts() {
         </ResponsiveContainer>
       </div>
 
-      {/* ---- PIE CHART STATUT ---- */}
+      {/* PIE CHART STATUT */}
       <div className="md:col-span-1 h-80 flex flex-col items-center justify-center">
         <h2 className="text-center font-semibold mb-3">Taux d'acceptation / refus</h2>
         <ResponsiveContainer width="100%" height="100%">
@@ -87,7 +87,7 @@ export default function AdminCharts() {
         </ResponsiveContainer>
       </div>
 
-      {/* ---- PIE CHART PAR MOIS ---- */}
+      {/* PIE CHART PAR MOIS */}
       <div className="md:col-span-1 h-80 flex flex-col items-center justify-center">
         <h2 className="text-center font-semibold mb-3">Évolution des candidatures dans l'année</h2>
         <ResponsiveContainer width="100%" height="100%">

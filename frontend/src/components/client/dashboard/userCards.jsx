@@ -50,7 +50,7 @@ const ApiUrl = import.meta.env.PROD
         {[
             { icon: <CalendarClock strokeWidth={1.5} className="text-yellow-500 w-10 h-10" />, value: stats.attentes, label: "Candidature(s) en attente" },
             { icon: <X strokeWidth={1.5} className="text-red-500 w-10 h-10" />, value: stats.refusees, label: "Candidature(s) refusée" },
-            { icon: <FileCheck strokeWidth={1.5} className="text-emerald-500 w-10 h-10" />, value: stats.acceptees, label: "Candiature(s) acceptée" },
+            { icon: <FileCheck strokeWidth={1.5} className="text-emerald-500 w-10 h-10" />, value: stats.acceptees, label: "Candidature(s) acceptée" },
             { icon: <FileUser strokeWidth={1.5} className="text-purple-500 w-10 h-10" />, value: stats.nbCandidatures, label: "Total candidatures" },
         ].map((item, i) => (
             <div

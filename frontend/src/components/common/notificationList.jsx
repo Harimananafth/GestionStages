@@ -1,17 +1,34 @@
-export default function Notification({data, error}){
-    if (error) return <li> <p className="text-xs font-semibold text-error" >Erreur de chargement </p> </li>
-    if (data.data.length ===  0) return <li> <p className='text-md font-semibold text-gray-500 p-4 flex justify-center items-center text-center' >Aucune notification </p> </li>
-
+export default function Notification({ data, error }) {
+  if (error)
     return (
-        data.data.map((notification) => (
-            <li key={notification.id} className={`${notification.lu ? "bg-white  border-l-gray-400" : "bg-blue-50  border-l-sky-600"} border-b border-b-gray-50 border-l-4 px-4 py-2 rounded-lg mb-1 shadow-sm`}>
-                <a className="text-sm font-semibold text-gray-600 hover:bg-gray-100 flex flex-col justify-center items-end">
-                    <p>{notification.message}</p>
-                    <span className="text-[10px] font-normal text-gray-400">{new Date(notification.date_reception).toLocaleString()}</span>
-                </a>
-            </li>
-        )
-    )
-)
-    
+      <li>
+        <p className="text-xs font-semibold text-error">Erreur de chargement</p>
+      </li>
+    );
+  if (data.data.length === 0)
+    return (
+      <li>
+        <p className="text-md font-semibold text-gray-500 p-4 flex justify-center items-center text-center">
+          Aucune notification
+        </p>
+      </li>
+    );
+
+  return data.data.map((notification) => (
+    <li
+      key={notification.id}
+      className={`${
+        notification.lu
+          ? "bg-white  border-l-gray-400"
+          : "bg-blue-50  border-l-sky-600"
+      } border-b border-b-gray-50 border-l-4 px-4 py-2 rounded-lg mb-1 shadow-sm`}
+    >
+      <a className="text-sm font-semibold text-gray-600 hover:bg-gray-100 flex flex-col justify-center items-end">
+        <p>{notification.message}</p>
+        <span className="text-[10px] font-normal text-gray-400">
+          {new Date(notification.date_reception).toLocaleString()}
+        </span>
+      </a>
+    </li>
+  ));
 }
