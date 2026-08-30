@@ -6,7 +6,7 @@ Une application web complète (monorepo) pour simplifier la gestion des candidat
 
 ---
 
-## 📖 Sommaire
+## Sommaire
 
 - [Structure du Monorepo](#-structure-du-monorepo)
 - [Fonctionnalités Clés](#-fonctionnalités-clés)
@@ -16,7 +16,7 @@ Une application web complète (monorepo) pour simplifier la gestion des candidat
 
 ---
 
-## 📂 Structure du Monorepo
+## Structure du Monorepo
 
 Ce projet est un monorepo contenant les deux applications principales :
 
@@ -25,9 +25,9 @@ Ce projet est un monorepo contenant les deux applications principales :
 
 ---
 
-## ✨ Fonctionnalités Clés
+## Fonctionnalités Clés
 
-### 👤 Espace Administrateur (Back-office)
+### Espace Administrateur (Back-office)
 
 - **Gestion des Offres :** Définir les périodes de stage (ex: Janvier - Juin 2025), les profils (ReactJS, Laravel, Technicien...) et le nombre de places.
 - **Gestion des Candidatures :** Lister et filtrer les étudiants (par profil, date, niveau d'études).
@@ -36,21 +36,21 @@ Ce projet est un monorepo contenant les deux applications principales :
 - **Prise de Décision :** Valider, refuser ou mettre en attente une candidature.
 - **Statistiques :** Suivi du nombre de candidatures (par an, par profil) et du taux d'acceptation/refus.
 
-### 🎓 Espace Étudiant
+### Espace Étudiant
 
 - **Profil Complet :** Création et mise à jour du profil (infos personnelles et académiques).
 - **Dépôt de Candidature :** Sélection d'une offre et upload de CV/Lettre de motivation (PDF).
 - **Suivi en Temps Réel :** Visualisation du statut de la candidature (En attente / Accepté / Refusé).
 - **Notifications :** Réception d'emails lors des changements de statut.
 
-### 🔔 Notifications & Communication
+### Notifications & Communication
 
 - **Emails Automatiques :** Confirmation de dépôt, validation ou refus de candidature.
 - **Messagerie Interne :** (Optionnel) Chat en temps réel via **Socket.io** pour une communication directe entre l'admin et l'étudiant.
 
 ---
 
-## 🛠️ Stack Technique
+## Stack Technique
 
 Un aperçu des technologies utilisées pour ce projet :
 
@@ -66,7 +66,7 @@ Un aperçu des technologies utilisées pour ce projet :
 
 ---
 
-## 🚀 Installation & Démarrage
+## Installation & Démarrage
 
 Suivez ces étapes pour lancer le projet en local.
 
@@ -127,7 +127,7 @@ L'application React sera accessible sur `http://localhost:3000` et l'API sur `ht
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 Créez les fichiers `.env` requis et remplissez les variables nécessaires.
 
